@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Setting Up GitHub Pages with Custom Domain - Storbeck Blog</title>
+</head>
+<body>
+    <header>
+        <h1><a href="../index.html">Storbeck Blog</a></h1>
+    </header>
+    <main>
+        <article>
+            <h2>Setting Up GitHub Pages with Custom Domain</h2>
+            <time datetime="2024-10-06">Published October 6, 2024</time>
+            
+            <p>I just set up this blog using GitHub Pages with a custom domain. Here's the technical process and what I learned.</p>
+
+            <h3>Why GitHub Pages?</h3>
+            <p>Free hosting, automatic deploys from git commits, and dead simple for static sites. Perfect for a basic blog that doesn't need server-side processing.</p>
+
+            <h3>Repository Structure</h3>
+            <pre>
+blog/
+├── index.html          # Main blog page
+├── posts/             # Individual blog posts
+│   └── *.html
+└── CNAME              # Custom domain configuration
+            </pre>
+
+            <h3>DNS Configuration</h3>
+            <p>For a custom domain, you need to configure DNS records:</p>
+            <ul>
+                <li><strong>A records</strong> for apex domain pointing to GitHub's IPs:
+                    <ul>
+                        <li>185.199.108.153</li>
+                        <li>185.199.109.153</li>
+                        <li>185.199.110.153</li>
+                        <li>185.199.111.153</li>
+                    </ul>
+                </li>
+                <li><strong>CNAME record</strong> for www subdomain pointing to username.github.io</li>
+            </ul>
+
+            <h3>GitHub Pages Settings</h3>
+            <p>In repository settings:</p>
+            <ol>
+                <li>Go to Pages section</li>
+                <li>Source: Deploy from a branch</li>
+                <li>Branch: main or master</li>
+                <li>Folder: / (root)</li>
+                <li>Custom domain: your-domain.com</li>
+            </ol>
+
+            <h3>The CNAME File</h3>
+            <p>GitHub Pages requires a CNAME file in the repository root containing just your domain name. This tells GitHub which custom domain to serve the site on.</p>
+
+            <h3>HTTPS Certificate</h3>
+            <p>GitHub automatically provisions Let's Encrypt certificates for custom domains. Takes a few minutes after DNS propagation.</p>
+
+            <h3>Deploy Process</h3>
+            <p>Every git push to the main branch triggers an automatic deployment. No build process needed for static HTML - GitHub just serves the files directly.</p>
+
+            <h3>Limitations</h3>
+            <ul>
+                <li>Static sites only (no server-side processing)</li>
+                <li>1GB repository size limit</li>
+                <li>100GB bandwidth per month</li>
+                <li>Public repositories only for free accounts</li>
+            </ul>
+
+            <h3>Why No CSS/JS?</h3>
+            <p>Semantic HTML with browser defaults is underrated. Fast loading, accessible by default, works everywhere, and focuses on content over presentation.</p>
+        </article>
+    </main>
+    <footer>
+        <p><a href="../index.html">← Back to blog</a></p>
+    </footer>
+</body>
+</html>
