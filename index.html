@@ -3,22 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Technical blog by Storbeck covering software development, DevOps, and random technical explorations">
     <title>Storbeck Blog</title>
 </head>
 <body>
     <header>
-        <h1>Storbeck Blog</h1>
-        <p>Random thoughts and experiences</p>
+        <hgroup>
+            <h1>Storbeck Blog</h1>
+            <p>Technical notes and random explorations</p>
+        </hgroup>
+        <nav>
+            <ul>
+                <li><a href="#recent-posts">Recent Posts</a></li>
+                <li><a href="https://movies.storbeck.dev" rel="external">Plex Server</a></li>
+            </ul>
+        </nav>
     </header>
+    
     <main>
-        <article>
-            <h2><a href="posts/2024-10-06-github-pages-setup.html">Setting Up GitHub Pages with Custom Domain</a></h2>
-            <time datetime="2024-10-06">October 6, 2024</time>
-            <p>Technical walkthrough of setting up this blog with GitHub Pages and custom domain configuration.</p>
-        </article>
+        <section id="recent-posts">
+            <h2>Recent Posts</h2>
+            <article>
+                <header>
+                    <h3><a href="posts/2024-10-06-github-pages-setup.html">Setting Up GitHub Pages with Custom Domain</a></h3>
+                    <p>
+                        <time datetime="2024-10-06">October 6, 2024</time>
+                        <span> • </span>
+                        <span>Technical Setup</span>
+                    </p>
+                </header>
+                <p>Technical walkthrough of setting up this blog with GitHub Pages and custom domain configuration. DNS records, CNAME files, and why semantic HTML matters.</p>
+                <p><a href="posts/2024-10-06-github-pages-setup.html" aria-label="Read full post about GitHub Pages setup">Continue reading →</a></p>
+            </article>
+        </section>
     </main>
+    
+    <aside>
+        <section>
+            <h2>About</h2>
+            <p>Technical blog documenting software development experiments, infrastructure notes, and the occasional deep dive into interesting problems.</p>
+        </section>
+        
+        <section>
+            <h2>Links</h2>
+            <ul>
+                <li><a href="https://movies.storbeck.dev" rel="external">Plex Media Server</a></li>
+            </ul>
+        </section>
+    </aside>
+    
     <footer>
-        <p>&copy; 2025 Storbeck | <a href="https://movies.storbeck.dev">Plex Server</a></p>
+        <p><small>&copy; 2025 Storbeck. Built with semantic HTML and hosted on GitHub Pages.</small></p>
     </footer>
 </body>
 </html>
