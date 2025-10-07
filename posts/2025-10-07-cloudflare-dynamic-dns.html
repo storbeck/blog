@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Complete guide to setting up secure dynamic DNS with Cloudflare API and 1Password service account for automated IP updates">
+    <meta name="author" content="Storbeck">
+    <title>Secure Dynamic DNS with Cloudflare and 1Password - Storbeck Blog</title>
+</head>
+<body>
+    <header>
+        <nav aria-label="Site navigation">
+            <a href="../index.html" rel="home">← Storbeck Blog</a>
+        </nav>
+    </header>
+    
+    <main>
+        <article>
+            <header>
+                <h1>Secure Dynamic DNS with Cloudflare and 1Password</h1>
+                <p>
+                    <time datetime="2025-10-07">Published October 7, 2025</time>
+                    <span> • </span>
+                    <span>DevOps, Security</span>
+                </p>
+            </header>
+            
+            <p><strong>Setting up dynamic DNS for home servers while keeping API credentials secure using 1Password service accounts.</strong></p>
+
+            <section>
+                <h2>The Challenge</h2>
+                <p>Home internet connections typically have dynamic IP addresses that change periodically. If you're running services (like a media server) that need to be accessible via a domain name, you need a way to automatically update DNS records when your IP changes.</p>
+                
+                <p>Traditional DDNS services work, but using Cloudflare gives you more control, better security features, and integration with your existing DNS setup.</p>
+            </section>
+
+            <section>
+                <h2>Security First: Why Not Store API Keys on Disk?</h2>
+                <p>Most DDNS scripts store API credentials in plain text files. This creates security risks:</p>
+                <ul>
+                    <li>Credentials visible in process lists</li>
+                    <li>Accessible to any user with file system access</li>
+                    <li>Risk of accidental commits to version control</li>
+                    <li>No audit trail for credential access</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>The Solution: 1Password Service Accounts</h2>
+                <p>1Password service accounts are designed for automated systems. They provide:</p>
+                <ul>
+                    <li>Programmatic access to secrets without user interaction</li>
+                    <li>Audit logging of credential access</li>
+                    <li>Centralized credential management</li>
+                    <li>Easy credential rotation</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Setup Steps</h2>
+                
+                <h3>1. Create Cloudflare API Token</h3>
+                <p>In Cloudflare dashboard → My Profile → API Tokens:</p>
+                <ol>
+                    <li>Create Token → Custom token</li>
+                    <li>Permissions:
+                        <ul>
+                            <li><code>Zone:Zone:Read</code></li>
+                            <li><code>Zone:DNS:Edit</code></li>
+                        </ul>
+                    </li>
+                    <li>Zone Resources: Include → Specific zone → your domain</li>
+                    <li>Copy the generated token</li>
+                </ol>
+
+                <h3>2. Store Credentials in 1Password</h3>
+                <ol>
+                    <li>Create new Secure Note item named "Cloudflare DDNS"</li>
+                    <li>Add fields:
+                        <ul>
+                            <li><code>zone_id</code>: From Cloudflare dashboard sidebar</li>
+                            <li><code>api_token</code>: The token from step 1</li>
+                        </ul>
+                    </li>
+                </ol>
+
+                <h3>3. Create 1Password Service Account</h3>
+                <ol>
+                    <li>Go to 1Password → Settings → Developer → Service Accounts</li>
+                    <li>Create service account with vault access to your credentials</li>
+                    <li>Save the service account token (starts with <code>ops_</code>)</li>
+                </ol>
+
+                <h3>4. Install 1Password CLI</h3>
+                <pre><code>curl -sS https://downloads.1password.com/linux/keys/1password.asc | \
+  sudo gpg --dearmor --output /usr/share/keyrings/1password-archive-keyring.gpg
+
+echo 'deb [arch=amd64 signed-by=/usr/share/keyrings/1password-archive-keyring.gpg] \
+  https://downloads.1password.com/linux/debian/amd64 stable main' | \
+  sudo tee /etc/apt/sources.list.d/1password.list
+
+sudo apt update && sudo apt install 1password-cli</code></pre>
+            </section>
+
+            <section>
+                <h2>The DDNS Script</h2>
+                <p>Create <code>~/.local/bin/update-ddns.sh</code>:</p>
+                
+                <pre><code>#!/bin/bash
+
+source ~/.env
+
+DOMAIN="yourdomain.com"
+SUBDOMAIN="movies"  # Creates movies.yourdomain.com
+ZONE_ID=$(op read "op://Private/Cloudflare DDNS/zone_id")
+API_TOKEN=$(op read "op://Private/Cloudflare DDNS/api_token")
+
+IP=$(curl -s ifconfig.me)
+
+# Get DNS record ID
+RESPONSE=$(curl -s -X GET \
+  "https://api.cloudflare.com/client/v4/zones/$ZONE_ID/dns_records?type=A&name=$SUBDOMAIN.$DOMAIN" \
+  -H "Authorization: Bearer $API_TOKEN" \
+  -H "Content-Type: application/json")
+
+RECORD_ID=$(echo $RESPONSE | jq -r '.result[0].id')
+
+if [ "$RECORD_ID" = "null" ]; then
+  # Create new DNS record
+  echo "Creating new DNS record..."
+  curl -s -X POST "https://api.cloudflare.com/client/v4/zones/$ZONE_ID/dns_records" \
+    -H "Authorization: Bearer $API_TOKEN" \
+    -H "Content-Type: application/json" \
+    --data "{\"type\":\"A\",\"name\":\"$SUBDOMAIN\",\"content\":\"$IP\",\"ttl\":1}"
+else
+  # Update existing DNS record
+  echo "Updating existing DNS record..."
+  curl -s -X PUT "https://api.cloudflare.com/client/v4/zones/$ZONE_ID/dns_records/$RECORD_ID" \
+    -H "Authorization: Bearer $API_TOKEN" \
+    -H "Content-Type: application/json" \
+    --data "{\"type\":\"A\",\"name\":\"$SUBDOMAIN\",\"content\":\"$IP\",\"ttl\":1}"
+fi</code></pre>
+
+                <p>Make it executable: <code>chmod +x ~/.local/bin/update-ddns.sh</code></p>
+            </section>
+
+            <section>
+                <h2>Environment Configuration</h2>
+                <p>Create <code>~/.env</code> with your service account token:</p>
+                <pre><code>OP_SERVICE_ACCOUNT_TOKEN=ops_your_service_account_token_here</code></pre>
+                
+                <p>Secure the file: <code>chmod 600 ~/.env</code></p>
+            </section>
+
+            <section>
+                <h2>Automation with Cron</h2>
+                <p>Add to crontab (<code>crontab -e</code>) to check every 10 minutes:</p>
+                <pre><code>*/10 * * * * /home/username/.local/bin/update-ddns.sh >/dev/null 2>&1</code></pre>
+            </section>
+
+            <section>
+                <h2>How It Works</h2>
+                <ol>
+                    <li>Script sources environment variables (including service account token)</li>
+                    <li>Uses 1Password CLI to fetch API credentials securely</li>
+                    <li>Gets current public IP address</li>
+                    <li>Checks if DNS record exists, creates or updates accordingly</li>
+                    <li>Runs automatically via cron without human intervention</li>
+                </ol>
+            </section>
+
+            <section>
+                <h2>Advantages of This Approach</h2>
+                <ul>
+                    <li><strong>Security</strong>: API credentials never stored on disk</li>
+                    <li><strong>Auditability</strong>: 1Password logs all credential access</li>
+                    <li><strong>Maintainability</strong>: Easy to rotate credentials</li>
+                    <li><strong>Reliability</strong>: Handles both record creation and updates</li>
+                    <li><strong>Flexibility</strong>: Works with Cloudflare's full feature set</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Troubleshooting</h2>
+                
+                <h3>Permission Errors</h3>
+                <p>Ensure your API token has <code>Zone:DNS:Edit</code> permissions, not just read access.</p>
+                
+                <h3>Service Account Issues</h3>
+                <p>Verify the service account has access to the correct vault containing your credentials.</p>
+                
+                <h3>Testing</h3>
+                <p>Run the script manually first to verify it works before adding to cron.</p>
+            </section>
+        </article>
+    </main>
+    
+    <aside>
+        <section>
+            <h2>Related Topics</h2>
+            <ul>
+                <li>Cloudflare API authentication methods</li>
+                <li>1Password service account security model</li>
+                <li>Home lab networking and security</li>
+                <li>DNS record management automation</li>
+            </ul>
+        </section>
+    </aside>
+    
+    <footer>
+        <nav aria-label="Post navigation">
+            <a href="../index.html" rel="home">← Back to blog</a>
+        </nav>
+        <p><small>Last updated: <time datetime="2025-10-07">October 7, 2025</time></small></p>
+    </footer>
+</body>
+</html>
