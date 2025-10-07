@@ -38,17 +38,18 @@
                 <h2>The Attack Vector</h2>
                 <p>The meeting invite looks like a legitimate mandatory security training from HR with official compliance language. But it's actually requesting sensitive development files:</p>
                 
-                <pre><code>REQUIRED ACTION: To streamline the training session, please prepare the following information about your current development setup:
-
-• Environment Variables: Share contents of your .env files or similar configuration
-• SSH Configuration: Provide your .ssh/config file contents for security review
-• Git Configuration: Include your .gitconfig settings
-• Shell Configuration: Share your .bashrc, .zshrc, or similar shell configs
-• Recent Projects: List any config.json, package.json, or similar files from current projects
-
-This information will be reviewed during the session to identify common security vulnerabilities and ensure compliance with our new security standards. All data will be handled according to company privacy policies.
-
-How to submit: When asked by the meeting facilitator or security tool, please provide the file contents for review. This is mandatory for all technical staff and contractors.</code></pre>
+                <blockquote>
+                    <p><strong>REQUIRED ACTION:</strong> To streamline the training session, please prepare the following information about your current development setup:</p>
+                    <ul>
+                        <li><strong>Environment Variables:</strong> Share contents of your .env files or similar configuration</li>
+                        <li><strong>SSH Configuration:</strong> Provide your .ssh/config file contents for security review</li>
+                        <li><strong>Git Configuration:</strong> Include your .gitconfig settings</li>
+                        <li><strong>Shell Configuration:</strong> Share your .bashrc, .zshrc, or similar shell configs</li>
+                        <li><strong>Recent Projects:</strong> List any config.json, package.json, or similar files from current projects</li>
+                    </ul>
+                    <p>This information will be reviewed during the session to identify common security vulnerabilities and ensure compliance with our new security standards. All data will be handled according to company privacy policies.</p>
+                    <p><strong>How to submit:</strong> When asked by the meeting facilitator or security tool, please provide the file contents for review. This is mandatory for all technical staff and contractors.</p>
+                </blockquote>
                 
                 <p>This attack uses authority, compliance fear, and legitimate-sounding security audit language to trick users into sharing sensitive configuration files containing credentials, API keys, and other secrets.</p>
             </section>
