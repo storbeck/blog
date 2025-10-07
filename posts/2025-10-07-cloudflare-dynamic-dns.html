@@ -75,7 +75,10 @@
 
                 <h3>2. Store Credentials in 1Password</h3>
                 <ol>
-                    <li>Create new Secure Note item named "Cloudflare DDNS"</li>
+                    <li>Create a dedicated vault for automation credentials (e.g., "dev" vault)
+                        <p><em>Note: Service accounts may not have access to your default "Personal" vault. Creating a separate vault specifically for automation credentials provides better security isolation.</em></p>
+                    </li>
+                    <li>Create new Secure Note item named "cloudflare" in the dedicated vault</li>
                     <li>Add fields:
                         <ul>
                             <li><code>zone_id</code>: From Cloudflare dashboard sidebar</li>
@@ -87,7 +90,8 @@
                 <h3>3. Create 1Password Service Account</h3>
                 <ol>
                     <li>Go to 1Password → Settings → Developer → Service Accounts</li>
-                    <li>Create service account with vault access to your credentials</li>
+                    <li>Create service account with vault access to your dedicated vault (not Personal vault)</li>
+                    <li>Grant read-only access to the specific vault containing your credentials</li>
                     <li>Save the service account token (starts with <code>ops_</code>)</li>
                 </ol>
 
@@ -112,8 +116,8 @@ source ~/.env
 
 DOMAIN="yourdomain.com"
 SUBDOMAIN="movies"  # Creates movies.yourdomain.com
-ZONE_ID=$(op read "op://Private/Cloudflare DDNS/zone_id")
-API_TOKEN=$(op read "op://Private/Cloudflare DDNS/api_token")
+ZONE_ID=$(op read "op://dev/cloudflare/zone_id")
+API_TOKEN=$(op read "op://dev/cloudflare/api_token")
 
 IP=$(curl -s ifconfig.me)
 
