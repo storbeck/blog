@@ -94,15 +94,6 @@ Search: "PurchasePromptShown"</code></pre>
                 <pre><code>GUI Service → set_purchase_prompt_shown_handler → show_purchase_prompt → Queue System</code></pre>
             </section>
 
-            <section>
-                <h2>7. Patch Creation</h2>
-                <p>To disable purchase prompts, patch <code>show_purchase_prompt</code> at <code>02f359b0</code>:</p>
-                <pre><code># Replace first instruction with RET (0xC3)
-# This makes the function immediately return without displaying prompts
-
-Original: 55 48 89 e5 48 83 ec 10 ...
-Patched:  C3 48 89 e5 48 83 ec 10 ...</code></pre>
-            </section>
 
         </article>
     </main>
