@@ -67,7 +67,7 @@ function blogpost
 
     curl -s "https://storbeck.dev/posts/$argv[1].html" | \
     pandoc -f html -t markdown | \
-    glow -p
+    glow -p -w 0
 end</code></pre>
             </section>
 
