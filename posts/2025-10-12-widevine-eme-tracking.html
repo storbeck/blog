@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="How DRM technology in browsers creates persistent cross-site tracking that survives privacy tools">
     <meta name="author" content="Storbeck">
-    <title>EME Hardware Fingerprinting in DRM Systems - Storbeck Blog</title>
+    <title>How Streaming Sites Track You Even with VPNs and Private Browsing - Storbeck Blog</title>
 </head>
 <body>
     <header>
@@ -17,7 +17,7 @@
     <main>
         <article>
             <header>
-                <h1>EME Hardware Fingerprinting in DRM Systems</h1>
+                <h1>How Streaming Sites Track You Even with VPNs and Private Browsing</h1>
                 <p>
                     <time datetime="2025-10-12">Published October 12, 2025</time>
                     <span> • </span>
@@ -28,12 +28,12 @@
             <p><strong>Research findings on how DRM implementations expose hardware-level identifiers for potential cross-site tracking.</strong></p>
             
             <section>
-                <h2>The Research</h2>
-                <p>A recent paper <a href="https://hal.science/hal-04179324v1" rel="external">"Your DRM Can Watch You Too: Exploring the Privacy Implications of Browsers (mis)Implementations of Widevine EME"</a> by Gwendal Patat, Mohamed Sabt, and Pierre-Alain Fouque (PETS 2023) found that browser implementations of Widevine EME expose hardware-specific information that could enable persistent device identification.</p>
+                <h2>How This Was Discovered</h2>
+                <p>Security researchers <a href="https://hal.science/hal-04179324v1" rel="external">recently found</a> that the copy protection software built into browsers (called Widevine) secretly collects information about your computer's hardware. This creates a unique "fingerprint" that can identify your specific device.</p>
                 
-                <p>They reverse engineered the Widevine CDM binary to see what hardware data it actually collects. JavaScript can't see this data - it happens inside the closed-source CDM where websites can't inspect it. Unlike cookies or localStorage, this hardware fingerprinting survives all standard privacy measures because it operates at the CDM level, not the browser level.</p>
+                <p>The key problem: unlike cookies or browsing history that you can delete, this fingerprint is collected by closed software that runs deeper in your system. Your VPN, private browsing, and clearing your data won't stop it because it bypasses all the normal browser privacy tools.</p>
                 
-                <p>When you request DRM content, browsers expose device-specific information:</p>
+                <p>Here's what happens behind the scenes when you watch Netflix or YouTube:</p>
                 <pre><code>navigator.requestMediaKeySystemAccess('com.widevine.alpha', config)
   .then(keySystemAccess => {
     // Exposes hardware security module details
