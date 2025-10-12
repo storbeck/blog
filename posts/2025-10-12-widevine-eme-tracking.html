@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="How DRM technology in browsers creates persistent cross-site tracking that survives privacy tools">
+    <meta name="author" content="Storbeck">
+    <title>EME Hardware Fingerprinting in DRM Systems - Storbeck Blog</title>
+</head>
+<body>
+    <header>
+        <nav aria-label="Site navigation">
+            <a href="../index.html" rel="home">← Storbeck Blog</a>
+        </nav>
+    </header>
+    
+    <main>
+        <article>
+            <header>
+                <h1>EME Hardware Fingerprinting in DRM Systems</h1>
+                <p>
+                    <time datetime="2025-10-12">Published October 12, 2025</time>
+                    <span> • </span>
+                    <span>Privacy, Security</span>
+                </p>
+            </header>
+            
+            <p><strong>Research findings on how DRM implementations expose hardware-level identifiers for potential cross-site tracking.</strong></p>
+            
+            <section>
+                <h2>The Research</h2>
+                <p>A recent paper <a href="https://hal.science/hal-04179324v1" rel="external">"Your DRM Can Watch You Too: Exploring the Privacy Implications of Browsers (mis)Implementations of Widevine EME"</a> by Gwendal Patat, Mohamed Sabt, and Pierre-Alain Fouque (PETS 2023) found that browser implementations of Widevine EME expose hardware-specific information that could enable persistent device identification.</p>
+                
+                <p>They reverse engineered the Widevine CDM binary to see what hardware data it actually collects. JavaScript can't see this data - it happens inside the closed-source CDM where websites can't inspect it. Unlike cookies or localStorage, this hardware fingerprinting survives all standard privacy measures because it operates at the CDM level, not the browser level.</p>
+                
+                <p>When you request DRM content, browsers expose device-specific information:</p>
+                <pre><code>navigator.requestMediaKeySystemAccess('com.widevine.alpha', config)
+  .then(keySystemAccess => {
+    // Exposes hardware security module details
+    // GPU info, firmware versions, crypto certificates
+    return keySystemAccess.createMediaKeys();
+  });</code></pre>
+            </section>
+            
+            <section>
+                <h2>What Gets Tracked</h2>
+                <p>The EME fingerprint includes hardware details that survive privacy measures:</p>
+                <ul>
+                    <li>Hardware Security Module (HSM) identifiers</li>
+                    <li>DRM certificate chains (device-specific)</li>
+                    <li>GPU model and driver versions</li>
+                    <li>Secure processor firmware signatures</li>
+                    <li>Codec support matrix</li>
+                </ul>
+                
+                <p>This creates a persistent identifier stored in secure hardware that regular browser data clearing can't touch.</p>
+            </section>
+            
+            <section>
+                <h2>Privacy Implications</h2>
+                <p>The same hardware fingerprint appears across different contexts:</p>
+                <ol>
+                    <li>Netflix streaming session</li>
+                    <li>YouTube in incognito mode</li> 
+                    <li>Spotify in different browser</li>
+                </ol>
+                
+                <p>This creates potential for cross-site correlation since the identifier persists regardless of privacy settings or browser choice.</p>
+            </section>
+            
+            <section>
+                <h2>Checking EME Status</h2>
+                <p>See if EME is enabled in your browser:</p>
+                <pre><code># Firefox
+about:config → media.eme.enabled
+
+# Chrome  
+chrome://settings → Privacy and security → Site Settings → Additional content settings</code></pre>
+                
+                <p>Test if EME triggers hardware fingerprinting:</p>
+                <pre><code>// Simple test - hardware fingerprinting happens inside CDM, not visible here
+navigator.requestMediaKeySystemAccess('com.widevine.alpha', [{
+  initDataTypes: ['cenc'],
+  audioCapabilities: [{contentType: 'audio/mp4;codecs="mp4a.40.2"'}]
+}]).then(access => {
+  console.log('EME available - CDM collects hardware fingerprint internally');
+  return access.createMediaKeys();
+}).then(keys => {
+  console.log('MediaKeys created - device fingerprinted by CDM');
+}).catch(e => console.log('Error:', e.name, '- EME may not be fully available'));</code></pre>
+                
+                <p>Run this script on Netflix or YouTube to see actual DRM fingerprinting in action.</p>
+            </section>
+            
+            <section>
+                <h2>Mitigation Options</h2>
+                <p>Limited options, all with trade-offs:</p>
+                
+                <p><strong>Disable EME completely:</strong></p>
+                <pre><code># Firefox: Set media.eme.enabled = false
+# Chrome: Not possible to fully disable</code></pre>
+                <p>Breaks all streaming services (Netflix, Spotify, YouTube Premium).</p>
+                
+                <p><strong>Separate devices:</strong></p>
+                <ul>
+                    <li>Dedicated streaming device (Roku, Apple TV)</li>
+                    <li>Different laptop for entertainment vs work</li>
+                    <li>Virtual machines (may not support EME)</li>
+                </ul>
+            </section>
+            
+            <section>
+                <h2>Technical Considerations</h2>
+                <p>EME requires device attestation for content protection, which inherently exposes hardware characteristics. This is a fundamental tension between DRM functionality and privacy.</p>
+                
+                <p>Privacy-conscious users should understand this trade-off when using DRM-enabled services.</p>
+            </section>
+        </article>
+    </main>
+    
+    <aside>
+        <section>
+            <h2>Related Topics</h2>
+            <ul>
+                <li><a href="https://hal.science/hal-04179324v1" rel="external">Original Research Paper (hal-04179324)</a></li>
+                <li><a href="2025-10-07-prompt-injection-demo.html">AI Security Vulnerabilities</a></li>
+                <li><a href="2025-10-07-keycloak-sso-setup.html">Self-Hosted Authentication</a></li>
+            </ul>
+        </section>
+    </aside>
+    
+    <footer>
+        <nav aria-label="Post navigation">
+            <a href="../index.html" rel="home">← Back to blog</a>
+        </nav>
+        <p><small>Last updated: <time datetime="2025-10-12">October 12, 2025</time></small></p>
+    </footer>
+</body>
+</html>
