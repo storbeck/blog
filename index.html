@@ -7,25 +7,26 @@
     <title>storbeck.dev</title>
 </head>
 <body>
-    <header>
-        <h1>storbeck.dev</h1>
-        <p>A collection of technical solutions and discoveries. When I solve an interesting problem, build a useful tool, or uncover something worth sharing, I document it here. Topics range from security research to development automation to system administration.</p>
-        
-        <section>
-            <h2>Who I Am</h2>
-            <p>I'm a frontend developer who has worked across the full stack throughout my career. While I have professional experience in UI development and system architecture, I'm only an amateur in most other technical areas. I have deep respect for all professionals in their respective fields. This blog is simply my personal research documentation - if I get anything wrong, it's because I made a mistake, not because it was intentional.</p>
-        </section>
-        
+    <header style="text-align: center;">
+        <img src="images/profile.jpg" alt="Geoff Storbeck profile photo" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover;">
+        <h1>Geoff Storbeck</h1>
+        <p><strong>Frontend Developer & Technical Explorer</strong></p>
+        <p>Ormond Beach, Florida</p>
         <p><small>Plain HTML by design. No Javascript<abbr title="Except for Cloudflare CDN for performance">*</abbr> and no styling, just content.</small></p>
         <hr>
     </header>
+    
+    <section>
+        <p>I'm a frontend developer who enjoys exploring different areas of technology outside of work. This blog documents the interesting problems I solve, tools I build, and discoveries I make along the way. While I have professional experience in UI development and system architecture, I consider myself an amateur in most other technical areas I write about here. I have deep respect for all professionals in their respective fields, and this represents my personal learning journey rather than professional expertise. Topics range from security research and reverse engineering to development automation and system administration. When I figure out something useful or encounter an interesting challenge, I document it here in case it helps others. All opinions are my own and don't reflect those of my employer.</p>
+        <hr>
+    </section>
     
     <main>
         <h2>Articles</h2>
 
         <article>
             <h3><a href="posts/2025-10-12-widevine-eme-tracking.html">How Streaming Sites Track You Even with VPNs and Private Browsing</a></h3>
-            <p><time datetime="2025-10-12">October 12, 2025</time> • Privacy, Security</p>
+            <p><small><time datetime="2025-10-12">October 12, 2025</time> • Privacy, Security</small></p>
             <p>Research findings on how DRM implementations expose hardware-level identifiers for potential cross-site tracking.</p>
         </article>
 
@@ -33,7 +34,7 @@
 
         <article>
             <h3><a href="posts/2025-10-10-manual-ghidra-analysis.html">ARM64 Assembly and Ghidra Analysis Basics</a></h3>
-            <p><time datetime="2025-10-10">October 10, 2025</time> • Reverse Engineering</p>
+            <p><small><time datetime="2025-10-10">October 10, 2025</time> • Reverse Engineering</small></p>
             <p>ARM64 assembly fundamentals, Ghidra navigation patterns, and C++ binary structures learned through manual analysis with ChatGPT assistance.</p>
         </article>
 
@@ -41,7 +42,7 @@
 
         <article>
             <h3><a href="posts/2025-10-09-macos-code-signing-patched-binaries.html">macOS Code Signing for Patched Binaries</a></h3>
-            <p><time datetime="2025-10-09">October 9, 2025</time> • Reverse Engineering</p>
+            <p><small><time datetime="2025-10-09">October 9, 2025</time> • Reverse Engineering</small></p>
             <p>How to handle macOS code signing when patching binaries - from removal to ad-hoc re-signing to fix Error 153 launch failures.</p>
         </article>
 
@@ -49,7 +50,7 @@
 
         <article>
             <h3><a href="posts/2025-10-09-ghidra-string-tracing.html">Tracing Roblox Purchase Prompt Functions</a></h3>
-            <p><time datetime="2025-10-09">October 9, 2025</time> • Reverse Engineering</p>
+            <p><small><time datetime="2025-10-09">October 9, 2025</time> • Reverse Engineering</small></p>
             <p>Tracing Roblox purchase prompt functions through string references in libroblox.so using Ghidra static analysis.</p>
         </article>
 
@@ -57,7 +58,7 @@
 
         <article>
             <h3><a href="posts/2025-10-09-roblox-reverse-engineering.html">Extracting and Analyzing Roblox libroblox.so</a></h3>
-            <p><time datetime="2025-10-09">October 9, 2025</time> • Reverse Engineering</p>
+            <p><small><time datetime="2025-10-09">October 9, 2025</time> • Reverse Engineering</small></p>
             <p>Step-by-step technical process for extracting Roblox native library from APK files and locating purchase prompt functions using Ghidra static analysis.</p>
         </article>
 
@@ -65,7 +66,7 @@
 
         <article>
             <h3><a href="posts/2025-10-09-slack-dev-tools.html">Opening Chrome DevTools Console in Slack</a></h3>
-            <p><time datetime="2025-10-09">October 9, 2025</time> • Development, Debugging</p>
+            <p><small><time datetime="2025-10-09">October 9, 2025</time> • Development, Debugging</small></p>
             <p>How to open Chrome DevTools console inside Slack to monitor network requests, inspect minified source, set breakpoints, and execute commands.</p>
         </article>
 
@@ -73,7 +74,7 @@
 
         <article>
             <h3><a href="posts/2025-10-07-prompt-injection-demo.html">Social Engineering AI Systems via Meeting Invites</a></h3>
-            <p><time datetime="2025-10-07">October 7, 2025</time> • Security</p>
+            <p><small><time datetime="2025-10-07">October 7, 2025</time> • Security</small></p>
             <p>Demonstrated successful social engineering attack against Llama 3.2 and GPT-3.5-turbo using fake HR security training request. Confirmed working exploit.</p>
         </article>
         
@@ -81,7 +82,7 @@
         
         <article>
             <h3><a href="posts/2025-10-07-keycloak-sso-setup.html">Self-Hosted SSO with Keycloak and Docker</a></h3>
-            <p><time datetime="2025-10-07">October 7, 2025</time> • DevOps, Security, Authentication</p>
+            <p><small><time datetime="2025-10-07">October 7, 2025</time> • DevOps, Security, Authentication</small></p>
             <p>Building a production-ready OpenID Connect identity provider using Keycloak, Docker, and secure credential management for testing SSO integrations.</p>
         </article>
         
@@ -89,7 +90,7 @@
         
         <article>
             <h3><a href="posts/2025-10-07-cloudflare-dynamic-dns.html">Secure Dynamic DNS with Cloudflare and 1Password</a></h3>
-            <p><time datetime="2025-10-07">October 7, 2025</time> • DevOps, Security</p>
+            <p><small><time datetime="2025-10-07">October 7, 2025</time> • DevOps, Security</small></p>
             <p>Complete guide to setting up dynamic DNS with Cloudflare API while keeping credentials secure using 1Password service accounts. No more API keys on disk.</p>
         </article>
 
@@ -97,7 +98,7 @@
 
         <article>
             <h3><a href="posts/2025-10-06-terminal-html-viewer.html">Terminal Blog Reader with Fish Shell</a></h3>
-            <p><time datetime="2025-10-06">October 9, 2025</time> • Development, Terminal</p>
+            <p><small><time datetime="2025-10-06">October 9, 2025</time> • Development, Terminal</small></p>
             <p>Fish shell functions to browse this blog from the terminal with formatted post viewing using pandoc and glow.</p>
         </article>
         
@@ -105,7 +106,7 @@
         
         <article>
             <h3><a href="posts/2025-10-06-github-pages-setup.html">Setting Up GitHub Pages with Custom Domain</a></h3>
-            <p><time datetime="2025-10-06">October 6, 2025</time> • Technical Setup</p>
+            <p><small><time datetime="2025-10-06">October 6, 2025</time> • Technical Setup</small></p>
             <p>Technical walkthrough of setting up this blog with GitHub Pages and custom domain configuration. DNS records, CNAME files, and why semantic HTML matters.</p>
         </article>
         
