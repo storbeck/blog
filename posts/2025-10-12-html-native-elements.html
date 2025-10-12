@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Exploring powerful HTML elements you probably haven't used: dialog, details, ruby, meter, and output for interactive content without JavaScript">
+    <meta name="author" content="Storbeck">
+    <title>Lesser-Known Native HTML Elements - Storbeck Blog</title>
+</head>
+<body>
+    <header>
+        <nav aria-label="Site navigation">
+            <a href="../index.html" rel="home">← Storbeck Blog</a>
+        </nav>
+    </header>
+    
+    <main>
+        <article>
+            <header>
+                <h1>Lesser-Known Native HTML Elements</h1>
+                <p>
+                    <time datetime="2025-10-12">Published October 12, 2025</time>
+                    <span> • </span>
+                    <span>Web Development, HTML</span>
+                </p>
+            </header>
+            
+            <p><strong>HTML includes many elements that solve common problems without CSS or JavaScript.</strong></p>
+            
+            <section>
+                <h2>Interactive Collapsible Content</h2>
+                <p>The <code>&lt;details&gt;</code> and <code>&lt;summary&gt;</code> elements create expandable sections:</p>
+                
+                <details>
+                    <summary>Click to expand this section</summary>
+                    <p>This content was hidden and is now visible.</p>
+                    <p>Any HTML content can go inside details elements - lists, images, forms, even nested details.</p>
+                </details>
+                
+                <pre><code>&lt;details&gt;
+    &lt;summary&gt;Click to expand this section&lt;/summary&gt;
+    &lt;p&gt;This content was hidden and is now visible.&lt;/p&gt;
+&lt;/details&gt;</code></pre>
+                
+                <p>Supported in all modern browsers. Older browsers show the content expanded.</p>
+            </section>
+            
+            <section>
+                <h2>Native Modal Dialogs</h2>
+                <p>The <code>&lt;dialog&gt;</code> element creates proper modal windows with built-in focus management and keyboard navigation:</p>
+                
+                <dialog id="demo-dialog">
+                    <form method="dialog">
+                        <h3>This is a native dialog</h3>
+                        <p>No CSS frameworks needed. Includes proper focus trapping and ESC key handling.</p>
+                        <button type="submit">Close</button>
+                    </form>
+                </dialog>
+                
+                <button onclick="document.getElementById('demo-dialog').showModal()">Open Dialog</button>
+                
+                <pre><code>&lt;dialog id="my-dialog"&gt;
+    &lt;form method="dialog"&gt;
+        &lt;h3&gt;Dialog Title&lt;/h3&gt;
+        &lt;p&gt;Dialog content here.&lt;/p&gt;
+        &lt;button type="submit"&gt;Close&lt;/button&gt;
+    &lt;/form&gt;
+&lt;/dialog&gt;
+
+&lt;button onclick="document.getElementById('my-dialog').showModal()"&gt;
+    Open Dialog
+&lt;/button&gt;</code></pre>
+                
+                <p><strong>Note:</strong> This example uses minimal JavaScript just for the demo. In production, you'd want proper event handlers.</p>
+            </section>
+            
+            <section>
+                <h2>Visual Progress and Measurements</h2>
+                <p>Two elements for showing data visually without custom styling:</p>
+                
+                <h3>Progress Bars</h3>
+                <p>Loading progress: <progress value="32" max="100">32%</progress></p>
+                <p>Indeterminate progress: <progress>Loading...</progress></p>
+                
+                <pre><code>&lt;progress value="32" max="100"&gt;32%&lt;/progress&gt;
+&lt;progress&gt;Loading...&lt;/progress&gt;</code></pre>
+                
+                <h3>Measurements and Gauges</h3>
+                <p>Disk usage: <meter value="6" min="0" max="10">6 out of 10</meter></p>
+                <p>Test score: <meter value="0.6">60%</meter></p>
+                <p>Temperature: <meter value="75" min="32" max="100" low="65" high="85" optimum="75">75°F</meter></p>
+                
+                <pre><code>&lt;meter value="6" min="0" max="10"&gt;6 out of 10&lt;/meter&gt;
+&lt;meter value="75" min="32" max="100" low="65" high="85" optimum="75"&gt;
+    75°F
+&lt;/meter&gt;</code></pre>
+            </section>
+            
+            <section>
+                <h2>Form Calculations and Output</h2>
+                <p>The <code>&lt;output&gt;</code> element displays calculated results from form inputs:</p>
+                
+                <form>
+                    <p>
+                        <label for="price">Price: $</label>
+                        <input type="number" id="price" name="price" value="100" min="0" step="0.01">
+                    </p>
+                    <p>
+                        <label for="tax">Tax Rate: </label>
+                        <input type="range" id="tax" name="tax" min="0" max="15" value="8.5" step="0.1">
+                        <output for="tax" id="tax-display">8.5</output>%
+                    </p>
+                    <p>
+                        <strong>Total: </strong>
+                        <output for="price tax" id="total">$108.50</output>
+                    </p>
+                </form>
+                
+                <script>
+                function updateCalculation() {
+                    const price = parseFloat(document.getElementById('price').value) || 0;
+                    const tax = parseFloat(document.getElementById('tax').value) || 0;
+                    const total = price * (1 + tax / 100);
+                    
+                    document.getElementById('tax-display').textContent = tax;
+                    document.getElementById('total').textContent = '$' + total.toFixed(2);
+                }
+
+                document.getElementById('price').addEventListener('input', updateCalculation);
+                document.getElementById('tax').addEventListener('input', updateCalculation);
+                </script>
+                
+                <pre><code>&lt;form&gt;
+    &lt;label for="price"&gt;Price: $&lt;/label&gt;
+    &lt;input type="number" id="price" value="100"&gt;
+    
+    &lt;label for="tax"&gt;Tax Rate: &lt;/label&gt;
+    &lt;input type="range" id="tax" min="0" max="15" value="8.5"&gt;
+    &lt;output for="tax"&gt;8.5&lt;/output&gt;%
+    
+    &lt;strong&gt;Total: &lt;/strong&gt;
+    &lt;output for="price tax"&gt;$108.50&lt;/output&gt;
+&lt;/form&gt;</code></pre>
+            </section>
+            
+            <section>
+                <h2>Typography for Global Languages</h2>
+                <p>The <code>&lt;ruby&gt;</code> element adds pronunciation guides or translations above text - originally for Japanese, but works for any language:</p>
+                
+                <p>Hindi greeting: <ruby>नमस्ते<rp>(</rp><rt>namaste</rt><rp>)</rp></ruby></p>
+                <p>Sanskrit: <ruby>संस्कृतम्<rp>(</rp><rt>saṃskṛtam</rt><rp>)</rp></ruby></p>
+                
+                <pre><code>&lt;ruby&gt;
+    नमस्ते
+    &lt;rp&gt;(&lt;/rp&gt;
+    &lt;rt&gt;namaste&lt;/rt&gt;
+    &lt;rp&gt;)&lt;/rp&gt;
+&lt;/ruby&gt;</code></pre>
+                
+                <p>The <code>&lt;rp&gt;</code> elements provide fallback parentheses for browsers that don't support ruby annotations.</p>
+            </section>
+            
+            <section>
+                <h2>Semantic Text Markup</h2>
+                <p>These elements add meaning to technical content:</p>
+                
+                <dl>
+                    <dt><code>&lt;kbd&gt;</code></dt>
+                    <dd>Keyboard input: Press <kbd>Ctrl</kbd>+<kbd>C</kbd> to copy</dd>
+                    
+                    <dt><code>&lt;samp&gt;</code></dt>
+                    <dd>Sample output: <samp>$ ls -la</samp></dd>
+                    
+                    <dt><code>&lt;var&gt;</code></dt>
+                    <dd>Variables: The equation is <var>y</var> = <var>mx</var> + <var>b</var></dd>
+                    
+                    <dt><code>&lt;mark&gt;</code></dt>
+                    <dd>Highlighted text: Search results for <mark>HTML elements</mark></dd>
+                    
+                    <dt><code>&lt;abbr&gt;</code></dt>
+                    <dd>Abbreviations: <abbr title="HyperText Markup Language">HTML</abbr> is semantic</dd>
+                </dl>
+                
+                <pre><code>&lt;kbd&gt;Ctrl&lt;/kbd&gt;+&lt;kbd&gt;C&lt;/kbd&gt;
+&lt;samp&gt;$ ls -la&lt;/samp&gt;
+&lt;var&gt;y&lt;/var&gt; = &lt;var&gt;mx&lt;/var&gt; + &lt;var&gt;b&lt;/var&gt;
+&lt;mark&gt;highlighted text&lt;/mark&gt;
+&lt;abbr title="HyperText Markup Language"&gt;HTML&lt;/abbr&gt;</code></pre>
+            </section>
+            
+            <section>
+                <h2>Benefits</h2>
+                <ul>
+                    <li>Screen readers understand semantic elements</li>
+                    <li>Search engines parse structured content better</li>
+                    <li>No JavaScript dependencies to maintain</li>
+                    <li>Native browser implementations are fast</li>
+                    <li>Works without JavaScript</li>
+                </ul>
+            </section>
+            
+            <section>
+                <h2>Browser Support</h2>
+                <p>Most of these elements have excellent support in modern browsers:</p>
+                <ul>
+                    <li><strong>details/summary:</strong> Supported everywhere (Chrome 12+, Firefox 49+, Safari 6+)</li>
+                    <li><strong>dialog:</strong> Chrome 37+, Firefox 98+, Safari 15.4+ (needs polyfill for older browsers)</li>
+                    <li><strong>meter/progress:</strong> Universal support</li>
+                    <li><strong>output:</strong> Universal support</li>
+                    <li><strong>ruby:</strong> Universal support with varying styling</li>
+                </ul>
+            </section>
+        </article>
+    </main>
+    
+    <aside>
+        <section>
+            <h2>Related Topics</h2>
+            <ul>
+                <li><a href="2025-10-06-github-pages-setup.html">Why Semantic HTML Matters</a></li>
+                <li><a href="../index.html">More Web Development Posts</a></li>
+            </ul>
+        </section>
+    </aside>
+    
+    <footer>
+        <nav aria-label="Post navigation">
+            <a href="../index.html" rel="home">← Back to blog</a>
+        </nav>
+        <p><small>Last updated: <time datetime="2025-10-12">October 12, 2025</time></small></p>
+    </footer>
+</body>
+</html>
