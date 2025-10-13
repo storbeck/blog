@@ -187,7 +187,35 @@
 &lt;mark&gt;highlighted text&lt;/mark&gt;
 &lt;abbr title="HyperText Markup Language"&gt;HTML&lt;/abbr&gt;</code></pre>
             </section>
-            
+
+            <section>
+                <h2>Customizable Select Dropdowns</h2>
+                <p>The <code>&lt;selectedcontent&gt;</code> element allows customizing how selected options are displayed in a dropdown:</p>
+
+                <select>
+                    <button type="button">
+                        <selectedcontent></selectedcontent>
+                    </button>
+                    <option>Apple</option>
+                    <option>Banana</option>
+                    <option>Cherry</option>
+                    <option>Date</option>
+                </select>
+
+                <pre><code>&lt;select&gt;
+    &lt;button type="button"&gt;
+        &lt;selectedcontent&gt;&lt;/selectedcontent&gt;
+    &lt;/button&gt;
+    &lt;option&gt;Apple&lt;/option&gt;
+    &lt;option&gt;Banana&lt;/option&gt;
+    &lt;option&gt;Cherry&lt;/option&gt;
+&lt;/select&gt;</code></pre>
+
+                <p>The <code>&lt;selectedcontent&gt;</code> element mirrors the currently selected option's content, allowing for fully styleable custom select controls. This is part of the newer customizable form controls specification.</p>
+
+                <p><strong>Note:</strong> This is cutting-edge - browser support is still rolling out. Check compatibility before using in production.</p>
+            </section>
+
             <section>
                 <h2>Benefits</h2>
                 <ul>
@@ -208,6 +236,7 @@
                     <li><strong>meter/progress:</strong> Universal support</li>
                     <li><strong>output:</strong> Universal support</li>
                     <li><strong>ruby:</strong> Universal support with varying styling</li>
+                    <li><strong>selectedcontent:</strong> Experimental - Chrome 119+ behind flag, limited support (check caniuse.com)</li>
                 </ul>
             </section>
         </article>
