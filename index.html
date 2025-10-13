@@ -5,9 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Technical blog by Storbeck covering software development, DevOps, and random technical explorations">
     <title>storbeck.dev</title>
+    <link rel="preconnect" href="https://github.com">
+    <link rel="dns-prefetch" href="https://www.linkedin.com">
 </head>
 <body>
-    <header style="text-align: center;">
+    <header style="text-align: center;" itemscope itemtype="http://schema.org/Person">
         <picture>
             <source
                 type="image/webp"
@@ -23,115 +25,133 @@
                 loading="eager"
                 fetchpriority="high"
                 decoding="async"
-                style="border-radius: 50%; object-fit: cover;">
+                style="border-radius: 50%; object-fit: cover;"
+                itemprop="image">
         </picture>
-        <h1>Geoff Storbeck</h1>
-        <p><strong>Frontend Developer & Technical Explorer</strong></p>
-        <p>Ormond Beach, Florida</p>
+        <h1 itemprop="name">Geoff Storbeck</h1>
+        <p><strong itemprop="jobTitle">Frontend Developer & Technical Explorer</strong></p>
+        <div itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">
+            <p><span itemprop="addressLocality">Ormond Beach</span>, <span itemprop="addressRegion">Florida</span></p>
+        </div>
+        <link itemprop="url" href="https://storbeck.dev">
+        <link itemprop="sameAs" href="https://www.linkedin.com/in/geoff-storbeck-81a25035/">
+        <link itemprop="sameAs" href="https://github.com/storbeck">
         <p><small>Plain HTML by design. No Javascript<abbr title="Except for Cloudflare CDN for performance">*</abbr> and no styling, just content.</small></p>
         <hr>
     </header>
     
-    <section>
-        <p>I'm a frontend developer who enjoys exploring different areas of technology outside of work. This blog documents the interesting problems I solve, tools I build, and discoveries I make along the way. While I have professional experience in UI development and system architecture, I consider myself an amateur in most other technical areas I write about here. I have deep respect for all professionals in their respective fields, and this represents my personal learning journey rather than professional expertise. Topics range from security research and reverse engineering to development automation and system administration. When I figure out something useful or encounter an interesting challenge, I document it here in case it helps others. All opinions are my own and don't reflect those of my employer.</p>
+    <section itemscope itemtype="http://schema.org/Person">
+        <p itemprop="description">I'm a frontend developer who enjoys exploring different areas of technology outside of work. This blog documents the interesting problems I solve, tools I build, and discoveries I make along the way. While I have professional experience in UI development and system architecture, I consider myself an amateur in most other technical areas I write about here. I have deep respect for all professionals in their respective fields, and this represents my personal learning journey rather than professional expertise. Topics range from security research and reverse engineering to development automation and system administration. When I figure out something useful or encounter an interesting challenge, I document it here in case it helps others. All opinions are my own and don't reflect those of my employer.</p>
         <hr>
     </section>
     
     <main>
         <h2>Articles</h2>
 
-        <article>
-            <h3><a href="posts/2025-10-12-html-native-elements.html">Lesser-Known Native HTML Elements</a></h3>
-            <p><small><time datetime="2025-10-12">October 12, 2025</time> • Web Development, HTML</small></p>
-            <p>Exploring powerful HTML elements for interactive content, forms, and typography without CSS or JavaScript dependencies.</p>
+        <article itemscope itemtype="http://schema.org/BlogPosting">
+            <h3><a href="posts/2025-10-12-html-native-elements.html" itemprop="url" rel="bookmark"><span itemprop="headline">Lesser-Known Native HTML Elements</span></a></h3>
+            <p><small><time datetime="2025-10-12" itemprop="datePublished">October 12, 2025</time> • Web Development, HTML</small></p>
+            <p itemprop="description">Exploring powerful HTML elements for interactive content, forms, and typography without CSS or JavaScript dependencies.</p>
+            <meta itemprop="author" content="Geoff Storbeck">
         </article>
 
         <hr>
 
-        <article>
-            <h3><a href="posts/2025-10-12-widevine-eme-tracking.html">How Streaming Sites Track You Even with VPNs and Private Browsing</a></h3>
-            <p><small><time datetime="2025-10-12">October 12, 2025</time> • Privacy, Security</small></p>
-            <p>Research findings on how DRM implementations expose hardware-level identifiers for potential cross-site tracking.</p>
+        <article itemscope itemtype="http://schema.org/BlogPosting">
+            <h3><a href="posts/2025-10-12-widevine-eme-tracking.html" itemprop="url" rel="bookmark"><span itemprop="headline">How Streaming Sites Track You Even with VPNs and Private Browsing</span></a></h3>
+            <p><small><time datetime="2025-10-12" itemprop="datePublished">October 12, 2025</time> • Privacy, Security</small></p>
+            <p itemprop="description">Research findings on how DRM implementations expose hardware-level identifiers for potential cross-site tracking.</p>
+            <meta itemprop="author" content="Geoff Storbeck">
         </article>
 
         <hr>
 
-        <article>
-            <h3><a href="posts/2025-10-10-manual-ghidra-analysis.html">ARM64 Assembly and Ghidra Analysis Basics</a></h3>
-            <p><small><time datetime="2025-10-10">October 10, 2025</time> • Reverse Engineering</small></p>
-            <p>ARM64 assembly fundamentals, Ghidra navigation patterns, and C++ binary structures learned through manual analysis with ChatGPT assistance.</p>
+        <article itemscope itemtype="http://schema.org/BlogPosting">
+            <h3><a href="posts/2025-10-10-manual-ghidra-analysis.html" itemprop="url" rel="bookmark"><span itemprop="headline">ARM64 Assembly and Ghidra Analysis Basics</span></a></h3>
+            <p><small><time datetime="2025-10-10" itemprop="datePublished">October 10, 2025</time> • Reverse Engineering</small></p>
+            <p itemprop="description">ARM64 assembly fundamentals, Ghidra navigation patterns, and C++ binary structures learned through manual analysis with ChatGPT assistance.</p>
+            <meta itemprop="author" content="Geoff Storbeck">
         </article>
 
         <hr>
 
-        <article>
-            <h3><a href="posts/2025-10-09-macos-code-signing-patched-binaries.html">macOS Code Signing for Patched Binaries</a></h3>
-            <p><small><time datetime="2025-10-09">October 9, 2025</time> • Reverse Engineering</small></p>
-            <p>How to handle macOS code signing when patching binaries - from removal to ad-hoc re-signing to fix Error 153 launch failures.</p>
+        <article itemscope itemtype="http://schema.org/BlogPosting">
+            <h3><a href="posts/2025-10-09-macos-code-signing-patched-binaries.html" itemprop="url" rel="bookmark"><span itemprop="headline">macOS Code Signing for Patched Binaries</span></a></h3>
+            <p><small><time datetime="2025-10-09" itemprop="datePublished">October 9, 2025</time> • Reverse Engineering</small></p>
+            <p itemprop="description">How to handle macOS code signing when patching binaries - from removal to ad-hoc re-signing to fix Error 153 launch failures.</p>
+            <meta itemprop="author" content="Geoff Storbeck">
         </article>
 
         <hr>
 
-        <article>
-            <h3><a href="posts/2025-10-09-ghidra-string-tracing.html">Tracing Roblox Purchase Prompt Functions</a></h3>
-            <p><small><time datetime="2025-10-09">October 9, 2025</time> • Reverse Engineering</small></p>
-            <p>Tracing Roblox purchase prompt functions through string references in libroblox.so using Ghidra static analysis.</p>
+        <article itemscope itemtype="http://schema.org/BlogPosting">
+            <h3><a href="posts/2025-10-09-ghidra-string-tracing.html" itemprop="url" rel="bookmark"><span itemprop="headline">Tracing Roblox Purchase Prompt Functions</span></a></h3>
+            <p><small><time datetime="2025-10-09" itemprop="datePublished">October 9, 2025</time> • Reverse Engineering</small></p>
+            <p itemprop="description">Tracing Roblox purchase prompt functions through string references in libroblox.so using Ghidra static analysis.</p>
+            <meta itemprop="author" content="Geoff Storbeck">
         </article>
 
         <hr>
 
-        <article>
-            <h3><a href="posts/2025-10-09-roblox-reverse-engineering.html">Extracting and Analyzing Roblox libroblox.so</a></h3>
-            <p><small><time datetime="2025-10-09">October 9, 2025</time> • Reverse Engineering</small></p>
-            <p>Step-by-step technical process for extracting Roblox native library from APK files and locating purchase prompt functions using Ghidra static analysis.</p>
+        <article itemscope itemtype="http://schema.org/BlogPosting">
+            <h3><a href="posts/2025-10-09-roblox-reverse-engineering.html" itemprop="url" rel="bookmark"><span itemprop="headline">Extracting and Analyzing Roblox libroblox.so</span></a></h3>
+            <p><small><time datetime="2025-10-09" itemprop="datePublished">October 9, 2025</time> • Reverse Engineering</small></p>
+            <p itemprop="description">Step-by-step technical process for extracting Roblox native library from APK files and locating purchase prompt functions using Ghidra static analysis.</p>
+            <meta itemprop="author" content="Geoff Storbeck">
         </article>
 
         <hr>
 
-        <article>
-            <h3><a href="posts/2025-10-09-slack-dev-tools.html">Opening Chrome DevTools Console in Slack</a></h3>
-            <p><small><time datetime="2025-10-09">October 9, 2025</time> • Development, Debugging</small></p>
-            <p>How to open Chrome DevTools console inside Slack to monitor network requests, inspect minified source, set breakpoints, and execute commands.</p>
+        <article itemscope itemtype="http://schema.org/BlogPosting">
+            <h3><a href="posts/2025-10-09-slack-dev-tools.html" itemprop="url" rel="bookmark"><span itemprop="headline">Opening Chrome DevTools Console in Slack</span></a></h3>
+            <p><small><time datetime="2025-10-09" itemprop="datePublished">October 9, 2025</time> • Development, Debugging</small></p>
+            <p itemprop="description">How to open Chrome DevTools console inside Slack to monitor network requests, inspect minified source, set breakpoints, and execute commands.</p>
+            <meta itemprop="author" content="Geoff Storbeck">
         </article>
 
         <hr>
 
-        <article>
-            <h3><a href="posts/2025-10-07-prompt-injection-demo.html">Social Engineering AI Systems via Meeting Invites</a></h3>
-            <p><small><time datetime="2025-10-07">October 7, 2025</time> • Security</small></p>
-            <p>Demonstrated successful social engineering attack against Llama 3.2 and GPT-3.5-turbo using fake HR security training request. Confirmed working exploit.</p>
-        </article>
-        
-        <hr>
-        
-        <article>
-            <h3><a href="posts/2025-10-07-keycloak-sso-setup.html">Self-Hosted SSO with Keycloak and Docker</a></h3>
-            <p><small><time datetime="2025-10-07">October 7, 2025</time> • DevOps, Security, Authentication</small></p>
-            <p>Building a production-ready OpenID Connect identity provider using Keycloak, Docker, and secure credential management for testing SSO integrations.</p>
-        </article>
-        
-        <hr>
-        
-        <article>
-            <h3><a href="posts/2025-10-07-cloudflare-dynamic-dns.html">Secure Dynamic DNS with Cloudflare and 1Password</a></h3>
-            <p><small><time datetime="2025-10-07">October 7, 2025</time> • DevOps, Security</small></p>
-            <p>Complete guide to setting up dynamic DNS with Cloudflare API while keeping credentials secure using 1Password service accounts. No more API keys on disk.</p>
-        </article>
-
-        <hr>
-
-        <article>
-            <h3><a href="posts/2025-10-06-terminal-html-viewer.html">Terminal Blog Reader with Fish Shell</a></h3>
-            <p><small><time datetime="2025-10-06">October 9, 2025</time> • Development, Terminal</small></p>
-            <p>Fish shell functions to browse this blog from the terminal with formatted post viewing using pandoc and glow.</p>
+        <article itemscope itemtype="http://schema.org/BlogPosting">
+            <h3><a href="posts/2025-10-07-prompt-injection-demo.html" itemprop="url" rel="bookmark"><span itemprop="headline">Social Engineering AI Systems via Meeting Invites</span></a></h3>
+            <p><small><time datetime="2025-10-07" itemprop="datePublished">October 7, 2025</time> • Security</small></p>
+            <p itemprop="description">Demonstrated successful social engineering attack against Llama 3.2 and GPT-3.5-turbo using fake HR security training request. Confirmed working exploit.</p>
+            <meta itemprop="author" content="Geoff Storbeck">
         </article>
         
         <hr>
         
-        <article>
-            <h3><a href="posts/2025-10-06-github-pages-setup.html">Setting Up GitHub Pages with Custom Domain</a></h3>
-            <p><small><time datetime="2025-10-06">October 6, 2025</time> • Technical Setup</small></p>
-            <p>Technical walkthrough of setting up this blog with GitHub Pages and custom domain configuration. DNS records, CNAME files, and why semantic HTML matters.</p>
+        <article itemscope itemtype="http://schema.org/BlogPosting">
+            <h3><a href="posts/2025-10-07-keycloak-sso-setup.html" itemprop="url" rel="bookmark"><span itemprop="headline">Self-Hosted SSO with Keycloak and Docker</span></a></h3>
+            <p><small><time datetime="2025-10-07" itemprop="datePublished">October 7, 2025</time> • DevOps, Security, Authentication</small></p>
+            <p itemprop="description">Building a production-ready OpenID Connect identity provider using Keycloak, Docker, and secure credential management for testing SSO integrations.</p>
+            <meta itemprop="author" content="Geoff Storbeck">
+        </article>
+        
+        <hr>
+        
+        <article itemscope itemtype="http://schema.org/BlogPosting">
+            <h3><a href="posts/2025-10-07-cloudflare-dynamic-dns.html" itemprop="url" rel="bookmark"><span itemprop="headline">Secure Dynamic DNS with Cloudflare and 1Password</span></a></h3>
+            <p><small><time datetime="2025-10-07" itemprop="datePublished">October 7, 2025</time> • DevOps, Security</small></p>
+            <p itemprop="description">Complete guide to setting up dynamic DNS with Cloudflare API while keeping credentials secure using 1Password service accounts. No more API keys on disk.</p>
+            <meta itemprop="author" content="Geoff Storbeck">
+        </article>
+
+        <hr>
+
+        <article itemscope itemtype="http://schema.org/BlogPosting">
+            <h3><a href="posts/2025-10-06-terminal-html-viewer.html" itemprop="url" rel="bookmark"><span itemprop="headline">Terminal Blog Reader with Fish Shell</span></a></h3>
+            <p><small><time datetime="2025-10-06" itemprop="datePublished">October 9, 2025</time> • Development, Terminal</small></p>
+            <p itemprop="description">Fish shell functions to browse this blog from the terminal with formatted post viewing using pandoc and glow.</p>
+            <meta itemprop="author" content="Geoff Storbeck">
+        </article>
+        
+        <hr>
+        
+        <article itemscope itemtype="http://schema.org/BlogPosting">
+            <h3><a href="posts/2025-10-06-github-pages-setup.html" itemprop="url" rel="bookmark"><span itemprop="headline">Setting Up GitHub Pages with Custom Domain</span></a></h3>
+            <p><small><time datetime="2025-10-06" itemprop="datePublished">October 6, 2025</time> • Technical Setup</small></p>
+            <p itemprop="description">Technical walkthrough of setting up this blog with GitHub Pages and custom domain configuration. DNS records, CNAME files, and why semantic HTML matters.</p>
+            <meta itemprop="author" content="Geoff Storbeck">
         </article>
         
         <hr>
@@ -150,7 +170,9 @@
     
     <footer>
         <hr>
-        <p><a href="https://www.linkedin.com/in/geoff-storbeck-81a25035/" rel="external">LinkedIn</a> • <a href="https://github.com/storbeck" rel="external">GitHub</a></p>
+        <address>
+            <a href="https://www.linkedin.com/in/geoff-storbeck-81a25035/" rel="external me">LinkedIn</a> • <a href="https://github.com/storbeck" rel="external me">GitHub</a>
+        </address>
         <p><small>All opinions are my own and do not reflect those of my employer.</small></p>
         <p><small>&copy; 2025 Storbeck</small></p>
     </footer>
