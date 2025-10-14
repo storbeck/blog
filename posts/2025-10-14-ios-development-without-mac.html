@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="How to develop native-feeling iOS apps on Linux without owning a Mac using Progressive Web Apps and Capacitor">
+    <meta name="author" content="Storbeck">
+    <title>iOS Development Without a Mac: PWA Approach - Storbeck Blog</title>
+</head>
+<body>
+    <header>
+        <nav aria-label="Site navigation">
+            <a href="../index.html" rel="home">← Storbeck Blog</a>
+        </nav>
+    </header>
+    
+    <main>
+        <article>
+            <header>
+                <h1>iOS Development Without a Mac: The PWA Approach</h1>
+                <p>
+                    <time datetime="2025-10-14">Published October 14, 2025</time>
+                    <span> • </span>
+                    <span>Development</span>
+                </p>
+            </header>
+            
+            <p><strong>You don't need a Mac to create native-feeling iOS apps. Here's how I built and deployed an iOS app using only Fedora Linux and some clever web technologies.</strong></p>
+            
+            <section>
+                <h2>The Problem</h2>
+                <p>I wanted to build an educational iOS app for my kids, but I don't own a Mac. Traditional iOS development requires Xcode, which only runs on macOS. Cloud solutions like GitHub Codespaces with macOS runners cost $0.08/minute and add up quickly for development work.</p>
+                
+                <p>Instead of spending thousands on Apple hardware or monthly fees on cloud services, I found a better way using Progressive Web App (PWA) technology.</p>
+            </section>
+            
+            <section>
+                <h2>The Solution: PWA + Capacitor</h2>
+                <p>Modern iOS Safari supports PWAs that can be "installed" directly to the home screen, creating an experience indistinguishable from native apps. Combined with Capacitor for future native features, this approach gives you 90% of what you need for most apps.</p>
+                
+                <h3>What You Get</h3>
+                <ul>
+                    <li><strong>No address bar</strong> - Completely hidden when launched from home screen</li>
+                    <li><strong>Full-screen experience</strong> - Uses entire screen real estate</li>
+                    <li><strong>Native app icon</strong> - Appears alongside real iOS apps</li>
+                    <li><strong>Fast performance</strong> - No hybrid framework overhead</li>
+                    <li><strong>Offline capability</strong> - With service workers (optional)</li>
+                </ul>
+            </section>
+            
+            <section>
+                <h2>Implementation Steps</h2>
+                
+                <h3>1. Set Up the Development Environment</h3>
+                <pre><code># Create React TypeScript project
+npm create vite@latest maze-adventures -- --template react-ts
+cd maze-adventures
+npm install
+
+# Add Capacitor for future native features
+npm install @capacitor/core @capacitor/cli @capacitor/ios
+npx cap init "Maze Adventures" com.storbeck.mazeadventures</code></pre>
+                
+                <h3>2. Configure PWA Meta Tags</h3>
+                <p>The magic happens in your HTML head section. These meta tags tell iOS Safari to treat your web app as a native app:</p>
+                
+                <pre><code>&lt;meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"&gt;
+&lt;meta name="apple-mobile-web-app-capable" content="yes"&gt;
+&lt;meta name="apple-mobile-web-app-status-bar-style" content="default"&gt;
+&lt;meta name="apple-mobile-web-app-title" content="Maze Adventures"&gt;
+&lt;link rel="apple-touch-icon" href="/icon.png"&gt;</code></pre>
+                
+                <h3>3. Development and Testing</h3>
+                <pre><code># Start development server accessible on network
+npm run dev -- --host 0.0.0.0
+
+# Access from iPhone at:
+# http://[your-ip]:5173/</code></pre>
+                
+                <h3>4. Installation on iOS</h3>
+                <ol>
+                    <li>Open Safari on iPhone and navigate to your dev server</li>
+                    <li>Tap the Share button (square with arrow up)</li>
+                    <li>Scroll down and tap "Add to Home Screen"</li>
+                    <li>Confirm the installation</li>
+                </ol>
+                
+                <p>The app now launches from your home screen with zero browser UI - completely native feeling.</p>
+            </section>
+            
+            <section>
+                <h2>Key Meta Tag Explanations</h2>
+                
+                <dl>
+                    <dt><code>apple-mobile-web-app-capable="yes"</code></dt>
+                    <dd>Enables full-screen mode, hiding Safari's address bar and controls</dd>
+                    
+                    <dt><code>apple-mobile-web-app-status-bar-style="default"</code></dt>
+                    <dd>Controls iOS status bar appearance (default, black, or black-translucent)</dd>
+                    
+                    <dt><code>user-scalable=no</code></dt>
+                    <dd>Prevents pinch-to-zoom for a more app-like experience</dd>
+                    
+                    <dt><code>apple-mobile-web-app-title</code></dt>
+                    <dd>Sets the name displayed under the home screen icon</dd>
+                </dl>
+            </section>
+            
+            <section>
+                <h2>When to Use This Approach</h2>
+                
+                <h3>Perfect For:</h3>
+                <ul>
+                    <li>Educational apps and games</li>
+                    <li>Productivity tools and utilities</li>
+                    <li>Content-focused applications</li>
+                    <li>MVP and prototyping</li>
+                    <li>Apps that don't need device-specific APIs</li>
+                </ul>
+                
+                <h3>Consider Native When You Need:</h3>
+                <ul>
+                    <li>Camera or photo library access</li>
+                    <li>Push notifications (though web push is coming)</li>
+                    <li>Background processing</li>
+                    <li>Deep iOS integration</li>
+                    <li>App Store distribution</li>
+                </ul>
+            </section>
+            
+            <section>
+                <h2>Future: Hybrid Approach</h2>
+                <p>The beauty of starting with Capacitor is the upgrade path. If you later need native features, you can:</p>
+                
+                <pre><code># Build iOS app remotely using EAS Build (free tier)
+npm install -g eas-cli
+eas build --platform ios
+
+# Or use other cloud build services:
+# - Codemagic
+# - Bitrise  
+# - GitHub Actions with macOS runner</code></pre>
+                
+                <p>Your web app code remains unchanged - Capacitor simply wraps it in a native shell.</p>
+            </section>
+            
+            <section>
+                <h2>Performance and User Experience</h2>
+                <p>PWAs often outperform hybrid apps built with frameworks like Cordova or Ionic because there's no JavaScript bridge overhead. Modern iOS Safari's JavaScript engine is fast enough for most interactive applications.</p>
+                
+                <p>The user experience is genuinely indistinguishable from native apps for the majority of use cases. Users launch your app from the home screen and interact with it exactly as they would any other iOS app.</p>
+            </section>
+            
+            <section>
+                <h2>Conclusion</h2>
+                <p>Don't let lack of Mac hardware stop you from iOS development. PWAs provide a legitimate path to creating professional iOS applications using any development platform.</p>
+                
+                <p>This approach saved me thousands in hardware costs and hundreds in monthly cloud fees while delivering an excellent user experience. For many applications, it's not just a workaround - it's the better solution.</p>
+            </section>
+        </article>
+    </main>
+    
+    <aside>
+        <section>
+            <h2>Related Topics</h2>
+            <ul>
+                <li><a href="https://capacitorjs.com/docs">Capacitor Documentation</a></li>
+                <li><a href="https://developer.apple.com/safari/web-apps/">Apple PWA Guidelines</a></li>
+                <li><a href="https://web.dev/progressive-web-apps/">Progressive Web Apps</a></li>
+            </ul>
+        </section>
+    </aside>
+    
+    <footer>
+        <nav aria-label="Post navigation">
+            <a href="../index.html" rel="home">← Back to blog</a>
+        </nav>
+        <p><small>Last updated: <time datetime="2025-10-14">October 14, 2025</time></small></p>
+    </footer>
+</body>
+</html>
