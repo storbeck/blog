@@ -44,26 +44,28 @@
 
       
 
-      <section>
-        <h2>Nonlinear intensity and smooth noise (Error dialog)</h2>
-        <p>Goal: make the error modal feel physical without looking jittery. Use a small translation driven by smooth noise and a nonlinear intensity that decays over time.</p>
+        <section>
+          <h2>Nonlinear intensity and soft drop (Error dialog)</h2>
+          <p>Goal: make the error modal feel physical. Baseline uses a small vertical jitter. Improved does a tiny diagonal “drop” from top left to bottom right, then settles back to center.</p>
 
         <section>
           
           <p>Open an error modal and compare the baseline (random jitter) to the improved version (smooth noise with nonlinear intensity and decay).</p>
           <h4>Code idea</h4>
-          <pre><code>// intensity grows on error, then decays each frame
-intensity = Math.max(0, intensity - decay * dt)        // linear decay
-strength = intensity * intensity                        // nonlinear mapping
-amplitude = maxPx * strength
+          <pre><code>// baseline: small vertical jitter (nonlinear intensity + decay)
+intensity = Math.max(0, intensity - decay * dt)
+amp = maxPx * (intensity * intensity)
+ox = 0
+oy = (Math.random()*2 - 1) * amp
 
-// baseline: random per frame (jittery)
-ox = (Math.random()*2 - 1) * amplitude
-oy = (Math.random()*2 - 1) * amplitude
-
-// improved: smooth noise, independent channels
-ox = noiseX(t * freq) * amplitude
-oy = noiseY(t * freq) * amplitude
+// improved: short springy drop along a 45° diagonal, then settle
+// s is position along the diagonal; v is velocity
+u = [1/Math.SQRT2, 1/Math.SQRT2]
+// start from top‑left (negative s), spring toward 0 with damping
+acc = (-k * s) - (d * v)
+v += acc * dt
+s += v * dt
+ox = u[0] * s; oy = u[1] * s
 modal.style.transform = `translate(${ox}px, ${oy}px)`</code></pre>
           <p>
             <strong>Before:</strong> <button type="button" id="btn-error-baseline">Open Error (Baseline)</button>
@@ -241,7 +243,7 @@ posB += (targetB - posB) * alpha</code></pre>
     };
   }
 
-  // 1) Error dialog: baseline random vs improved noise with decay
+  // 1) Error dialog: baseline vertical jitter vs improved diagonal soft drop
   (function() {
     const dialog = document.getElementById('error-dialog');
     const btnBase = document.getElementById('btn-error-baseline');
@@ -250,8 +252,11 @@ posB += (targetB - posB) * alpha</code></pre>
 
     let raf = 0, t0 = 0, intensity = 0, mode = 'baseline';
     const maxPx = 14, decayPerSec = 1.6;
-    const freqNoise = 3.0; // lower frequency so motion is clearly smooth
-    const nx = makeNoise1D(17.3), ny = makeNoise1D(73.1);
+    // Spring params for improved diagonal drop
+    const uX = 1/Math.SQRT2, uY = 1/Math.SQRT2; // 45° diagonal
+    let s = 0, v = 0; // position and velocity along diagonal
+    const k = 120;     // stiffness
+    const d = 16;      // damping
 
     function step() {
       const t = now(); const dt = Math.min(0.033, t - t0); t0 = t;
@@ -260,13 +265,36 @@ posB += (targetB - posB) * alpha</code></pre>
       const strength = intensity * intensity; // nonlinear
       const amp = maxPx * strength;
       let ox = 0, oy = 0;
-      if (mode === 'baseline') { ox = (Math.random()*2-1)*amp; oy = (Math.random()*2-1)*amp; }
-      else { ox = nx(t * freqNoise) * amp; oy = ny(t * freqNoise) * amp; }
+      if (mode === 'baseline') {
+        // vertical-only jitter
+        ox = 0;
+        oy = (Math.random()*2-1) * amp;
+      } else {
+        // spring drop along diagonal from top-left (negative s) then settle
+        const acc = (-k * s) - (d * v);
+        v += acc * dt;
+        s += v * dt;
+        ox = uX * s;
+        oy = uY * s;
+      }
       dialog.style.transform = `translate(${ox}px, ${oy}px)`;
-      if (intensity > 0) { raf = requestAnimationFrame(step); } else { dialog.style.transform = 'translate(0,0)'; }
+      const active = (mode === 'baseline') ? (intensity > 0) : (Math.abs(s) > 0.1 || Math.abs(v) > 2);
+      if (active) { raf = requestAnimationFrame(step); } else { dialog.style.transform = 'translate(0,0)'; }
     }
 
-    function open(which) { mode = which; if (!dialog.open) dialog.showModal(); intensity = 1; t0 = now(); cancelAnimationFrame(raf); raf = requestAnimationFrame(step); }
+    function open(which) {
+      mode = which;
+      if (!dialog.open) dialog.showModal();
+      t0 = now();
+      cancelAnimationFrame(raf);
+      if (mode === 'baseline') {
+        intensity = 1; // drives amplitude and decay
+      } else {
+        // start slightly up/left (negative s), let spring bring it through and back
+        intensity = 0; s = -12; v = 0;
+      }
+      raf = requestAnimationFrame(step);
+    }
     btnBase.addEventListener('click', () => open('baseline'));
     btnImproved.addEventListener('click', () => open('improved'));
     btnClose.addEventListener('click', () => { cancelAnimationFrame(raf); dialog.close(); dialog.style.transform = 'translate(0,0)'; });
