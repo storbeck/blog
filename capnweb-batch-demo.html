@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Live demo comparing six sequential REST fetches vs a single Cap’n Web HTTP batch. Shows network calls and timing.">
+  <meta name="author" content="Storbeck">
+  <title>Collapse 6 Fetches Into 1 — Cap’n Web Demo (Draft) - Storbeck Blog</title>
+  <link rel="preconnect" href="https://esm.sh">
+  <meta itemprop="author" content="Geoff Storbeck">
+  <meta itemprop="headline" content="Collapse 6 Fetches Into 1 — Cap’n Web Demo (Draft)">
+  <meta itemprop="datePublished" content="2025-10-15">
+  <meta itemprop="description" content="Compare naive REST vs Cap’n Web HTTP batch in a live, minimal demo.">
+  <meta itemprop="url" content="https://storbeck.dev/capnweb-batch-demo.html">
+  <meta itemprop="mainEntityOfPage" content="https://storbeck.dev/capnweb-batch-demo.html">
+  <meta itemprop="inLanguage" content="en">
+  <meta itemprop="genre" content="Demo">
+</head>
+<body>
+  <header>
+    <nav aria-label="Site navigation">
+      <a href="./index.html" rel="home">← Storbeck Blog</a>
+    </nav>
+  </header>
+
+  <main>
+    <article itemscope itemtype="http://schema.org/BlogPosting">
+      <header>
+        <h1 itemprop="headline">Collapse 6 Fetches Into 1 — Live Demo</h1>
+        <p>
+          <time datetime="2025-10-15" itemprop="datePublished">Published October 15, 2025</time>
+          <span> • </span>
+          <span>Performance</span>
+        </p>
+      </header>
+
+      <section aria-labelledby="demo-setup">
+        <h2 id="demo-setup">Setup</h2>
+        <p>This page compares two approaches against the deployed Worker:</p>
+        <ul>
+          <li>Six sequential REST calls</li>
+          <li>One HTTP batch using Cap’n Web</li>
+        </ul>
+        <dl>
+          <dt>Worker base URL</dt>
+          <dd><code>https://capnweb-demo.storbeck-capnweb-demo.workers.dev</code></dd>
+          <dt><label for="delayMs">Per-call server delay (ms)</label></dt>
+          <dd>
+            <input id="delayMs" name="delayMs" type="number" min="0" step="10" value="120">
+          </dd>
+        </dl>
+        <p id="config-help"><small>The Worker returns CORS + Timing-Allow-Origin headers so this page can measure timings.</small></p>
+      </section>
+
+      <section aria-labelledby="results" aria-live="polite">
+        <h2 id="results">Comparison</h2>
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">6 REST fetches (sequential)</th>
+              <th scope="col">1 HTTP batch (Cap’n Web)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <p><button type="button" id="runRest">Run sequential REST</button></p>
+                <pre id="logRest" role="log"></pre>
+              </td>
+              <td>
+                <p><button type="button" id="runBatch">Run single batch</button></p>
+                <pre id="logBatch" role="log"></pre>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section aria-labelledby="notes">
+        <h2 id="notes">Notes</h2>
+        <ul>
+          <li>This page imports Cap’n Web at runtime via ESM (<code>https://esm.sh/capnweb</code>) to avoid bundling.</li>
+          <li>Only requests to your Worker are counted in request totals.</li>
+          <li>For accurate numbers, ensure your Worker sets <code>Access-Control-Allow-Origin: *</code> and <code>Timing-Allow-Origin: *</code>.</li>
+        </ul>
+      </section>
+    </article>
+  </main>
+
+  <footer>
+    <nav aria-label="Page navigation">
+      <a href="./index.html" rel="home">← Back to blog</a>
+    </nav>
+    <p><small>Last updated: <time datetime="2025-10-15">October 15, 2025</time></small></p>
+  </footer>
+
+  <script>
+    (function() {
+      const BASE = 'https://capnweb-demo.storbeck-capnweb-demo.workers.dev';
+      const $ = (id) => document.getElementById(id);
+      const logRest = $('logRest');
+      const logBatch = $('logBatch');
+
+      function append(el, line = '') {
+        el.textContent += line + '\n';
+      }
+      function clear(el) { el.textContent = ''; }
+
+      function getDelay() {
+        const v = parseInt($('delayMs').value, 10);
+        return Number.isFinite(v) && v >= 0 ? v : 0;
+      }
+
+      function disableUI(disabled) {
+        $('runRest').disabled = disabled;
+        $('runBatch').disabled = disabled;
+        $('delayMs').disabled = disabled;
+      }
+
+      function installFetchLogger() {
+        const orig = window.fetch.bind(window);
+        const records = [];
+        window.fetch = async function(...args) {
+          const url = typeof args[0] === 'string' ? args[0] : args[0].url;
+          const t0 = performance.now();
+          const res = await orig(...args);
+          const t1 = performance.now();
+          records.push({ url, ms: t1 - t0, status: res.status });
+          return res;
+        };
+        return {
+          stop() { window.fetch = orig; },
+          get() { return records.slice(); }
+        };
+      }
+
+      async function runSequentialRest() {
+        clear(logRest);
+        disableUI(true);
+        const delay = getDelay();
+        append(logRest, `# 6 sequential REST fetches`);
+        append(logRest, `Base: ${BASE}`);
+        append(logRest, `Per-call server delay: ${delay} ms`);
+        append(logRest, '');
+
+        const logger = installFetchLogger();
+        const t0 = performance.now();
+        try {
+          for (let i = 1; i <= 6; i++) {
+            const s0 = performance.now();
+            const res = await fetch(`${BASE}/rest/${i}?delay=${delay}`);
+            const body = await res.json();
+            const s1 = performance.now();
+            append(logRest, `REST ${i}/6 -> ${res.status} in ${(s1 - s0).toFixed(1)} ms (${JSON.stringify(body)})`);
+          }
+          const t1 = performance.now();
+          const total = (t1 - t0).toFixed(1);
+          const onlyWorker = logger.get().filter(r => r.url.startsWith(BASE));
+          append(logRest, '');
+          append(logRest, `Total time: ${total} ms`);
+          append(logRest, `Requests to Worker: ${onlyWorker.length}`);
+        } catch (err) {
+          append(logRest, `Error: ${String(err)}`);
+        } finally {
+          logger.stop();
+          disableUI(false);
+        }
+      }
+
+      async function runBatchCapnweb() {
+        clear(logBatch);
+        disableUI(true);
+        const delay = getDelay();
+        append(logBatch, `# 1 HTTP batch (Cap’n Web)`);
+        append(logBatch, `Base: ${BASE}`);
+        append(logBatch, `Per-call server delay: ${delay} ms`);
+        append(logBatch, '');
+
+        try {
+          append(logBatch, 'Loading Cap\'n Web client…');
+          const cap = await import('https://esm.sh/capnweb@latest');
+          append(logBatch, 'Client loaded. Starting batch…');
+
+          const logger = installFetchLogger();
+          const api = cap.newHttpBatchRpcSession(`${BASE}/api?delay=${delay}`);
+
+          const t0 = performance.now();
+          const calls = [api.a(), api.b(), api.c(), api.d(), api.e(), api.f()];
+          const results = await Promise.all(calls);
+          const t1 = performance.now();
+
+          results.forEach((val, idx) => append(logBatch, `RPC ${idx + 1}/6 -> ${JSON.stringify(val)}`));
+          const total = (t1 - t0).toFixed(1);
+          const onlyWorker = logger.get().filter(r => r.url.startsWith(BASE));
+          logger.stop();
+
+          append(logBatch, '');
+          append(logBatch, `Total time: ${total} ms`);
+          append(logBatch, `Requests to Worker: ${onlyWorker.length}`);
+        } catch (err) {
+          append(logBatch, `Error: ${String(err)}`);
+        } finally {
+          disableUI(false);
+        }
+      }
+
+      $('runRest').addEventListener('click', runSequentialRest);
+      $('runBatch').addEventListener('click', runBatchCapnweb);
+    })();
+  </script>
+</body>
+</html>
