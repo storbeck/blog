@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Bring subtle, high‑quality UI motion and feedback using noise, nonlinear intensity, and asymptotic smoothing (adapted from game camera math)">
+  <meta name="author" content="Storbeck">
+  <title>Juicing Your UI with Math - Storbeck Blog</title>
+  <link rel="preconnect" href="https://github.com">
+  <link rel="dns-prefetch" href="https://www.linkedin.com">
+  <meta itemprop="author" content="Geoff Storbeck">
+  <meta itemprop="headline" content="Juicing Your UI with Math">
+  <meta itemprop="datePublished" content="2025-10-15">
+  <meta itemprop="description" content="Bring subtle, high‑quality UI motion and feedback using noise, nonlinear intensity, and asymptotic smoothing (adapted from game camera math)">
+  <meta itemprop="url" content="https://storbeck.dev/posts/2025-10-15-juicing-ui-with-math.html">
+  <meta itemprop="mainEntityOfPage" content="https://storbeck.dev/posts/2025-10-15-juicing-ui-with-math.html">
+  <meta itemprop="inLanguage" content="en">
+  <meta itemprop="genre" content="Blog">
+  
+</head>
+<body>
+  <header>
+    <nav aria-label="Site navigation">
+      <a href="../index.html" rel="home">← Storbeck Blog</a>
+    </nav>
+  </header>
+
+  <main>
+    <article itemscope itemtype="http://schema.org/BlogPosting">
+      <header>
+        <h1 itemprop="headline">Juicing Your UI with Math</h1>
+        <p>
+          <time datetime="2025-10-15" itemprop="datePublished">Published October 15, 2025</time>
+          <span> • </span>
+          <span>UI/UX, Interaction Design</span>
+        </p>
+      </header>
+
+      <section>
+        <h2>Why this post</h2>
+        <p>This takes the “juicing your cameras with math” ideas from game dev and puts them to work in everyday interfaces. The techniques are the same; the context is different. With a touch of math, motion reads as deliberate and steady rather than jittery or dizzying.</p>
+        <p><strong>Rule of thumb:</strong> think of motion like seasoning. A pinch improves everything; a handful ruins the dish. Use it thoughtfully.</p>
+      </section>
+
+      
+
+      <section>
+        <h2>Nonlinear intensity and smooth noise (Error dialog)</h2>
+        <p>Goal: make the error modal feel physical without looking jittery. Use a small translation driven by smooth noise and a nonlinear intensity that decays over time.</p>
+
+        <section>
+          
+          <p>Open an error modal and compare the baseline (random jitter) to the improved version (smooth noise with nonlinear intensity and decay).</p>
+          <h4>Code idea</h4>
+          <pre><code>// intensity grows on error, then decays each frame
+intensity = Math.max(0, intensity - decay * dt)        // linear decay
+strength = intensity * intensity                        // nonlinear mapping
+amplitude = maxPx * strength
+
+// baseline: random per frame (jittery)
+ox = (Math.random()*2 - 1) * amplitude
+oy = (Math.random()*2 - 1) * amplitude
+
+// improved: smooth noise, independent channels
+ox = noiseX(t * freq) * amplitude
+oy = noiseY(t * freq) * amplitude
+modal.style.transform = `translate(${ox}px, ${oy}px)`</code></pre>
+          <p>
+            <strong>Before:</strong> <button type="button" id="btn-error-baseline">Open Error (Baseline)</button>
+            <strong>After:</strong> <button type="button" id="btn-error-improved">Open Error (Improved)</button>
+          </p>
+          <dialog id="error-dialog" aria-labelledby="error-title">
+            <header>
+              <h4 id="error-title">Could not save changes</h4>
+            </header>
+            <p>Please fix the highlighted fields and try again.</p>
+            <menu>
+              <button type="button" id="error-close">Close</button>
+            </menu>
+          </dialog>
+        </section>
+
+        <section>
+          <h2>Smooth follow (Drawer)</h2>
+          <p>Goal: avoid a hard snap when the drawer opens and closes. Move a fraction of the remaining distance each frame, scaled by time.</p>
+          <h4>Code idea</h4>
+          <pre><code>// pos 1 is offscreen, 0 is onscreen
+alpha = 1 - Math.pow(1 - kPerSecond, dt * 60)  // time scaled
+pos += (target - pos) * alpha                  // smooth follow
+drawer.style.transform = `translateX(${pos*100}%)`</code></pre>
+          <p>
+            <strong>Before:</strong> <button type="button" id="btn-drawer-baseline">Open Drawer (Baseline)</button>
+            <strong>After:</strong> <button type="button" id="btn-drawer-improved">Open Drawer (Improved)</button>
+          </p>
+          <section id="drawer" role="dialog" aria-modal="true" aria-labelledby="drawer-title" hidden>
+            <header>
+              <h4 id="drawer-title">Notifications</h4>
+            </header>
+            <p>All caught up. Come back later for new updates.</p>
+            <p>
+              <button type="button" id="drawer-close">Close</button>
+            </p>
+          </section>
+        </section>
+
+        <section>
+          <h2>Feathered bias (Inline error)</h2>
+          <p>Goal: draw attention to the field with an error without a harsh jump. Compute a target scroll position with a small bias, then ease toward it.</p>
+          <h4>Code idea</h4>
+          <pre><code>targetY = fieldTop - window.innerHeight * 0.35   // biased target
+alpha = 1 - Math.pow(1 - 0.18, dt * 60)         // gentle ease
+y += (targetY - y) * alpha
+window.scrollTo(0, y)</code></pre>
+          <p>
+            <strong>Before:</strong> <button type="button" id="btn-bias-baseline">Show Error (Baseline)</button>
+            <strong>After:</strong> <button type="button" id="btn-bias-improved">Show Error (Improved)</button>
+          </p>
+          <section aria-labelledby="form-title">
+            <h4 id="form-title">Sample Form</h4>
+            <p><label>First name <input type="text" id="f1"></label></p>
+            <p><label>Last name <input type="text" id="f2"></label></p>
+            <p><label>Email <input type="email" id="f3"></label></p>
+            <p><label>City <input type="text" id="f4"></label></p>
+            <p><label>Country <input type="text" id="f5"></label></p>
+            <p id="error-inline" hidden><strong>Enter a valid email.</strong></p>
+          </section>
+        </section>
+      </section>
+
+      <section>
+        <h2>Toast: snap vs smooth follow with gentle pulse</h2>
+        <p>Goal: show feedback that feels calm and readable. Baseline snaps. Improved eases in and adds a tiny settling motion.</p>
+        <h4>Code idea</h4>
+        <pre><code>// baseline
+toast.hidden = false; toast.style.transform = 'translateY(0)';
+
+// improved
+pos = 1; target = 0; // 1 off, 0 on
+alpha = 1 - Math.pow(1 - kPerSecond, dt * 60)
+pos += (target - pos) * alpha
+toast.style.transform = `translateY(${pos*20}px)` // 20px travel
+// small noise pulse for a short time after showing</code></pre>
+        <p>
+          <strong>Before:</strong> <button type="button" id="btn-toast-baseline">Show Toast (Baseline)</button>
+          <strong>After:</strong> <button type="button" id="btn-toast-improved">Show Toast (Improved)</button>
+        </p>
+        <section id="toast" role="status" aria-live="polite" hidden>
+          <p>Saved successfully</p>
+        </section>
+      </section>
+
+        
+
+      <section>
+        <h2>Sticky header: jump vs smooth follow</h2>
+        <p>Goal: avoid a hard jump when the header sticks. Baseline flips at a threshold. Improved eases into place.</p>
+        <h4>Code idea</h4>
+        <pre><code>// baseline
+if (scrollY &gt;= threshold) header.style.transform = 'translateY(0)'; else header.style.transform = 'translateY(-60px)';
+
+// improved
+targetY = (scrollY &gt;= threshold) ? 0 : -60
+posY += (targetY - posY) * alpha</code></pre>
+        <p>
+          <strong>Before:</strong> <button type="button" id="btn-sticky-baseline">Enable Sticky (Baseline)</button>
+          <strong>After:</strong> <button type="button" id="btn-sticky-improved">Enable Sticky (Improved)</button>
+        </p>
+        <header id="demo-sticky" aria-label="Demo sticky header">
+          <p><strong>Section Header</strong></p>
+        </header>
+          
+      </section>
+
+      <section>
+        <h2>Reorder: instant vs smooth settle</h2>
+        <p>Goal: when items change order, let them glide into place. Baseline teleports. Improved eases between positions.</p>
+        <h4>Code idea</h4>
+        <pre><code>// baseline: swap immediately
+swap()
+
+// improved: animate positions with smoothing
+posA += (targetA - posA) * alpha
+posB += (targetB - posB) * alpha</code></pre>
+        <p>
+          <strong>Before:</strong> <button type="button" id="btn-swap-baseline">Swap (Baseline)</button>
+          <strong>After:</strong> <button type="button" id="btn-swap-improved">Swap (Improved)</button>
+        </p>
+        <section id="swapRow" aria-label="Swappable items">
+          <article id="swapA" aria-label="Item A"><p>A</p></article>
+          <article id="swapB" aria-label="Item B"><p>B</p></article>
+        </section>
+      </section>
+
+      <section>
+        <h2>Summary</h2>
+        <ul>
+          <li>Map event strength nonlinearly to response.</li>
+          <li>Use coherent noise for natural, time-scaled micro‑motion.</li>
+          <li>Apply asymptotic smoothing for calm, readable movement.</li>
+          <li>Feather biases toward POIs; avoid snaps.</li>
+          <li>Split attention when truly needed, and merge gracefully.</li>
+        </ul>
+      </section>
+    </article>
+  </main>
+
+  <aside>
+    <section>
+      <h2>Related Topics</h2>
+      <ul>
+        <li><a href="https://www.youtube.com/watch?v=tu-Qe66AvtY" rel="external noopener noreferrer">Original talk (GDC): Juicing Your Cameras with Math</a></li>
+        <li><a href="https://en.wikipedia.org/wiki/Perlin_noise" rel="external noopener noreferrer">Perlin noise</a></li>
+        <li><a href="https://www.gdcvault.com/" rel="external noopener noreferrer">GDC Vault</a></li>
+      </ul>
+    </section>
+  </aside>
+
+  <footer>
+    <nav aria-label="Post navigation">
+      <a href="../index.html" rel="home">← Back to blog</a>
+    </nav>
+    <p><small>Last updated: <time datetime="2025-10-15">October 15, 2025</time></small></p>
+  </footer>
+
+  <script>
+  // Respect user motion preference
+  const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Utilities
+  const now = () => performance.now() / 1000;
+  const clamp01 = (v) => Math.min(1, Math.max(0, v));
+  const lerp = (a, b, t) => a + (b - a) * t;
+  const smoothstep = (a, b, x) => { const t = clamp01((x - a) / (b - a)); return t * t * (3 - 2 * t); };
+
+  // Tiny 1D value noise (deterministic) for smooth micro‑motion
+  function makeNoise1D(seed) {
+    function h(i) { const s = Math.sin(i * 127.1 + seed * 311.7) * 43758.5453; return s - Math.floor(s); }
+    return function(t) {
+      const i0 = Math.floor(t), i1 = i0 + 1, f = t - i0, u = f * f * (3 - 2 * f);
+      return (h(i0) * (1 - u) + h(i1) * u) * 2 - 1;
+    };
+  }
+
+  // 1) Error dialog: baseline random vs improved noise with decay
+  (function() {
+    const dialog = document.getElementById('error-dialog');
+    const btnBase = document.getElementById('btn-error-baseline');
+    const btnImproved = document.getElementById('btn-error-improved');
+    const btnClose = document.getElementById('error-close');
+
+    let raf = 0, t0 = 0, intensity = 0, mode = 'baseline';
+    const maxPx = 14, decayPerSec = 1.6;
+    const freqNoise = 3.0; // lower frequency so motion is clearly smooth
+    const nx = makeNoise1D(17.3), ny = makeNoise1D(73.1);
+
+    function step() {
+      const t = now(); const dt = Math.min(0.033, t - t0); t0 = t;
+      if (reduceMotion) { dialog.style.transform = 'translate(0,0)'; cancelAnimationFrame(raf); return; }
+      intensity = Math.max(0, intensity - decayPerSec * dt);
+      const strength = intensity * intensity; // nonlinear
+      const amp = maxPx * strength;
+      let ox = 0, oy = 0;
+      if (mode === 'baseline') { ox = (Math.random()*2-1)*amp; oy = (Math.random()*2-1)*amp; }
+      else { ox = nx(t * freqNoise) * amp; oy = ny(t * freqNoise) * amp; }
+      dialog.style.transform = `translate(${ox}px, ${oy}px)`;
+      if (intensity > 0) { raf = requestAnimationFrame(step); } else { dialog.style.transform = 'translate(0,0)'; }
+    }
+
+    function open(which) { mode = which; if (!dialog.open) dialog.showModal(); intensity = 1; t0 = now(); cancelAnimationFrame(raf); raf = requestAnimationFrame(step); }
+    btnBase.addEventListener('click', () => open('baseline'));
+    btnImproved.addEventListener('click', () => open('improved'));
+    btnClose.addEventListener('click', () => { cancelAnimationFrame(raf); dialog.close(); dialog.style.transform = 'translate(0,0)'; });
+  })();
+
+  // 2) Drawer: snap vs smooth follow (time‑scaled)
+  (function() {
+    const drawer = document.getElementById('drawer');
+    const btnBase = document.getElementById('btn-drawer-baseline');
+    const btnImproved = document.getElementById('btn-drawer-improved');
+    const btnClose = document.getElementById('drawer-close');
+
+    function ensureStyle() {
+      drawer.style.position = 'fixed'; drawer.style.top = '0'; drawer.style.right = '0'; drawer.style.bottom = '0';
+      drawer.style.width = '320px'; drawer.style.background = 'white'; drawer.style.borderLeft = '1px solid #ccc';
+      drawer.style.padding = '16px'; drawer.style.boxSizing = 'border-box'; drawer.style.willChange = 'transform';
+      drawer.style.transform = 'translateX(100%)';
+    }
+    ensureStyle();
+
+    let raf = 0, pos = 1, target = 1, last = 0; // pos: 1 off, 0 on
+    function hiddenIfNeeded() { drawer.hidden = pos >= 0.999; }
+
+    function tick() {
+      const t = now(); const dt = Math.min(0.033, t - last); last = t;
+      const kps = 8/60; // gentle
+      const a = reduceMotion ? 1 : (1 - Math.pow(1 - kps, dt * 60));
+      pos += (target - pos) * a;
+      drawer.style.transform = `translateX(${(pos*100).toFixed(3)}%)`;
+      if (Math.abs(target - pos) > 0.002) { raf = requestAnimationFrame(tick); }
+      else { pos = target; drawer.style.transform = `translateX(${(pos*100).toFixed(3)}%)`; if (pos === 1) hiddenIfNeeded(); }
+    }
+
+    function openBaseline() { ensureStyle(); drawer.hidden = false; pos = target = 0; drawer.style.transform = 'translateX(0)'; }
+    function openImproved() { ensureStyle(); drawer.hidden = false; last = now(); target = 0; cancelAnimationFrame(raf); if (reduceMotion) openBaseline(); else raf = requestAnimationFrame(tick); }
+    function closeDrawer() { last = now(); target = 1; cancelAnimationFrame(raf); if (reduceMotion) { pos = 1; drawer.style.transform = 'translateX(100%)'; hiddenIfNeeded(); } else { raf = requestAnimationFrame(tick); } }
+
+    btnBase.addEventListener('click', openBaseline);
+    btnImproved.addEventListener('click', openImproved);
+    btnClose.addEventListener('click', closeDrawer);
+  })();
+
+  // 3) Error field: snap vs feathered scroll bias
+  (function() {
+    const btnBase = document.getElementById('btn-bias-baseline');
+    const btnImproved = document.getElementById('btn-bias-improved');
+    const err = document.getElementById('error-inline');
+    const email = document.getElementById('f3');
+    function showErr() { err.hidden = false; }
+    function hideErr() { err.hidden = true; }
+    function base() {
+      showErr(); email.focus();
+      const r = email.getBoundingClientRect();
+      const y = r.top + window.scrollY - (window.innerHeight / 2 - r.height);
+      window.scrollTo(0, y);
+    }
+    function improved() {
+      showErr(); email.focus();
+      const startY = window.scrollY; const r = email.getBoundingClientRect();
+      const targetY = r.top + window.scrollY - (window.innerHeight * 0.35);
+      if (reduceMotion) { window.scrollTo(0, targetY); return; }
+      let y = startY, last = now();
+      function step() { const t = now(); const dt = Math.min(0.033, t - last); last = t; const a = 1 - Math.pow(1 - 0.18, dt * 60); y += (targetY - y) * a; window.scrollTo(0, y); if (Math.abs(targetY - y) > 0.5) requestAnimationFrame(step); }
+      requestAnimationFrame(step);
+    }
+    btnBase.addEventListener('click', base);
+    btnImproved.addEventListener('click', improved);
+    email.addEventListener('input', hideErr);
+  })();
+
+  // 4) Toast: snap vs smooth follow with gentle pulse
+  (function() {
+    const toast = document.getElementById('toast');
+    const btnBase = document.getElementById('btn-toast-baseline');
+    const btnImproved = document.getElementById('btn-toast-improved');
+    const nx = makeNoise1D(9.1);
+
+    function ensureStyle() {
+      toast.style.position = 'fixed'; toast.style.right = '16px'; toast.style.bottom = '16px';
+      toast.style.padding = '12px 16px'; toast.style.background = '#222'; toast.style.color = '#fff';
+      toast.style.borderRadius = '4px'; toast.style.boxShadow = '0 2px 6px rgba(0,0,0,0.3)';
+      toast.style.transform = 'translateY(20px)'; toast.style.opacity = '0.0';
+      toast.hidden = true;
+    }
+    ensureStyle();
+
+    function showBaseline() {
+      ensureStyle(); toast.hidden = false; toast.style.transform = 'translateY(0)'; toast.style.opacity = '1';
+      setTimeout(() => { toast.hidden = true; }, 2000);
+    }
+
+    function showImproved() {
+      ensureStyle(); toast.hidden = false;
+      let pos = 1, target = 0, raf = 0, t0 = now();
+      let pulseT = 0.6; // seconds of tiny pulse
+      function step() {
+        const t = now(); const dt = Math.min(0.033, t - t0); t0 = t;
+        const a = reduceMotion ? 1 : (1 - Math.pow(1 - 10/60, dt * 60));
+        pos += (target - pos) * a;
+        let oy = pos * 20;
+        if (!reduceMotion && pulseT > 0) { oy += nx(t * 6.0) * 1.5; pulseT -= dt; }
+        toast.style.transform = `translateY(${oy.toFixed(2)}px)`;
+        toast.style.opacity = String(1 - pos);
+        if (Math.abs(target - pos) > 0.002) raf = requestAnimationFrame(step);
+        else { setTimeout(() => { toast.hidden = true; }, 1800); }
+      }
+      raf = requestAnimationFrame(step);
+    }
+
+    btnBase.addEventListener('click', showBaseline);
+    btnImproved.addEventListener('click', showImproved);
+  })();
+
+  
+
+  // 6) Sticky header: jump vs smooth follow
+  (function() {
+    const hdr = document.getElementById('demo-sticky');
+    const btnBase = document.getElementById('btn-sticky-baseline');
+    const btnImproved = document.getElementById('btn-sticky-improved');
+    let mode = 'baseline';
+
+    function ensureStyle() {
+      hdr.style.position = 'fixed'; hdr.style.left = '0'; hdr.style.right = '0'; hdr.style.top = '0';
+      hdr.style.background = '#f8f8f8'; hdr.style.borderBottom = '1px solid #ccc'; hdr.style.padding = '8px 12px';
+      hdr.style.transform = 'translateY(-60px)'; hdr.style.willChange = 'transform';
+    }
+    ensureStyle();
+
+    let posY = -60, targetY = -60, raf = 0, last = now();
+    const threshold = 140;
+
+    function onScroll() {
+      if (mode === 'baseline' || reduceMotion) {
+        const y = window.scrollY >= threshold ? 0 : -60; hdr.style.transform = `translateY(${y}px)`;
+      } else {
+        targetY = window.scrollY >= threshold ? 0 : -60;
+        cancelAnimationFrame(raf); raf = requestAnimationFrame(tick);
+      }
+    }
+
+    function tick() {
+      const t = now(); const dt = Math.min(0.033, t - last); last = t;
+      const a = 1 - Math.pow(1 - 10/60, dt * 60);
+      posY += (targetY - posY) * a; hdr.style.transform = `translateY(${posY.toFixed(2)}px)`;
+      if (Math.abs(targetY - posY) > 0.2) raf = requestAnimationFrame(tick);
+    }
+
+    btnBase.addEventListener('click', () => { mode = 'baseline'; onScroll(); });
+    btnImproved.addEventListener('click', () => { mode = 'improved'; onScroll(); });
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+  })();
+
+  // 7) Reorder: instant vs smooth settle
+  (function() {
+    const row = document.getElementById('swapRow');
+    const a = document.getElementById('swapA');
+    const b = document.getElementById('swapB');
+    const btnBase = document.getElementById('btn-swap-baseline');
+    const btnImproved = document.getElementById('btn-swap-improved');
+
+    function ensureStyle() {
+      row.style.position = 'relative'; row.style.height = '80px'; row.style.margin = '8px 0';
+      row.style.border = '1px dashed #ccc'; row.style.userSelect = 'none';
+      [a,b].forEach((el) => { el.style.position = 'absolute'; el.style.width = '120px'; el.style.height = '60px'; el.style.top = '10px'; el.style.background = '#eef'; el.style.border = '1px solid #99c'; el.style.display = 'grid'; el.style.placeItems = 'center'; el.style.willChange = 'transform,left'; });
+    }
+    ensureStyle();
+
+    let swapped = false; let posA = 0, posB = 140; let targetA = 0, targetB = 140; let raf = 0, last = now();
+    function layoutInstant() {
+      a.style.left = `${(swapped ? 140 : 0)}px`; b.style.left = `${(swapped ? 0 : 140)}px`;
+    }
+
+    function animateToTargets() {
+      const t = now(); const dt = Math.min(0.033, t - last); last = t;
+      const a1 = reduceMotion ? 1 : (1 - Math.pow(1 - 12/60, dt * 60));
+      posA += (targetA - posA) * a1; posB += (targetB - posB) * a1;
+      a.style.left = `${posA.toFixed(2)}px`; b.style.left = `${posB.toFixed(2)}px`;
+      if (Math.abs(targetA - posA) > 0.5 || Math.abs(targetB - posB) > 0.5) raf = requestAnimationFrame(animateToTargets);
+    }
+
+    btnBase.addEventListener('click', () => { swapped = !swapped; layoutInstant(); });
+    btnImproved.addEventListener('click', () => {
+      swapped = !swapped; targetA = swapped ? 140 : 0; targetB = swapped ? 0 : 140; cancelAnimationFrame(raf); last = now(); raf = requestAnimationFrame(animateToTargets);
+    });
+    layoutInstant();
+  })();
+  </script>
+</body>
+</html>
