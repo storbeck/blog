@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Minimal, copy‑paste CSS to make a rainbow border using layered backgrounds and conic‑gradient. One rule. No extra markup.">
+  <meta name="author" content="Storbeck">
+  <title>Rainbow Border with Modern CSS (One Rule) - Storbeck Blog</title>
+  <link rel="preconnect" href="https://github.com">
+  <link rel="dns-prefetch" href="https://www.linkedin.com">
+  <meta itemprop="author" content="Geoff Storbeck">
+  <meta itemprop="headline" content="Rainbow Border with Modern CSS (One Rule)">
+  <meta itemprop="datePublished" content="2025-10-15">
+  <meta itemprop="description" content="Minimal, copy‑paste CSS to make a rainbow border using layered backgrounds and conic‑gradient. One rule. No extra markup.">
+  <meta itemprop="url" content="https://storbeck.dev/posts/2025-10-15-modern-rainbow-border-css.html">
+  <meta itemprop="mainEntityOfPage" content="https://storbeck.dev/posts/2025-10-15-modern-rainbow-border-css.html">
+  <meta itemprop="inLanguage" content="en">
+  <meta itemprop="genre" content="Blog">
+</head>
+<body>
+  <header>
+    <nav aria-label="Site navigation">
+      <a href="../index.html" rel="home">← Storbeck Blog</a>
+    </nav>
+  </header>
+
+  <main>
+    <article itemscope itemtype="http://schema.org/BlogPosting">
+      <header>
+        <h1 itemprop="headline">Rainbow Border with Modern CSS (One Rule)</h1>
+        <p>
+          <time datetime="2025-10-15" itemprop="datePublished">Published October 15, 2025</time>
+          <span> • </span>
+          <span>CSS</span>
+        </p>
+      </header>
+
+      <section aria-labelledby="modern">
+        <h2 id="modern">Minimal, Copy‑Paste CSS</h2>
+        <p>One rule using layered backgrounds and <code>conic-gradient()</code>. The solid face paints the padding box; the rainbow paints the border box through a transparent border.</p>
+        <pre><code>/* HTML */
+&lt;button class="rainbow" type="button">Rainbow Bordered Button&lt;/button>
+
+/* CSS */
+.rainbow {
+  /* rotation angle for the conic gradient */
+  --angle: 0turn;
+  /* Layout */
+  inline-size: 15em;
+  block-size: 3em;
+  border-radius: 10px;
+  border: 4px solid transparent; /* border thickness */
+
+  /* Two backgrounds: inner solid, outer conic rainbow */
+  background:
+    linear-gradient(hsl(199 61% 17%), hsl(199 61% 17%)) padding-box,
+    conic-gradient(from var(--angle),
+      hsl(4 82% 66%), hsl(11 86% 66%), hsl(40 90% 68%),
+      hsl(161 33% 60%), hsl(208 48% 60%), hsl(283 30% 68%), hsl(4 82% 66%)
+    ) border-box;
+
+  color: white;
+  font-size: 1.1rem;
+}
+
+.rainbow:where(:hover, :focus-visible) {
+  background:
+    linear-gradient(hsl(199 61% 22%), hsl(199 61% 22%)) padding-box,
+    conic-gradient(
+      hsl(4 82% 66%), hsl(11 86% 66%), hsl(40 90% 68%),
+      hsl(161 33% 60%), hsl(208 48% 60%), hsl(283 30% 68%), hsl(4 82% 66%)
+    ) border-box;
+}
+
+.rainbow:active {
+  background:
+    linear-gradient(hsl(199 61% 12%), hsl(199 61% 12%)) padding-box,
+    conic-gradient(
+      hsl(4 82% 66%), hsl(11 86% 66%), hsl(40 90% 68%),
+      hsl(161 33% 60%), hsl(208 48% 60%), hsl(283 30% 68%), hsl(4 82% 66%)
+    ) border-box;
+}
+</code></pre>
+        <p>Benefits:</p>
+        <ul>
+          <li>No pseudo‑elements</li>
+          <li>Border radius applies to both the fill and the rainbow border</li>
+          <li>Colors stay crisp on any DPI; no images required</li>
+        </ul>
+      </section>
+
+      <section aria-labelledby="demo">
+        <h2 id="demo">Live Demo</h2>
+        <p>Buttons below use the same minimal CSS. The second one rotates the border.</p>
+        <style>
+          /* Scoped to this article to avoid leaking styles site-wide */
+          .demo-wrap .rainbow {
+            --angle: 0turn;
+            inline-size: 15em;
+            block-size: 3em;
+            border-radius: 10px;
+            border: 4px solid transparent;
+            background:
+              linear-gradient(hsl(199 61% 17%), hsl(199 61% 17%)) padding-box,
+              conic-gradient(from var(--angle),
+                hsl(4 82% 66%), hsl(11 86% 66%), hsl(40 90% 68%),
+                hsl(161 33% 60%), hsl(208 48% 60%), hsl(283 30% 68%), hsl(4 82% 66%)
+              ) border-box;
+            color: white;
+            font-size: 1.1rem;
+          }
+
+          /* Smooth hover/active face changes */
+          .demo-wrap .rainbow:where(:hover, :focus-visible) {
+            background:
+              linear-gradient(hsl(199 61% 22%), hsl(199 61% 22%)) padding-box,
+              conic-gradient(from var(--angle),
+                hsl(4 82% 66%), hsl(11 86% 66%), hsl(40 90% 68%),
+                hsl(161 33% 60%), hsl(208 48% 60%), hsl(283 30% 68%), hsl(4 82% 66%)
+              ) border-box;
+          }
+          .demo-wrap .rainbow:active {
+            background:
+              linear-gradient(hsl(199 61% 12%), hsl(199 61% 12%)) padding-box,
+              conic-gradient(from var(--angle),
+                hsl(4 82% 66%), hsl(11 86% 66%), hsl(40 90% 68%),
+                hsl(161 33% 60%), hsl(208 48% 60%), hsl(283 30% 68%), hsl(4 82% 66%)
+              ) border-box;
+          }
+
+          /* Register and animate the custom angle for smooth rotation */
+          @property --angle {
+            syntax: '<angle>';
+            inherits: false;
+            initial-value: 0turn;
+          }
+          @keyframes spin {
+            to { --angle: 1turn; }
+          }
+          .demo-wrap .rainbow.rotate {
+            animation: spin 3s linear infinite;
+          }
+        </style>
+        <figure class="demo-wrap">
+          <p>
+            <button class="rainbow" type="button">Rainbow Border</button>
+          </p>
+          <p>
+            <button class="rainbow rotate" type="button">Rotating Border</button>
+          </p>
+          <figcaption>
+            <small>Top: static border. Bottom: rotating gradient using a typed custom property and a simple animation. No extra markup.</small>
+          </figcaption>
+        </figure>
+      </section>
+
+      
+
+      <section aria-labelledby="notes">
+        <h2 id="notes">Notes</h2>
+        <ul>
+          <li>Example only; styles above are scoped to this article.</li>
+          <li>Use a real <code>&lt;button&gt;</code> for accessibility; keep contrast high.</li>
+          <li>Adjust border thickness by changing the transparent <code>border</code> width.</li>
+        </ul>
+      </section>
+    </article>
+  </main>
+
+  <aside>
+    <section>
+      <h2>Related Topics</h2>
+      <ul>
+        <li>CSS gradients: <a href="https://developer.mozilla.org/docs/Web/CSS/gradient/conic-gradient" rel="external noopener noreferrer">conic-gradient()</a></li>
+        <li>Layered backgrounds &amp; clipping: <a href="https://developer.mozilla.org/docs/Web/CSS/background-clip" rel="external noopener noreferrer">background-clip</a></li>
+        <li>Border images: <a href="https://developer.mozilla.org/docs/Web/CSS/border-image" rel="external noopener noreferrer">border-image</a></li>
+      </ul>
+    </section>
+  </aside>
+
+  <footer>
+    <nav aria-label="Post navigation">
+      <a href="../index.html" rel="home">← Back to blog</a>
+    </nav>
+    <p><small>Last updated: <time datetime="2025-10-15">October 15, 2025</time></small></p>
+  </footer>
+</body>
+<!--
+This page intentionally contains code examples only. The site does not include global CSS.
+-->
+</html>
