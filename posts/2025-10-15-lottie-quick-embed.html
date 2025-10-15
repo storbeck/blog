@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Drop‑in animations with Lottie web components. Designers export Lottie; developers embed a local .lottie or JSON with one tag—no JavaScript to write or CSS transforms to rebuild.">
+  <meta name="author" content="Storbeck">
+  <title>Drop‑in Lottie Animations - Storbeck Blog</title>
+  <link rel="preconnect" href="https://unpkg.com">
+  <link rel="dns-prefetch" href="https://unpkg.com">
+  <meta itemprop="author" content="Geoff Storbeck">
+  <meta itemprop="headline" content="Drop‑in Lottie Animations">
+  <meta itemprop="datePublished" content="2025-10-15">
+  <meta itemprop="description" content="Design in Figma/After Effects → export Lottie; embed with a single web component. No JS to write, no CSS transforms to recreate — fast designer‑to‑dev handoff.">
+  <meta itemprop="url" content="https://storbeck.dev/posts/2025-10-15-lottie-quick-embed.html">
+  <meta itemprop="mainEntityOfPage" content="https://storbeck.dev/posts/2025-10-15-lottie-quick-embed.html">
+  <meta itemprop="inLanguage" content="en">
+  <meta itemprop="genre" content="Blog">
+  <!-- Minimal, demo-only script include for the DotLottie web component (.lottie assets). -->
+  <script type="module" src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs"></script>
+</head>
+<body>
+  <header>
+    <nav aria-label="Site navigation">
+      <a href="../index.html" rel="home">← Storbeck Blog</a>
+    </nav>
+  </header>
+
+  <main>
+    <article itemscope itemtype="http://schema.org/BlogPosting">
+      <header>
+        <h1 itemprop="headline">Simple Drop‑in Animations</h1>
+        <p>
+          <time datetime="2025-10-15" itemprop="datePublished">Published October 15, 2025</time>
+          <span> • </span>
+          <span>UI</span>
+        </p>
+      </header>
+
+      <section aria-labelledby="demo">
+        <h2 id="demo">Live demo</h2>
+        <p>This is a Lottie animation added with a single HTML tag. No custom JavaScript or CSS animations required.</p>
+        <figure>
+          <dotlottie-player
+            src="../lottie/bouncing_square.lottie"
+            background="transparent"
+            speed="1"
+            loop
+            autoplay
+            aria-label="Bouncing square animation"
+            style="width: 480px; height: 480px">
+          </dotlottie-player>
+          <figcaption><small>Embedded with the DotLottie web player. Local <code>.lottie</code> asset, looping and autoplay enabled.</small></figcaption>
+        </figure>
+      </section>
+
+      <section aria-labelledby="why">
+        <h2 id="why">Why use Lottie?</h2>
+        <p>Lottie is a lightweight, vector‑based animation format (JSON or <code>.lottie</code>) that plays natively on the web and mobile. Designers export straight from After Effects/Figma; developers embed the file with a single tag. You get sharp animations at any size, small downloads, and simple controls&mdash;without hand‑coding animation logic.</p>
+      </section>
+
+      <section aria-labelledby="whatyouneed">
+        <h2 id="whatyouneed">What you need</h2>
+        <ul>
+		<li>A Lottie file from <a href="https://lottiefiles.com/">https://lottiefiles.com/</a> (<code>.lottie</code> or JSON)</li>
+          <li>Permission to edit the page’s HTML</li>
+        </ul>
+      </section>
+
+      <section aria-labelledby="how">
+        <h2 id="how">Add an animation in two steps</h2>
+        <ol>
+          <li>Upload the Lottie file to your site. Example path: <code>/lottie/bouncing_square.lottie</code>.</li>
+          <li>Paste these two snippets into your page (anywhere inside <code>&lt;head&gt;</code> and where you want it to appear):</li>
+        </ol>
+        <p><strong>In the &lt;head&gt;:</strong></p>
+        <pre><code>&lt;script type="module" src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs"&gt;&lt;/script&gt;</code></pre>
+        <p><strong>Where the animation should appear:</strong></p>
+        <pre><code>&lt;dotlottie-player
+  src="/lottie/bouncing_square.lottie"
+  background="transparent"
+  loop
+  autoplay
+  style="width: 480px; height: 480px"&gt;
+&lt;/dotlottie-player&gt;</code></pre>
+        <p>That’s it. You can change the size by editing the width/height numbers.</p>
+      </section>
+
+      <section aria-labelledby="options">
+        <h2 id="options">Optional settings</h2>
+        <ul>
+          <li><strong>Show controls</strong> (play/pause/seek): add <code>controls</code></li>
+          <li><strong>Reduce motion</strong>: remove <code>autoplay</code> so it only plays when clicked</li>
+          <li><strong>Use JSON instead of .lottie</strong>: swap the script + tag to the LottieFiles player:
+            <pre><code>&lt;script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"&gt;&lt;/script&gt;
+&lt;lottie-player src="/path/your.json" background="transparent" loop autoplay&gt;&lt;/lottie-player&gt;</code></pre>
+          </li>
+        </ul>
+      </section>
+
+      <section aria-labelledby="tips">
+        <h2 id="tips">Tips</h2>
+        <ul>
+          <li>Prefer optimized assets (<em>Optimized Lottie JSON</em> or <em>.lottie</em>) to keep downloads small.</li>
+          <li>Size the animation by changing the inline width/height.</li>
+          <li>If you can’t include third‑party scripts, convert the Lottie to a video or GIF and use a normal <code>&lt;video&gt;</code> or <code>&lt;img&gt;</code>.</li>
+          <li>Designers keep control of the motion; developers avoid hand‑coding animations.</li>
+        </ul>
+      </section>
+    </article>
+  </main>
+
+  <aside>
+    <section>
+      <h2>Related Topics</h2>
+      <ul>
+        <li><a href="https://lottiefiles.com/tools/web-player" rel="external noopener noreferrer">LottieFiles Web Player (JSON)</a></li>
+        <li><a href="https://www.npmjs.com/package/@lottiefiles/dotlottie-wc" rel="external noopener noreferrer">DotLottie Web Player (.lottie)</a></li>
+      </ul>
+    </section>
+  </aside>
+
+  <footer>
+    <nav aria-label="Post navigation">
+      <a href="../index.html" rel="home">← Back to blog</a>
+    </nav>
+    <p><small>Last updated: <time datetime="2025-10-15">October 15, 2025</time></small></p>
+  </footer>
+</body>
+</html>
