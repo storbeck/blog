@@ -77,47 +77,6 @@ curl http://exampleonion.onion/
 </code></pre>
       </section>
 
-      
-
-      <section>
-        <h2>Ask Claude like a search engine</h2>
-        <p>Prompt Claude in plain English, it will run the Ahmia query via <code>curl</code> over Tor and list candidate onions:</p>
-        <pre><code>"find me academic research repository onions"
-
-● Bash(QUERY='research+papers' curl -sS --socks5-hostname 127.0.0.1:9050 …)
-  ⎿  2222f2ikw4c6x4sljqbtalrqz5ngfoizmw3uyvont3tqkehdpmtdayqd.onion
-     2gzyxa5i5ayvgbqn6r7r37fzapdf5fp6vxtxqymxoa6cocwemjgs5nyd.onion
-     2gzyxa5ihm7nsggfxnu52rck2vv4rvmdlkiu3zzui5du4xyclen53wid.onion
-     … +12 lines (ctrl+r to expand)
-
-● Bash(QUERY='thesis+dissertation' curl -sS --socks5-hostname 127.0.0.1:9050 …)
-  ⎿  Running…
-
-● Bash(QUERY='digital+library' curl -sS --socks5-hostname 127.0.0.1:9050 …)
-  ⎿  Waiting…
-     ctrl+b to run in background
-</code></pre>
-        <p>Under the hood, it’s just Ahmia plus a small filter for v3 onion hostnames:</p>
-        <pre><code>QUERY='research+papers'
-BASE='http://juhanurmihxlp77nkq76byazcldy2hlmovfu2epvl5ankdibsot4csyd.onion'
-curl -sS --socks5-hostname 127.0.0.1:9050 "$BASE/search/?q=${QUERY}" | \
-  grep -Eo 'https?://[a-z2-7]{56}\.onion' | sort -u | head -n 20
-</code></pre>
-        <p>To skim content quickly, fetch headers or the first lines from each host:</p>
-        <pre><code>curl -sS -I --socks5-hostname 127.0.0.1:9050 http://EXAMPLE.onion/
-curl -sS    --socks5-hostname 127.0.0.1:9050 http://EXAMPLE.onion/ | head -n 20
-</code></pre>
-      </section>
-
-      <section>
-        <h2>Troubleshooting</h2>
-        <ul>
-          <li>Tor not running: <code>systemctl status tor</code></li>
-          <li>No <code>.onion</code> resolution: curl needs <code>socks5h</code>; plain curl won't resolve <code>.onion</code> (RFC 7686). Use <code>--socks5-hostname</code> or <code>ALL_PROXY=socks5h://...</code>.</li>
-          <li>WebFetch: doesn't use a SOCKS proxy, so it won't reach <code>.onion</code>. Use Bash + <code>curl</code> with <code>socks5h</code>.</li>
-        </ul>
-      </section>
-
       <section>
         <h2>Claude Code profile (copy‑paste)</h2>
         <p>Drop this into your Claude project as <code>CLAUDE.md</code>. It tells Claude to use the Bash tool with <code>curl</code> over Tor and how to search/skim onions via Ahmia.</p>
@@ -163,6 +122,47 @@ Notes
 - Sites are intermittent; small timeouts and retries help
 </code></pre>
       </section>
+
+      <section>
+        <h2>Ask Claude like a search engine</h2>
+        <p>Prompt Claude in plain English, it will run the Ahmia query via <code>curl</code> over Tor and list candidate onions:</p>
+        <pre><code>"find me academic research repository onions"
+
+● Bash(QUERY='research+papers' curl -sS --socks5-hostname 127.0.0.1:9050 …)
+  ⎿  2222f2ikw4c6x4sljqbtalrqz5ngfoizmw3uyvont3tqkehdpmtdayqd.onion
+     2gzyxa5i5ayvgbqn6r7r37fzapdf5fp6vxtxqymxoa6cocwemjgs5nyd.onion
+     2gzyxa5ihm7nsggfxnu52rck2vv4rvmdlkiu3zzui5du4xyclen53wid.onion
+     … +12 lines (ctrl+r to expand)
+
+● Bash(QUERY='thesis+dissertation' curl -sS --socks5-hostname 127.0.0.1:9050 …)
+  ⎿  Running…
+
+● Bash(QUERY='digital+library' curl -sS --socks5-hostname 127.0.0.1:9050 …)
+  ⎿  Waiting…
+     ctrl+b to run in background
+</code></pre>
+        <p>Under the hood, it’s just Ahmia plus a small filter for v3 onion hostnames:</p>
+        <pre><code>QUERY='research+papers'
+BASE='http://juhanurmihxlp77nkq76byazcldy2hlmovfu2epvl5ankdibsot4csyd.onion'
+curl -sS --socks5-hostname 127.0.0.1:9050 "$BASE/search/?q=${QUERY}" | \
+  grep -Eo 'https?://[a-z2-7]{56}\.onion' | sort -u | head -n 20
+</code></pre>
+        <p>To skim content quickly, fetch headers or the first lines from each host:</p>
+        <pre><code>curl -sS -I --socks5-hostname 127.0.0.1:9050 http://EXAMPLE.onion/
+curl -sS    --socks5-hostname 127.0.0.1:9050 http://EXAMPLE.onion/ | head -n 20
+</code></pre>
+      </section>
+
+      <section>
+        <h2>Troubleshooting</h2>
+        <ul>
+          <li>Tor not running: <code>systemctl status tor</code></li>
+          <li>No <code>.onion</code> resolution: curl needs <code>socks5h</code>; plain curl won't resolve <code>.onion</code> (RFC 7686). Use <code>--socks5-hostname</code> or <code>ALL_PROXY=socks5h://...</code>.</li>
+          <li>WebFetch: doesn't use a SOCKS proxy, so it won't reach <code>.onion</code>. Use Bash + <code>curl</code> with <code>socks5h</code>.</li>
+        </ul>
+      </section>
+
+      
       <section>
         <h2>See also</h2>
         <ul>
