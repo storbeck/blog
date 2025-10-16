@@ -38,6 +38,7 @@
 
       <section itemprop="articleBody">
         <p>Zine‑ish, textmode, ANSI/ASCII—think <abbr title="classic hacker e‑zine">Phrack</abbr> meets demoscene. You can get that gritty moving background vibe without CSS or JavaScript by pre‑rendering the motion into an animated image (WebP/GIF) and embedding it like any other image. This post shows a minimal Linux toolchain: generate ASCII, render to images, pan subtly across frames, then assemble into an animation.</p>
+        <p>Inspiration: <a href="https://colonelpanic.tech/" rel="external noopener noreferrer">colonelpanic.tech</a></p>
 
         <h2 id="overview">Overview</h2>
         <ol>
@@ -107,7 +108,6 @@ magick -delay 7 -loop 0 -dither FloydSteinberg -colors 32 \
         <p>Tip: If the motion feels too fast/slow, tweak <code>-delay</code> or change the per‑frame offset in the loop. Keep the movement subtle—your eye should feel texture, not distraction.</p>
 
         <h2 id="embed">Embed on the blog</h2>
-        <p>This site avoids CSS/JS frameworks, so just embed the pre‑rendered animation like any other image. For best performance, prefer animated WebP with a GIF fallback:</p>
         <pre><code>&lt;picture&gt;
   &lt;source type="image/webp" srcset="images/zine-bg-800w.webp 800w, images/zine-bg-1200w.webp 1200w"&gt;
   &lt;img src="images/zine-bg-800w.gif" alt="Animated ASCII zine‑style texture" 
@@ -117,29 +117,7 @@ magick -delay 7 -loop 0 -dither FloydSteinberg -colors 32 \
         <p>If you want it as a hero background behind text without CSS, place the image above your content as a figure with a descriptive caption; keep contrast high for readability.</p>
 
         <h2 id="demo">Live Demo (click to start)</h2>
-        <p>The animation below is opt‑in. Click the button to reveal and begin the motion. For the demo only, it references an external background texture similar to what inspired this post. For production, generate your own tile and use an animated WebP as shown above.</p>
-        <details>
-          <summary>Show animated demo</summary>
-          <figure>
-            <figcaption>Subtle drifting background — example demo</figcaption>
-            <style>
-              @keyframes asciiDrift {
-                0% { background-position: center center; }
-                25% { background-position: 15% 20%; }
-                50% { background-position: 85% 80%; }
-                75% { background-position: 20% 85%; }
-                100% { background-position: center center; }
-              }
-            </style>
-            <div role="img" aria-label="Moving zine-style background demo"
-                 style="width:100%;max-width:640px;height:240px;
-                        background-image:url('https://colonelpanic.tech/wp-content/themes/colonelpanic-theme/background.png');
-                        background-size:150% auto;background-repeat:no-repeat;background-position:center center;
-                        animation: asciiDrift 28s linear infinite;">
-            </div>
-            <p><small>Note: This uses an external texture for demonstration. Replace with your generated animated WebP/GIF to keep everything local.</small></p>
-          </figure>
-        </details>
+        <p>Demo note: No hotlinking here. Generate your own texture with <code>figlet</code> (banner art) or by converting an image to ASCII (<code>chafa</code>/<code>jp2a</code>), then assemble frames and embed your animated WebP locally using the steps above.</p>
 
         <h2 id="variations">Variations</h2>
         <ul>
