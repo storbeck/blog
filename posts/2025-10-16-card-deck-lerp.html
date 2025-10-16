@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="A tiny HTML/CSS/JS demo that fans, opens, and rotates a deck of cards with smooth lerped transforms — no frameworks.">
+  <meta name="author" content="Storbeck">
+  <title>Hand‑Held Card Fan (Lerped) - Storbeck Blog</title>
+  <link rel="preconnect" href="https://github.com">
+  <link rel="dns-prefetch" href="https://www.linkedin.com">
+  <meta itemprop="author" content="Geoff Storbeck">
+  <meta itemprop="headline" content="Hand‑Held Card Fan (Lerped)">
+  <meta itemprop="datePublished" content="2025-10-16">
+  <meta itemprop="description" content="A tiny HTML/CSS/JS demo that fans, opens, and rotates a deck of cards with smooth lerped transforms — no frameworks.">
+  <meta itemprop="url" content="https://storbeck.dev/posts/2025-10-16-card-deck-lerp.html">
+  <meta itemprop="mainEntityOfPage" content="https://storbeck.dev/posts/2025-10-16-card-deck-lerp.html">
+  <meta itemprop="inLanguage" content="en">
+  <meta itemprop="genre" content="Demo">
+</head>
+<body>
+  <header>
+    <nav aria-label="Site navigation">
+      <a href="../index.html" rel="home">← Storbeck Blog</a>
+    </nav>
+  </header>
+
+  <main>
+    <article itemscope itemtype="http://schema.org/BlogPosting">
+      <header>
+        <h1 itemprop="headline">Hand‑Held Card Fan (Lerped)</h1>
+        <p>
+          <time datetime="2025-10-16" itemprop="datePublished">Published October 16, 2025</time>
+          <span> • </span>
+          <span>UI, Animation</span>
+        </p>
+      </header>
+
+      <section>
+        <p>This is a small, dependency‑free web recreation of <strong>Gianluca Tessicini</strong>’s Unity prototype. I loved the original and rebuilt the interaction as a plain HTML/CSS/JavaScript demo for the web. All credit for the idea and inspiration goes to Gianluca. The demo fans a deck of cards, opens/closes smoothly, and supports hover lift; animations are driven by <code>requestAnimationFrame</code> with a damped‑lerp transform.</p>
+      </section>
+
+      <section aria-labelledby="live-demo" itemprop="articleBody">
+        <h2 id="live-demo">Live Demo</h2>
+        <p><small>Hover a card to lift it. Adjust the sliders and toggle the deck.</small></p>
+
+        <style>
+          :root { --stage-w: 900px; --stage-h: 520px; }
+          .wrap { max-width: var(--stage-w); margin: 0 auto; padding: 12px; }
+          .stage { position: relative; width: 100%; aspect-ratio: 16/9; max-width: var(--stage-w); max-height: var(--stage-h); border-radius: 16px; background:#0f172a; overflow:hidden; user-select:none; box-shadow:0 14px 40px rgba(0,0,0,.45); }
+          .deck { position:absolute; inset:0; display:grid; place-items:center center; perspective:1000px; }
+          .card { position:absolute; width:160px; height:220px; border-radius:14px; transform-origin:50% 90%; background:#fff; border:4px solid currentColor; color:#020617; box-shadow:0 12px 22px rgba(0,0,0,.25); }
+          .card.red { color:#e11d48; }
+          .card.black { color:#020617; }
+          .controls { display:grid; grid-template-columns: repeat(4, 1fr) auto; gap:12px; align-items:center; margin-top:10px; }
+          .ctrl { display:grid; gap:6px; }
+          label { opacity:.85; font-size:12px; }
+          input[type="range"] { width:100%; }
+          button { padding:10px 14px; border-radius:10px; border:1px solid rgba(255,255,255,.15); background:#2fd9b8; color:#081610; font-weight:800; cursor:pointer; box-shadow:0 6px 18px rgba(47,217,184,.28); }
+          button.secondary { background:#1a2236; color:#e8effa; border-color:rgba(255,255,255,.12); box-shadow:0 6px 18px rgba(0,0,0,.25) inset; }
+          .hint { opacity:.7; font-size:12px; margin-top:6px; text-align:center; }
+          /* Playing card faces (Unicode pips) */
+          .face { position:absolute; inset:6px; pointer-events:none; }
+          .corner { position:absolute; font:800 18px/1.1 system-ui, sans-serif; white-space:pre; }
+          .corner.top { top:8px; left:10px; }
+          .corner.bot { bottom:8px; right:10px; transform:rotate(180deg); }
+          .pip { position:absolute; transform:translate(-50%,-50%); font:700 28px/1 system-ui, sans-serif; }
+          .red { color:#e11d48; } .black { color:#020617; }
+        </style>
+
+        <div class="wrap">
+          <div class="stage" id="stage">
+            <div class="deck" id="deck"></div>
+          </div>
+          <div class="controls">
+            <div class="ctrl"><label for="count">Card Count</label><input id="count" type="range" min="2" max="15" value="5"></div>
+            <div class="ctrl"><label for="angle">Total Angle</label><input id="angle" type="range" min="0" max="270" value="55"></div>
+            <div class="ctrl"><label for="spacing">Spacing</label><input id="spacing" type="range" min="0" max="80" value="28"></div>
+            <div class="ctrl"><label for="offset">Rotation Offset</label><input id="offset" type="range" min="-40" max="40" value="0"></div>
+            <button id="toggleBtn" type="button">Close Deck</button>
+          </div>
+          <p class="hint">Tip: Hover a card to lift it.</p>
+        </div>
+
+        <script>
+          (function() {
+            const deckEl = document.getElementById('deck');
+            const stageEl = document.getElementById('stage');
+            const ui = {
+              count: document.getElementById('count'),
+              angle: document.getElementById('angle'),
+              spacing: document.getElementById('spacing'),
+              offset: document.getElementById('offset'),
+              toggle: document.getElementById('toggleBtn'),
+            };
+            const state = {
+              openT: 1, openTarget: 1, cards: [],
+              params: { count: +ui.count.value, totalAngle: +ui.angle.value, spacing: +ui.spacing.value, offset: +ui.offset.value },
+              handYaw: 0, handYawTarget: 0,
+            };
+            const lerp = (a,b,t)=>a+(b-a)*t;
+            function damp(current, target, smoothing, dt){ return lerp(current, target, 1 - Math.exp(-smoothing * dt)); }
+
+            function buildDeck(n){
+              deckEl.innerHTML=''; state.cards.length=0;
+              for(let i=0;i<n;i++) addCard();
+            }
+
+            // --- Playing card faces (Unicode pip version) ---
+            const SUITS = [
+              { key:'spade',   sym:'\u2660', color:'black' },
+              { key:'heart',   sym:'\u2665', color:'red'   },
+              { key:'club',    sym:'\u2663', color:'black' },
+              { key:'diamond', sym:'\u2666', color:'red'   },
+            ];
+            const RANKS = ['A','2','3','4','5','6','7','8','9','10'];
+            const PIPS = {
+              A:  [[50,50]],
+              '2':[[50,25],[50,75]],
+              '3':[[50,20],[50,50],[50,80]],
+              '4':[[30,25],[70,25],[30,75],[70,75]],
+              '5':[[30,25],[70,25],[50,50],[30,75],[70,75]],
+              '6':[[30,20],[70,20],[30,50],[70,50],[30,80],[70,80]],
+              '7':[[30,20],[70,20],[30,45],[70,45],[30,70],[70,70],[50,32]],
+              '8':[[30,20],[70,20],[30,45],[70,45],[30,70],[70,70],[50,32],[50,58]],
+              '9':[[30,20],[70,20],[30,45],[70,45],[30,70],[70,70],[50,32],[50,58],[50,85]],
+              '10':[[30,18],[70,18],[30,40],[70,40],[30,62],[70,62],[30,84],[70,84],[50,30],[50,70]],
+            };
+            function rankSuitForIndex(i){
+              const rank = RANKS[i % RANKS.length];
+              const suit = SUITS[Math.floor(i / RANKS.length) % SUITS.length];
+              return {rank, suit};
+            }
+            function renderFace(el, rank, suit, show){
+              const prior = el.querySelector('.face'); if(prior) prior.remove();
+              if(!show) return;
+              const face = document.createElement('div'); face.className = 'face';
+              const colorCls = suit.color === 'red' ? 'red' : 'black';
+              const tl = document.createElement('div'); tl.className = `corner top ${colorCls}`; tl.textContent = `${rank}\n${suit.sym}`;
+              const br = document.createElement('div'); br.className = `corner bot ${colorCls}`; br.textContent = `${rank}\n${suit.sym}`;
+              const pips = document.createElement('div'); pips.className = 'pips';
+              const layout = PIPS[rank] || [[50,50]];
+              layout.forEach(([x,y])=>{ const pip = document.createElement('div'); pip.className = `pip ${colorCls}`; pip.style.left = x+'%'; pip.style.top = y+'%'; pip.textContent = suit.sym; pips.appendChild(pip); });
+              face.appendChild(tl); face.appendChild(br); face.appendChild(pips); el.appendChild(face);
+            }
+
+            function addCard(){
+              const idx = state.cards.length;
+              const el=document.createElement('div');
+              const rsInit = rankSuitForIndex(idx);
+              el.className = 'card ' + (rsInit.suit.color === 'red' ? 'red' : 'black');
+              el.style.zIndex=String(1000+idx);
+              deckEl.appendChild(el);
+              const c={
+                el,
+                i: idx,
+                // start above as if being dealt in
+                x: 0, y: -260, rot: (Math.random()*10-5), scale: 0.96,
+                tx: 0, ty: 0, trot: 0, tscale: 1,
+                lift: 0,
+                removing: false,
+                ttl: 0
+              };
+              el.addEventListener('pointerenter',()=>{ c.lift=1; });
+              el.addEventListener('pointerleave',()=>{ c.lift=0; });
+              // render faces always
+              renderFace(el, rsInit.rank, rsInit.suit, true);
+              state.cards.push(c);
+            }
+
+            function updateTargets(){
+              // Active cards (not flagged for removal)
+              const active = state.cards.filter(c=>!c.removing);
+              active.forEach((c, idx)=>{ c.i = idx; });
+
+              const count = active.length;
+              const {totalAngle,spacing,offset}=state.params;
+              const mid=(count-1)/2; const step=count>1? (totalAngle/(count-1)) : 0;
+
+              // Layout active cards
+              active.forEach((c)=>{
+                const i=c.i; const fromMid=i-mid;
+                const baseAngle=(fromMid*step+offset)*state.openT;
+                const baseX=(fromMid*spacing)*state.openT;
+                const arcY=-Math.abs(fromMid)*2*state.openT;
+                const liftY=c.lift*8; const liftScale=1+c.lift*0.03;
+                c.tx=baseX; c.ty=arcY - liftY; c.trot=baseAngle; c.tscale=liftScale;
+                c.el.style.zIndex=String(1000 + i); // rightmost on top
+                // keep faces and border color in sync with index
+                const rsNow = rankSuitForIndex(i);
+                renderFace(c.el, rsNow.rank, rsNow.suit, true);
+                c.el.classList.toggle('red', rsNow.suit.color==='red');
+                c.el.classList.toggle('black', rsNow.suit.color!=='red');
+              });
+
+              // Removing cards fly upward and then get culled in the tick()
+              state.cards.filter(c=>c.removing).forEach((c)=>{
+                c.ty = -260; c.tscale = 0.96; c.trot += 0.2; // gentle spin out
+                c.el.style.zIndex = '2000';
+              });
+            }
+
+            stageEl.addEventListener('pointermove',(e)=>{ const r=stageEl.getBoundingClientRect(); const nx=((e.clientX-r.left)/r.width)*2-1; state.handYawTarget=nx*10; });
+            function adjustDeck(newCount){
+              state.params.count = newCount;
+              const active = state.cards.filter(c=>!c.removing).length;
+              if(newCount > active){
+                const addN = newCount - active;
+                for(let k=0;k<addN;k++) addCard();
+              } else if(newCount < active){
+                let remainingToRemove = active - newCount;
+                for(let i=state.cards.length-1; i>=0 && remainingToRemove>0; i--){
+                  const c = state.cards[i];
+                  if(!c.removing){ c.removing = true; c.ttl = 0.7; remainingToRemove--; }
+                }
+              }
+              updateTargets();
+            }
+
+            ui.count.addEventListener('input',()=>{ adjustDeck(+ui.count.value); });
+            ui.angle.addEventListener('input',()=>{ state.params.totalAngle=+ui.angle.value; updateTargets(); });
+            ui.spacing.addEventListener('input',()=>{ state.params.spacing=+ui.spacing.value; updateTargets(); });
+            ui.offset.addEventListener('input',()=>{ state.params.offset=+ui.offset.value; updateTargets(); });
+            ui.toggle.addEventListener('click',()=>{
+              state.openTarget = state.openTarget > 0.5 ? 0 : 1;
+              ui.toggle.textContent = state.openTarget > 0.5 ? 'Close Deck' : 'Open Deck';
+            });
+
+            // Faces are always on (no toggle)
+
+            let last=performance.now();
+            function tick(now){
+              const dt=Math.min(0.05,(now-last)/1000); last=now;
+              state.openT=damp(state.openT,state.openTarget,8,dt);
+              state.handYaw=damp(state.handYaw,state.handYawTarget,6,dt);
+              updateTargets();
+
+              const toCull=[];
+              state.cards.forEach((c, idx)=>{
+                c.x=damp(c.x,c.tx,12,dt);
+                c.y=damp(c.y,c.ty,12,dt);
+                c.rot=damp(c.rot,c.trot,12,dt);
+                c.scale=damp(c.scale,c.tscale,12,dt);
+                c.el.style.transform=`translate3d(${c.x}px, ${c.y}px, 0) rotate(${c.rot}deg) scale(${c.scale})`;
+                if(c.removing){ c.ttl -= dt; if(c.ttl<=0 || c.y < -220){ toCull.push(idx); } }
+              });
+
+              // Remove culled cards
+              if(toCull.length){
+                for(let i=toCull.length-1;i>=0;i--){ const idx=toCull[i]; const c=state.cards[idx]; c.el.remove(); state.cards.splice(idx,1); }
+              }
+
+              deckEl.style.transform=`rotateY(${state.handYaw}deg)`;
+              requestAnimationFrame(tick);
+            }
+            buildDeck(state.params.count); updateTargets(); requestAnimationFrame(tick);
+          })();
+        </script>
+      </section>
+
+      <section>
+        <h2>Notes</h2>
+        <ul>
+          <li>Lerp with exponential smoothing keeps motion frame‑rate friendly.</li>
+          <li>Transforms use translate3d/rotate/scale for GPU acceleration.</li>
+          <li>No dependencies; all inline to keep this demo self‑contained.</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>Copy/Paste Source</h2>
+        <p>These blocks match the live demo above. Paste into any page (keep the same IDs).</p>
+        <h3>HTML</h3>
+        <pre><code>&lt;div class=&quot;stage&quot; id=&quot;stage&quot;&gt;
+  &lt;div class=&quot;deck&quot; id=&quot;deck&quot;&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;controls&quot;&gt;
+  &lt;div class=&quot;ctrl&quot;&gt;&lt;label for=&quot;count&quot;&gt;Card Count&lt;/label&gt;&lt;input id=&quot;count&quot; type=&quot;range&quot; min=&quot;2&quot; max=&quot;12&quot; value=&quot;5&quot;&gt;&lt;/div&gt;
+  &lt;div class=&quot;ctrl&quot;&gt;&lt;label for=&quot;angle&quot;&gt;Total Angle&lt;/label&gt;&lt;input id=&quot;angle&quot; type=&quot;range&quot; min=&quot;0&quot; max=&quot;140&quot; value=&quot;55&quot;&gt;&lt;/div&gt;
+  &lt;div class=&quot;ctrl&quot;&gt;&lt;label for=&quot;spacing&quot;&gt;Spacing&lt;/label&gt;&lt;input id=&quot;spacing&quot; type=&quot;range&quot; min=&quot;0&quot; max=&quot;80&quot; value=&quot;28&quot;&gt;&lt;/div&gt;
+  &lt;div class=&quot;ctrl&quot;&gt;&lt;label for=&quot;offset&quot;&gt;Rotation Offset&lt;/label&gt;&lt;input id=&quot;offset&quot; type=&quot;range&quot; min=&quot;‑40&quot; max=&quot;40&quot; value=&quot;0&quot;&gt;&lt;/div&gt;
+  &lt;button id=&quot;toggleBtn&quot; type=&quot;button&quot;&gt;Close Deck&lt;/button&gt;
+&lt;/div&gt;
+        </code></pre>
+
+        <h3>CSS</h3>
+        <pre><code>/* Stage &amp; layout */
+.stage{position:relative;width:100%;aspect-ratio:16/9;border-radius:16px;background:#0f172a;overflow:hidden;user-select:none;box-shadow:0 14px 40px rgba(0,0,0,.45)}
+.deck{position:absolute;inset:0;display:grid;place-items:end center;perspective:1000px}
+.controls{display:grid;grid-template-columns:repeat(4,1fr) auto;gap:12px;align-items:center;margin-top:10px}
+.ctrl{display:grid;gap:6px}
+
+/* Cards */
+.card{position:absolute;width:160px;height:220px;border-radius:14px;transform-origin:50% 90%;background:#fff;border:4px solid currentColor;color:#020617;box-shadow:0 12px 22px rgba(0,0,0,.25)}
+.card.red{color:#e11d48}
+.card.black{color:#020617}
+
+/* Faces (Unicode pips) */
+.face{position:absolute;inset:6px;pointer-events:none}
+.corner{position:absolute;font:800 18px/1.1 system-ui,sans-serif;white-space:pre}
+.corner.top{top:8px;left:10px}
+.corner.bot{bottom:8px;right:10px;transform:rotate(180deg)}
+.pip{position:absolute;transform:translate(-50%,-50%);font:700 28px/1 system-ui,sans-serif}
+.red{color:#e11d48}.black{color:#020617}
+        </code></pre>
+
+        <h3>JavaScript</h3>
+        <pre><code>(function () {
+  const d = document;
+  const deck = d.getElementById('deck');
+  const stage = d.getElementById('stage');
+
+  const ui = {
+    count: d.getElementById('count'),
+    angle: d.getElementById('angle'),
+    spacing: d.getElementById('spacing'),
+    offset: d.getElementById('offset'),
+    toggle: d.getElementById('toggleBtn'),
+  };
+
+  const state = {
+    openT: 1,
+    openTarget: 1,
+    cards: [],
+    params: {
+      count: +ui.count.value,
+      totalAngle: +ui.angle.value,
+      spacing: +ui.spacing.value,
+      offset: +ui.offset.value,
+    },
+    handYaw: 0,
+    handYawTarget: 0,
+  };
+
+  const lerp = (a, b, t) => a + (b - a) * t;
+  const damp = (x, target, smoothing, dt) => lerp(x, target, 1 - Math.exp(-smoothing * dt));
+
+  const SUITS = [
+    { sym: '♠', color: 'black' },
+    { sym: '♥', color: 'red' },
+    { sym: '♣', color: 'black' },
+    { sym: '♦', color: 'red' },
+  ];
+  const RANKS = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
+  const PIPS = {
+    A: [[50, 50]],
+    '2': [[50, 25], [50, 75]],
+    '3': [[50, 20], [50, 50], [50, 80]],
+    '4': [[30, 25], [70, 25], [30, 75], [70, 75]],
+    '5': [[30, 25], [70, 25], [50, 50], [30, 75], [70, 75]],
+    '6': [[30, 20], [70, 20], [30, 50], [70, 50], [30, 80], [70, 80]],
+    '7': [[30, 20], [70, 20], [30, 45], [70, 45], [30, 70], [70, 70], [50, 32]],
+    '8': [[30, 20], [70, 20], [30, 45], [70, 45], [30, 70], [70, 70], [50, 32], [50, 58]],
+    '9': [[30, 20], [70, 20], [30, 45], [70, 45], [30, 70], [70, 70], [50, 32], [50, 58], [50, 85]],
+    '10': [[30, 18], [70, 18], [30, 40], [70, 40], [30, 62], [70, 62], [30, 84], [70, 84], [50, 30], [50, 70]],
+  };
+
+  function rankSuitForIndex(i) {
+    return {
+      rank: RANKS[i % RANKS.length],
+      suit: SUITS[Math.floor(i / RANKS.length) % SUITS.length],
+    };
+  }
+
+  function renderFace(el, rank, suit) {
+    const old = el.querySelector('.face');
+    if (old) old.remove();
+    const face = d.createElement('div');
+    face.className = 'face';
+    const color = suit.color === 'red' ? 'red' : 'black';
+
+    const tl = d.createElement('div');
+    tl.className = `corner top ${color}`;
+    tl.textContent = `${rank}
+${suit.sym}`;
+    const br = d.createElement('div');
+    br.className = `corner bot ${color}`;
+    br.textContent = `${rank}
+${suit.sym}`;
+
+    const layout = PIPS[rank] || [[50, 50]];
+    layout.forEach(([x, y]) => {
+      const pip = d.createElement('div');
+      pip.className = `pip ${color}`;
+      pip.style.left = x + '%';
+      pip.style.top = y + '%';
+      pip.textContent = suit.sym;
+      face.appendChild(pip);
+    });
+
+    face.appendChild(tl);
+    face.appendChild(br);
+    el.appendChild(face);
+  }
+
+  function addCard() {
+    const idx = state.cards.length;
+    const el = d.createElement('div');
+    const rs = rankSuitForIndex(idx);
+    el.className = 'card ' + (rs.suit.color === 'red' ? 'red' : 'black');
+    el.style.zIndex = String(1000 + idx);
+    deck.appendChild(el);
+    const c = {
+      el, i: idx,
+      x: 0, y: -260, rot: (Math.random() * 10 - 5), scale: 0.96,
+      tx: 0, ty: 0, trot: 0, tscale: 1,
+      lift: 0, removing: false, ttl: 0,
+    };
+    el.addEventListener('pointerenter', () => { c.lift = 1; });
+    el.addEventListener('pointerleave', () => { c.lift = 0; });
+    renderFace(el, rs.rank, rs.suit);
+    state.cards.push(c);
+  }
+
+  function buildDeck(n) {
+    deck.innerHTML = '';
+    state.cards.length = 0;
+    for (let i = 0; i < n; i++) addCard();
+  }
+
+  function updateTargets() {
+    const active = state.cards.filter(c => !c.removing);
+    active.forEach((c, i) => { c.i = i; });
+    const count = active.length;
+    const { totalAngle, spacing, offset } = state.params;
+    const mid = (count - 1) / 2;
+    const step = count > 1 ? (totalAngle / (count - 1)) : 0;
+    active.forEach((c) => {
+      const i = c.i;
+      const fromMid = i - mid;
+      const ang = (fromMid * step + offset) * state.openT;
+      const x = (fromMid * spacing) * state.openT;
+      const y = -Math.abs(fromMid) * 2 * state.openT;
+      const liftY = c.lift * 20;
+      const liftScale = 1 + c.lift * 0.03;
+      c.tx = x; c.ty = y - liftY; c.trot = ang; c.tscale = liftScale;
+      c.el.style.zIndex = String(1000 + i);
+      const r = rankSuitForIndex(i);
+      renderFace(c.el, r.rank, r.suit);
+      c.el.classList.toggle('red', r.suit.color === 'red');
+      c.el.classList.toggle('black', r.suit.color !== 'red');
+    });
+    state.cards.filter(c => c.removing).forEach((c) => {
+      c.ty = -260; c.tscale = 0.96; c.trot += 0.2; c.el.style.zIndex = '2000';
+    });
+  }
+
+  stage.addEventListener('pointermove', (e) => {
+    const r = stage.getBoundingClientRect();
+    const nx = (e.clientX - r.left) / r.width * 2 - 1;
+    state.handYawTarget = nx * 10;
+  });
+
+  function adjustDeck(n) {
+    state.params.count = n;
+    const active = state.cards.filter(c => !c.removing).length;
+    if (n > active) {
+      for (let k = 0; k < n - active; k++) addCard();
+    } else if (n < active) {
+      let rm = active - n;
+      for (let i = state.cards.length - 1; i >= 0 && rm > 0; i--) {
+        const c = state.cards[i];
+        if (!c.removing) { c.removing = true; c.ttl = 0.7; rm--; }
+      }
+    }
+    updateTargets();
+  }
+
+  ui.count.addEventListener('input', () => adjustDeck(+ui.count.value));
+  ui.angle.addEventListener('input', () => { state.params.totalAngle = +ui.angle.value; updateTargets(); });
+  ui.spacing.addEventListener('input', () => { state.params.spacing = +ui.spacing.value; updateTargets(); });
+  ui.offset.addEventListener('input', () => { state.params.offset = +ui.offset.value; updateTargets(); });
+  ui.toggle.addEventListener('click', () => {
+    state.openTarget = state.openTarget > 0.5 ? 0 : 1;
+    ui.toggle.textContent = state.openTarget > 0.5 ? 'Close Deck' : 'Open Deck';
+  });
+
+  let last = performance.now();
+  function tick(now) {
+    const dt = Math.min(0.05, (now - last) / 1000);
+    last = now;
+    state.openT = damp(state.openT, state.openTarget, 8, dt);
+    state.handYaw = damp(state.handYaw, state.handYawTarget, 6, dt);
+    updateTargets();
+    const cul = [];
+    state.cards.forEach((c, i) => {
+      c.x = damp(c.x, c.tx, 12, dt);
+      c.y = damp(c.y, c.ty, 12, dt);
+      c.rot = damp(c.rot, c.trot, 12, dt);
+      c.scale = damp(c.scale, c.tscale, 12, dt);
+      c.el.style.transform = `translate3d(${c.x}px, ${c.y}px, 0) rotate(${c.rot}deg) scale(${c.scale})`;
+      if (c.removing) { c.ttl -= dt; if (c.ttl <= 0 || c.y < -220) cul.push(i); }
+    });
+    if (cul.length) {
+      for (let i = cul.length - 1; i >= 0; i--) {
+        const idx = cul[i];
+        state.cards[idx].el.remove();
+        state.cards.splice(idx, 1);
+      }
+    }
+    deck.style.transform = `rotateY(${state.handYaw}deg)`;
+    requestAnimationFrame(tick);
+  }
+
+  buildDeck(state.params.count);
+  updateTargets();
+  requestAnimationFrame(tick);
+})();
+</code></pre>
+      </section>
+
+      <section>
+        <h2>Inspiration & Credit</h2>
+        <p>This demo was inspired by a Unity prototype shared by <a href="https://www.linkedin.com/in/glucat/" rel="external noopener noreferrer">Gianluca Tessicini</a>. See the original post and video: <a href="https://www.linkedin.com/feed/update/urn:li:activity:7382163787639853057/" rel="external noopener noreferrer">LinkedIn post</a>. This version re‑implements the interaction in plain HTML/CSS/JavaScript with a different visual style.</p>
+      </section>
+    </article>
+  </main>
+
+  <aside>
+    <section>
+      <h2>Related Topics</h2>
+      <ul>
+        <li>UI motion basics</li>
+        <li>requestAnimationFrame patterns</li>
+      </ul>
+    </section>
+  </aside>
+
+  <footer>
+    <nav aria-label="Post navigation">
+      <a href="../index.html" rel="home">← Back to blog</a>
+    </nav>
+    <p><small>Last updated: <time datetime="2025-10-16">October 16, 2025</time></small></p>
+  </footer>
+</body>
+</html>
