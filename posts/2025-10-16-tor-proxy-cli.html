@@ -3,15 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Use Claude’s Bash tool with curl over Tor’s SOCKS proxy to explore safely; understand .onion limitations and verify Tor routing.">
+  <meta name="description" content="Browse Tor with Claude using curl over socks5h: simple setup, fast lookups via Ahmia, and how to prompt Claude to find and skim .onion sites like a search engine.">
   <meta name="author" content="Storbeck">
-  <title>Browse the Darknet with Claude (curl over Tor) - Storbeck Blog</title>
+  <title>Browse Tor with Claude (curl + socks5h) - Storbeck Blog</title>
   <link rel="preconnect" href="https://github.com">
   <link rel="dns-prefetch" href="https://www.linkedin.com">
   <meta itemprop="author" content="Geoff Storbeck">
-  <meta itemprop="headline" content="Browse the Darknet with Claude (curl over Tor)">
+  <meta itemprop="headline" content="Browse Tor with Claude (curl + socks5h)">
   <meta itemprop="datePublished" content="2025-10-16">
-  <meta itemprop="description" content="Run curl through Tor’s SOCKS proxy from Claude’s Bash tool. Verify Tor egress, learn why some clients block .onion, and use socks5h correctly.">
+  <meta itemprop="description" content="Use curl through Tor’s SOCKS proxy from Claude’s Bash tool. Verify Tor egress, understand .onion limitations, and use socks5h correctly.">
   <meta itemprop="url" content="https://storbeck.dev/posts/2025-10-16-tor-proxy-cli.html">
   <meta itemprop="mainEntityOfPage" content="https://storbeck.dev/posts/2025-10-16-tor-proxy-cli.html">
   <meta itemprop="inLanguage" content="en">
@@ -31,7 +31,7 @@
   <main>
     <article itemscope itemtype="http://schema.org/BlogPosting">
       <header>
-        <h1 itemprop="headline">Browse the Darknet with Claude (via Tor Proxy)</h1>
+        <h1 itemprop="headline">Browse the Dark Web with Claude (curl + socks5h)</h1>
         <p>
           <time datetime="2025-10-16" itemprop="datePublished">Published October 16, 2025</time>
           <span> • </span>
@@ -40,129 +40,135 @@
       </header>
 
       <section>
-        <h2>Overview</h2>
-        <p>Use Claude’s Bash tool to run <code>curl</code> through your Tor connection. We’ll turn on Tor, route <code>curl</code> via Tor’s SOCKS proxy, verify it, then search Ahmia for new onion sites.</p>
+        <h2>What you get</h2>
+        <p>Claude can “browse the Dark Web” by running <code>curl</code> through your local Tor proxy. Both DNS and HTTP(S) stay inside Tor, so <code>.onion</code> works. With Ahmia, Claude can act like a simple search engine for onions: find candidates, fetch headers, skim first lines, and report back fast.</p>
         <ul>
-          <li>Enable Tor on <code>127.0.0.1:9050</code>.</li>
-          <li>Route <code>curl</code> through Tor with <code>socks5h</code> (remote DNS).</li>
-          <li>Use Claude’s Bash tool to search Ahmia and follow results.</li>
+          <li>Proxy: <code>127.0.0.1:9050</code> (Tor SOCKS)</li>
+          <li>Mode: <code>socks5h</code> (Tor resolves hostnames)</li>
         </ul>
-        <p><strong>Note:</strong> Hosted fetchers often block <code>.onion</code>. The Bash tool + <code>curl</code> over Tor is the reliable path.</p>
       </section>
 
+      
+
       <section>
-        <h2>Setup (Fedora)</h2>
-        <p>Install and start Tor (SOCKS on <code>127.0.0.1:9050</code>):</p>
+        <h2>Quick start (Fedora)</h2>
         <pre><code>sudo dnf install tor
 sudo systemctl enable --now tor
-sudo ss -ltn | grep 9050  # expect 127.0.0.1:9050
+sudo ss -ltn | grep ':9050'   # expect 127.0.0.1:9050
 </code></pre>
       </section>
 
       <section>
-        <h2>How it works</h2>
-        <p>Tor runs a local <strong>SOCKS proxy</strong> on <code>127.0.0.1:9050</code>. <code>curl</code> can use it directly. The key is <code>socks5h</code> (the “h” means DNS lookups also happen inside Tor), which is required for <code>.onion</code> hosts.</p>
-        <dl>
-          <dt>SOCKS proxy</dt>
-          <dd>Tor’s local endpoint (<code>127.0.0.1:9050</code>) that carries your HTTP requests through the Tor network.</dd>
-          <dt><code>socks5h</code></dt>
-          <dd>Tell <code>curl</code> to resolve hostnames inside Tor. Without this, <code>.onion</code> won’t resolve (and could leak DNS).</dd>
-        </dl>
-        <p><strong>Flow:</strong> Claude’s Bash tool → <code>curl</code> → Tor (SOCKS) → destination.</p>
+        <h2>Use with curl</h2>
+        <p>One‑off:</p>
+        <pre><code>curl --socks5-hostname 127.0.0.1:9050 http://exampleonion.onion/
+</code></pre>
+        <p>Or set an env var for the session:</p>
+        <pre><code>export ALL_PROXY=socks5h://127.0.0.1:9050
+curl http://exampleonion.onion/
+</code></pre>
+        <p><strong>Important:</strong> use <code>socks5h</code> (or <code>--socks5-hostname</code>) so Tor does the DNS resolution. Plain <code>socks5</code> won’t resolve <code>.onion</code>.</p>
       </section>
 
       <section>
-        <h2>Configure <code>curl</code> to use Tor</h2>
-        <p>This applies to the <code>curl</code> commands you run in Claude’s Bash tool. Use <code>socks5h</code> so DNS and HTTP both go through Tor.</p>
-        <pre><code># Quick check: should return {"IsTor": true, ...}
-curl -sS --socks5-hostname 127.0.0.1:9050 https://check.torproject.org/api/ip
-
-# Optional: set for the session (if the Bash tool keeps env between steps)
-set -x ALL_PROXY socks5h://127.0.0.1:9050
+        <h2>Verify it works</h2>
+        <pre><code>curl -sS --socks5-hostname 127.0.0.1:9050 https://check.torproject.org/api/ip
+# Expect: {"IsTor": true, ...}
 </code></pre>
       </section>
 
       
 
       <section>
-        <h2>Use in Claude Code (hands‑on)</h2>
-        <p>Note on <code>.onion</code> and WebFetch: hosted fetchers often block onion sites, and many HTTP clients refuse <code>.onion</code> over HTTP proxies (per RFC 7686) to prevent DNS leaks. That’s normal. The workable path is Claude’s <strong>Bash tool</strong> with <code>curl</code>, routing via Tor so DNS and HTTP stay inside Tor.</p>
-        <p>In your Bash commands, either add <code>--socks5-hostname 127.0.0.1:9050</code> per curl call, or (if the session keeps env) set <code>ALL_PROXY=socks5h://127.0.0.1:9050</code> once.</p>
-        <h3>Example CLAUDE.md (put this in your repo root)</h3>
-        <pre><code># Claude Code: curl over Tor (.onion ready)
+        <h2>Ask Claude like a search engine</h2>
+        <p>Prompt Claude in plain English, it will run the Ahmia query via <code>curl</code> over Tor and list candidate onions:</p>
+        <pre><code>"find me academic research repository onions"
 
-Purpose
-- Use curl through your local Tor SOCKS proxy from the Bash tool. You do not need to proxy Claude itself. Avoid WebFetch for .onion — hosted fetchers often block it. Using curl with socks5h keeps DNS and HTTP inside Tor.
+● Bash(QUERY='research+papers' curl -sS --socks5-hostname 127.0.0.1:9050 …)
+  ⎿  2222f2ikw4c6x4sljqbtalrqz5ngfoizmw3uyvont3tqkehdpmtdayqd.onion
+     2gzyxa5i5ayvgbqn6r7r37fzapdf5fp6vxtxqymxoa6cocwemjgs5nyd.onion
+     2gzyxa5ihm7nsggfxnu52rck2vv4rvmdlkiu3zzui5du4xyclen53wid.onion
+     … +12 lines (ctrl+r to expand)
 
-Assumptions
-- Tor is running locally with SOCKS on 127.0.0.1:9050.
-- You can use the Bash tool (shell) in Claude Code.
+● Bash(QUERY='thesis+dissertation' curl -sS --socks5-hostname 127.0.0.1:9050 …)
+  ⎿  Running…
 
-Rules
-- Use the Bash tool with curl. Do not use WebFetch for .onion.
-- Route curl via Tor using one of these:
-  - Per command: --socks5-hostname 127.0.0.1:9050
-  - Or (if the session keeps env) export once: set -x ALL_PROXY socks5h://127.0.0.1:9050
-- Use -sS to surface errors without progress bars.
-
-Sanity check (clearnet via Tor)
-curl -s --socks5-hostname 127.0.0.1:9050 https://check.torproject.org/api/ip
-# Expect: {"IsTor": true, ...}
-
-Ahmia basics
-- Ahmia onion: http://juhanurmihxlp77nkq76byazcldy2hlmovfu2epvl5ankdibsot4csyd.onion/
-
-1) Headers (reachability)
-curl -sS -I --socks5-hostname 127.0.0.1:9050 \
-  http://juhanurmihxlp77nkq76byazcldy2hlmovfu2epvl5ankdibsot4csyd.onion/
-
-2) Search and extract candidate v3 onions (dedup; exclude Ahmia)
-QUERY='marketplace'
-curl -sS --socks5-hostname 127.0.0.1:9050 \
-  "http://juhanurmihxlp77nkq76byazcldy2hlmovfu2epvl5ankdibsot4csyd.onion/search/?q=${QUERY}" | \
-  grep -Eo 'https?://[a-z2-7]{56}\.onion(/[^"< ]*)?' | \
-  grep -v 'juhanurmihxlp77nkq76byazcldy2hlmovfu2epvl5ankdibsot4csyd\.onion' | \
-  sed -E 's#^https?://##; s#/.*$##; s#/$##' | \
-  sort -u | head -n 10
-
-3) Probe each host, then fetch a snippet
-while read -r host; do
-  echo "== $host =="
-  curl -sS -I --socks5-hostname 127.0.0.1:9050 \
-    --connect-timeout 10 --max-time 20 --retry 2 --retry-delay 2 \
-    "http://$host/" | sed -n '1,12p'
-  curl -sS --socks5-hostname 127.0.0.1:9050 \
-    --connect-timeout 10 --max-time 20 --retry 1 \
-    "http://$host/" | head -n 20
-  echo
-done
-
-4) Optional: CSV summary (host,status,server)
-while read -r host; do
-  status=$(curl -sS -I --socks5-hostname 127.0.0.1:9050 --max-time 15 "http://$host/" | head -n1 | awk '{print $2}')
-  server=$(curl -sS -I --socks5-hostname 127.0.0.1:9050 --max-time 15 "http://$host/" | awk -F': ' 'BEGIN{IGNORECASE=1} /^Server:/ {print $2; exit}')
-  printf '%s,%s,%s\n' "$host" "${status:-NA}" "${server:-NA}"
-done
-
-Notes
-- .onion requires DNS inside Tor. --socks5-hostname (or ALL_PROXY=socks5h://…) ensures Tor resolves hostnames; plain --socks5 will not.
-- Hosted fetchers may block .onion. Bash + curl through Tor is the reliable path.
-- Sites can be intermittent; timeouts and small retries help.
-        </code></pre>
-        <p>Notes:</p>
-        <ul>
-          <li><code>[a-z2-7]{56}</code> matches valid v3 onion hostnames; filtering avoids Ahmia’s own links.</li>
-          <li><code>-sS</code> shows errors without progress bars; timeouts and retries keep runs responsive.</li>
-          <li>Use <code>--socks5-hostname</code> (or export <code>ALL_PROXY=socks5h://127.0.0.1:9050</code>) so DNS and HTTP both go through Tor.</li>
-        </ul>
+● Bash(QUERY='digital+library' curl -sS --socks5-hostname 127.0.0.1:9050 …)
+  ⎿  Waiting…
+     ctrl+b to run in background
+</code></pre>
+        <p>Under the hood, it’s just Ahmia plus a small filter for v3 onion hostnames:</p>
+        <pre><code>QUERY='research+papers'
+BASE='http://juhanurmihxlp77nkq76byazcldy2hlmovfu2epvl5ankdibsot4csyd.onion'
+curl -sS --socks5-hostname 127.0.0.1:9050 "$BASE/search/?q=${QUERY}" | \
+  grep -Eo 'https?://[a-z2-7]{56}\.onion' | sort -u | head -n 20
+</code></pre>
+        <p>To skim content quickly, fetch headers or the first lines from each host:</p>
+        <pre><code>curl -sS -I --socks5-hostname 127.0.0.1:9050 http://EXAMPLE.onion/
+curl -sS    --socks5-hostname 127.0.0.1:9050 http://EXAMPLE.onion/ | head -n 20
+</code></pre>
       </section>
 
       <section>
         <h2>Troubleshooting</h2>
         <ul>
-          <li><strong>No output?</strong> Drop <code>-s</code> or use <code>-sS</code> to see errors. Check Tor is running: <code>systemctl status tor</code>.</li>
-          <li><strong>Env var not sticking?</strong> If using <code>ALL_PROXY</code>, set it in the same Bash tool session, or prefix the command: <code>env ALL_PROXY=socks5h://127.0.0.1:9050 curl …</code>.</li>
-          <li><strong>.onion blocked in Claude?</strong> Expected for hosted fetchers. Use the Bash tool with <code>socks5h</code> and share the results.</li>
+          <li>Tor not running: <code>systemctl status tor</code></li>
+          <li>No <code>.onion</code> resolution: curl needs <code>socks5h</code>; plain curl won't resolve <code>.onion</code> (RFC 7686). Use <code>--socks5-hostname</code> or <code>ALL_PROXY=socks5h://...</code>.</li>
+          <li>WebFetch: doesn't use a SOCKS proxy, so it won't reach <code>.onion</code>. Use Bash + <code>curl</code> with <code>socks5h</code>.</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>Claude Code profile (copy‑paste)</h2>
+        <p>Drop this into your Claude project as <code>CLAUDE.md</code>. It tells Claude to use the Bash tool with <code>curl</code> over Tor and how to search/skim onions via Ahmia.</p>
+        <pre><code># Claude Code: Tor browsing via curl (.onion ready)
+
+Purpose
+- Use curl through your local Tor SOCKS proxy from the Bash tool. Don't proxy Claude itself. WebFetch doesn't use SOCKS proxies, so it won't reach .onion. Using socks5h keeps DNS + HTTP inside Tor.
+
+Assumptions
+- Tor running locally with SOCKS on 127.0.0.1:9050
+- Bash tool available in Claude Code
+
+Rules
+- Use Bash + curl instead of WebFetch for .onion
+- Route curl via Tor:
+  - Per command: --socks5-hostname 127.0.0.1:9050
+  - Or session-wide: export ALL_PROXY=socks5h://127.0.0.1:9050
+- Use -sS to show errors without the progress bar
+
+Sanity check (clearnet via Tor)
+curl -sS --socks5-hostname 127.0.0.1:9050 https://check.torproject.org/api/ip
+# Expect: {"IsTor": true, ...}
+
+Ahmia basics
+BASE='http://juhanurmihxlp77nkq76byazcldy2hlmovfu2epvl5ankdibsot4csyd.onion'
+
+1) Headers (reachability)
+curl -sS -I --socks5-hostname 127.0.0.1:9050 "$BASE/"
+
+2) Search and extract v3 onion candidates (dedup)
+QUERY='marketplace'
+curl -sS --socks5-hostname 127.0.0.1:9050 "$BASE/search/?q=${QUERY}" | \
+  grep -Eo 'https?://[a-z2-7]{56}\.onion' | sort -u | head -n 10
+
+3) Probe one host, then fetch a snippet
+HOST='EXAMPLE.onion'
+curl -sS -I --socks5-hostname 127.0.0.1:9050 "http://$HOST/" | sed -n '1,12p'
+curl -sS    --socks5-hostname 127.0.0.1:9050 "http://$HOST/" | head -n 20
+
+Notes
+- .onion needs DNS inside Tor (RFC 7686). curl must use socks5h: --socks5-hostname or ALL_PROXY=socks5h://...
+- WebFetch won't use a SOCKS proxy; use Bash + curl
+- Sites are intermittent; small timeouts and retries help
+</code></pre>
+      </section>
+      <section>
+        <h2>See also</h2>
+        <ul>
+          <li><a href="https://curl.se/docs/manpage.html" rel="external noopener noreferrer">curl manual</a></li>
+          <li><a href="https://community.torproject.org/" rel="external noopener noreferrer">Tor Project community</a></li>
+          <li><a href="https://www.rfc-editor.org/rfc/rfc7686" rel="external noopener noreferrer">RFC 7686: The .onion Special-Use Domain Name</a></li>
         </ul>
       </section>
     </article>
@@ -170,7 +176,7 @@ Notes
 
   <aside>
     <section>
-      <h2>Related Topics</h2>
+      <h2>See also</h2>
       <ul>
         <li>curl with <code>socks5h</code> (DNS inside Tor)</li>
         <li>Using Claude’s Bash tool to drive curl over Tor</li>
