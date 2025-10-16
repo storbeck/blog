@@ -3,10 +3,21 @@
   --sans: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji";
   --serif: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
   --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  /* Link palette inspired by OKLCH guidance in the Light & Color post */
+  --link: oklch(0.56 0.14 260);
+  --link-hover: oklch(0.50 0.16 260);
+  --link-visited: oklch(0.54 0.12 305);
 }
 html { font-family: var(--sans); font-size: 19px; }
 @media (min-width: 960px) { html { font-size: 20px; } }
-body { margin: 0; line-height: 1.7; background: #fff; color: #111; font-family: var(--serif); }
+body {
+  margin: 0;
+  line-height: 1.7;
+  color: #111;
+  font-family: var(--serif);
+  /* Subtle center radial for depth */
+  background: radial-gradient(circle at 50% 22%, #eef2f7 0%, #f6f8fb 55%, #ffffff 85%) #ffffff;
+}
 
 /* Headings and chrome use sans for contrast */
 header, nav, footer, h1, h2, h3 { font-family: var(--sans); letter-spacing: 0.01em; }
@@ -31,10 +42,11 @@ h3 { font-size: clamp(1.2rem, 1.2vw + 0.35rem, 1.4rem); }
 img, picture, video { max-width: 100%; height: auto; }
 
 /* Code */
-pre { overflow: auto; padding: 0.75rem; background: rgba(127,127,127,0.08); border-radius: 6px; font-size: 0.95rem; }
+pre { overflow: auto; padding: 0.75rem; background: #eef0f3; border: 1px solid #d9dde3; border-radius: 6px; font-size: 0.95rem; }
 code, pre, kbd, samp { font-family: var(--mono); }
 code { font-size: 0.95em; }
-code { background: rgba(127,127,127,0.12); padding: 0.1em 0.3em; border-radius: 4px; }
+/* Inline code should blend with text; no box */
+code { background: transparent; border: 0; padding: 0.05em 0.15em; border-radius: 0; }
 pre code { background: none; padding: 0; }
 
 /* Blockquotes */
@@ -46,8 +58,10 @@ th, td { padding: 0.5rem; border-bottom: 1px solid rgba(127,127,127,0.2); text-a
 
 /* Rules + links */
 hr { border: none; height: 1px; background: currentColor; opacity: 0.15; margin: 2rem 0; }
-a { color: inherit; text-decoration: underline; text-underline-offset: 0.15em; }
-a:hover { text-decoration-thickness: 0.12em; }
+a { color: var(--link); text-decoration: underline; text-underline-offset: 0.15em; }
+a:visited { color: var(--link-visited); }
+a:hover { color: var(--link-hover); text-decoration-thickness: 0.12em; }
+a:active { color: color-mix(in oklch, var(--link-hover) 80%, black); }
 
 /* Focus visibility */
 :focus-visible { outline: 2px solid currentColor; outline-offset: 2px; }
