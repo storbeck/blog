@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Practical UI patterns: modular rhythm, natural motion, OKLCH palettes, hierarchy, tiny charts, and accessible status—with an interactive palette and copy‑paste code.">
+  <meta name="author" content="Storbeck">
+  <title>Light & Color Ideas for Modern Frontend - Storbeck Blog</title>
+  <link rel="preconnect" href="https://github.com">
+  <link rel="dns-prefetch" href="https://www.linkedin.com">
+  <meta itemprop="author" content="Geoff Storbeck">
+  <meta itemprop="headline" content="Light &amp; Color Ideas for Modern Frontend">
+  <meta itemprop="datePublished" content="2025-10-16">
+  <meta itemprop="description" content="Practical UI patterns: modular rhythm, natural motion, OKLCH palettes, hierarchy, tiny charts, and accessible status—with an interactive palette and copy‑paste code.">
+  <meta itemprop="url" content="https://storbeck.dev/posts/2025-10-16-light-and-color-principles-frontend.html">
+  <meta itemprop="mainEntityOfPage" content="https://storbeck.dev/posts/2025-10-16-light-and-color-principles-frontend.html">
+  <meta itemprop="inLanguage" content="en">
+  <meta itemprop="genre" content="Blog">
+</head>
+<body>
+  <header>
+    <nav aria-label="Site navigation">
+      <a href="../index.html" rel="home">← Storbeck Blog</a>
+    </nav>
+  </header>
+
+  <main>
+    <article itemscope itemtype="http://schema.org/BlogPosting">
+      <header>
+        <h1 itemprop="headline">Light &amp; Color Ideas for Modern Frontend</h1>
+        <p>
+          <time datetime="2025-10-16" itemprop="datePublished">Published October 16, 2025</time>
+          <span> • </span>
+          <span>Design, Frontend</span>
+        </p>
+      </header>
+
+      <p itemprop="description">This guide collects small, dependable patterns for everyday product UI. Inside you’ll find a modular rhythm for type and spacing, motion curves that feel natural, a plain‑English primer on OKLCH with an interactive palette, ways to shape hierarchy using saturation and lightness, a tiny accessible chart, and clear status chips that don’t rely on color alone. Each section includes the working demo and the exact code behind it.</p>
+
+      <section aria-labelledby="harmony">
+        <h2 id="harmony">Harmony &amp; Proportion (Rhythm)</h2>
+        <p>Use a modular type/spacing rhythm so pages “feel” coherent across breakpoints.</p>
+        <pre><code>/* Key ideas */
+• Pick a modest ratio (1.125–1.2)
+• Use clamp() for fluid steps
+• Keep spacing tied to the same beat
+        </code></pre>
+        <style>
+          .demo-harmony { font-family: system-ui, sans-serif; }
+          .demo-harmony { --step: 1.18; --base: 1rem; }
+          .demo-harmony h3 { font-size: clamp(1.25rem, 1rem + 1.2vw, calc(var(--base) * var(--step) * var(--step) * var(--step))); margin: 0 0 .6em; }
+          .demo-harmony p { font-size: clamp(1rem, .95rem + .4vw, calc(var(--base) * var(--step))); margin: 0 0 .8em; }
+          .demo-harmony small { font-size: clamp(.9rem, .85rem + .2vw, .95rem); opacity: .8; }
+          .demo-harmony .card { border: 1px solid #ddd; border-radius: 10px; padding: 1.25rem; }
+          .demo-harmony .row { display: flex; gap: 1rem; }
+          .demo-harmony .col { flex: 1 1 0; }
+        </style>
+        <figure class="demo-harmony">
+          <div class="row">
+            <div class="col">
+              <div class="card">
+                <h3>Modular Rhythm</h3>
+                <p>Headings, body, and meta scale from the same ratio.</p>
+                <p><small>Resize the window to see fluid steps.</small></p>
+              </div>
+            </div>
+            <div class="col">
+              <div class="card">
+                <h3>Consistent Spacing</h3>
+                <p>Gaps and padding align with the type rhythm for a calmer layout.</p>
+                <p><small>One beat ≈ one spacing unit.</small></p>
+              </div>
+            </div>
+          </div>
+          <figcaption><small>Both cards use the same scale for type and spacing, producing a stable visual cadence.</small></figcaption>
+        </figure>
+        <pre><code>/* CSS */
+.demo-harmony { --step: 1.18; --base: 1rem; }
+.demo-harmony h3 { font-size: clamp(1.25rem, 1rem + 1.2vw, calc(var(--base) * var(--step) * var(--step) * var(--step))); }
+.demo-harmony p  { font-size: clamp(1rem, .95rem + .4vw, calc(var(--base) * var(--step))); }
+
+<!-- HTML -->
+&lt;section class="demo-harmony"&gt;
+  &lt;h3&gt;Modular Rhythm&lt;/h3&gt;
+  &lt;p&gt;Fluid steps keep proportions consistent.&lt;/p&gt;
+&lt;/section&gt;
+</code></pre>
+      </section>
+
+      <section aria-labelledby="motion">
+        <h2 id="motion">Curves &amp; Motion (Natural Easing)</h2>
+        <p>Favor S‑curves for interaction motion. They feel organic compared to linear movement.</p>
+        <style>
+          .demo-motion { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; align-items: end; }
+          .demo-motion .box { border: 1px solid #ddd; border-radius: 10px; padding: .75rem; }
+          .demo-motion .ball { inline-size: 44px; block-size: 44px; border-radius: 50%; background: #555; transform: translateX(0); }
+          .demo-motion .linear .ball { transition: transform 600ms linear; }
+          .demo-motion .ease .ball { transition: transform 600ms cubic-bezier(.25,.1,.25,1); }
+          .demo-motion .box:hover .ball { transform: translateX(160px); }
+        </style>
+        <figure class="demo-motion">
+          <div class="box linear">
+            <p><strong>Linear</strong></p>
+            <div class="ball" aria-hidden="true"></div>
+          </div>
+          <div class="box ease">
+            <p><strong>S‑Curve</strong> (ease‑in‑out)</p>
+            <div class="ball" aria-hidden="true"></div>
+          </div>
+          <figcaption><small>Hover either box. The S‑curve starts and ends gently; the linear version feels mechanical.</small></figcaption>
+        </figure>
+        <pre><code>/* CSS */
+.box .ball { transition: transform 600ms cubic-bezier(.25,.1,.25,1); }
+.box:hover .ball { transform: translateX(160px); }
+
+<!-- HTML -->
+&lt;div class="box"&gt;
+  &lt;div class="ball" aria-hidden=&quot;true&quot;&gt;&lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+      </section>
+
+      <section aria-labelledby="oklch">
+        <h2 id="oklch">OKLCH in CSS (Perceptual Color)</h2>
+        <p><code>oklch(L C h / a?)</code> expresses color using perceived lightness (<strong>L</strong>, 0–1), chroma (<strong>C</strong>, vividness), and hue angle (<strong>h</strong>, 0–360deg). It’s a perceptual model, so equal changes in L/C look roughly equal to people—great for UI scales, gradients, and <code>color-mix()</code>.</p>
+        <style>
+          .demo-oklch { display: grid; gap: .75rem; font-family: system-ui, sans-serif; }
+          .demo-oklch { --hsl-a: hsl(270 70% 60%); --hsl-b: hsl(330 70% 60%);
+                         --ok-a:  oklch(0.70 0.10 270); --ok-b:  oklch(0.70 0.10 330); }
+          .demo-oklch .row { display: grid; grid-template-columns: 7ch 1fr; align-items: center; gap: .5rem; }
+          .demo-oklch .strip { block-size: 36px; border-radius: 8px; border: 1px solid #ddd; position: relative; }
+          .demo-oklch .hsl { background: linear-gradient(90deg, var(--hsl-a), var(--hsl-b)); }
+          .demo-oklch .ok  { background: linear-gradient(90deg, var(--ok-a),  var(--ok-b)); }
+          .demo-oklch .midline { position: absolute; inset-inline-start: 50%; inset-block: 0; inline-size: 2px; background: rgba(0,0,0,.15); }
+          .demo-oklch .compare { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; }
+          .demo-oklch .swatch { display: grid; gap: .25rem; }
+          .demo-oklch .box { inline-size: 100%; block-size: 36px; border: 1px solid #ddd; border-radius: 8px; }
+          .demo-oklch .mid-hsl { background: color-mix(in hsl, var(--hsl-a) 50%, var(--hsl-b) 50%); }
+          .demo-oklch .mid-ok  { background: color-mix(in oklch, var(--ok-a) 50%, var(--ok-b) 50%); }
+          .demo-oklch small.note { color: #555; }
+        </style>
+        <figure class="demo-oklch">
+          <div class="row"><span><small>HSL</small></span><div class="strip hsl" aria-label="HSL gradient"><span class="midline" aria-hidden="true"></span></div></div>
+          <div class="row"><span><small>OKLCH</small></span><div class="strip ok" aria-label="OKLCH gradient"><span class="midline" aria-hidden="true"></span></div></div>
+          <div class="compare" aria-label="Midpoint comparison">
+            <div class="swatch"><div class="box mid-hsl" aria-label="HSL 50/50 midpoint"></div><small>HSL 50/50 midpoint</small></div>
+            <div class="swatch"><div class="box mid-ok" aria-label="OKLCH 50/50 midpoint"></div><small>OKLCH 50/50 midpoint</small></div>
+          </div>
+          <figcaption><small class="note">Look at the middle: HSL’s midpoint dips in lightness (looks “muddy”), while OKLCH preserves lightness—equal steps look equal.</small></figcaption>
+        </figure>
+        <pre><code>/* OKLCH basics */
+--brand: oklch(0.65 0.12 260);
+--light-1: color-mix(in oklch, white 80%, var(--brand));
+--dark-1:  color-mix(in oklch, black 20%, var(--brand));
+
+/* Hue offsets for accents */
+--h: 260deg; --l: .65; --c: .12;
+--base: oklch(var(--l) var(--c) var(--h));
+--comp: oklch(var(--l) calc(var(--c)*.85) calc(var(--h) + 180deg));
+</code></pre>
+      </section>
+
+      <section aria-labelledby="color">
+        <h2 id="color">Color Relationships (Perceptual Space)</h2>
+        <p>Build palettes in OKLCH so steps feel even to the eye, then mix and match with small hue offsets for accents.</p>
+        <div class="controls" aria-label="Adjust base OKLCH color for interactive palette">
+          <p class="label"><strong>Adjust Base Color (OKLCH)</strong></p>
+          <label class="row">L (lightness)
+            <input name="L" type="range" min="0" max="1" step="0.01" value="0.65">
+            <output for="L">0.65</output>
+          </label>
+          <label class="row">C (chroma)
+            <input name="C" type="range" min="0" max="0.2" step="0.005" value="0.12">
+            <output for="C">0.12</output>
+          </label>
+          <label class="row">h (hue)
+            <input name="H" type="range" min="0" max="360" step="1" value="260">
+            <output for="H">260°</output>
+          </label>
+        </div>
+        <style>
+          .demo-color { font-family: system-ui, sans-serif; --h: 260deg; --l: .65; --c: .12; }
+          .demo-color .palettes { display: grid; grid-template-columns: 1fr; gap: 1rem; }
+          .demo-color .palette { border: 1px solid #ddd; border-radius: 10px; padding: .75rem; }
+          .demo-color .swatches { display: flex; gap: .5rem; margin-block: .5rem; }
+          .demo-color .swatch { inline-size: 54px; block-size: 34px; border-radius: 8px; border: 1px solid #ddd; }
+          .demo-color .btn { display: inline-block; padding: .5rem .8rem; border-radius: 10px; border: 1px solid transparent; color: white; font-weight: 600; }
+          .demo-color .label { margin: 0; }
+          /* Controls layout */
+          .demo-color ~ .controls, .demo-color .controls, .controls { display: grid; gap: .6rem; margin-block: .5rem 1rem; max-inline-size: 540px; }
+          .controls .row { display: grid; grid-template-columns: 12ch 1fr 6ch; align-items: center; gap: .6rem; }
+
+          /* Core palette math per card */
+          .demo-color .palette { --base: oklch(var(--l) var(--c) var(--h));
+            --s1: color-mix(in oklch, white 85%, var(--base));
+            --s2: color-mix(in oklch, white 70%, var(--base));
+            --s3: color-mix(in oklch, white 50%, var(--base));
+            --s4: color-mix(in oklch, black 20%, var(--base));
+            --s5: color-mix(in oklch, black 35%, var(--base));
+          }
+
+          .demo-color .pair { border: 1px solid #ddd; border-radius: 10px; padding: .75rem; }
+          .demo-color .pair h4 { margin: 0 0 .25rem; font-size: 1rem; }
+          .demo-color .badge { display: inline-block; padding: .25rem .5rem; border-radius: 999px; font: 600 12px/1 system-ui, sans-serif; border: 1px solid rgba(0,0,0,.08); }
+        </style>
+
+        <figure class="demo-color" aria-labelledby="palettes-title">
+          <figcaption id="palettes-title"><strong>Core Scales</strong></figcaption>
+          <div class="palettes">
+            <div class="palette" aria-label="Interactive palette (inherits L/C/h)">
+              <p class="label"><strong>Interactive</strong> (OKLCH L/C/h)</p>
+              <div class="swatches" role="list">
+                <div class="swatch" style="background: var(--s1)" role="listitem" aria-label="interactive‑1"></div>
+                <div class="swatch" style="background: var(--s2)" role="listitem" aria-label="interactive‑2"></div>
+                <div class="swatch" style="background: var(--s3)" role="listitem" aria-label="interactive‑3"></div>
+                <div class="swatch" style="background: var(--s4)" role="listitem" aria-label="interactive‑4"></div>
+                <div class="swatch" style="background: var(--s5)" role="listitem" aria-label="interactive‑5"></div>
+              </div>
+              <p><a class="btn" style="background: var(--s4)" href="#" role="button" aria-label="Interactive Action">Interactive Action</a></p>
+            </div>
+
+            
+          </div>
+          <small>Each palette defines a base OKLCH color (L, C, Hue) and derives light/dark steps via <code>color-mix()</code>. Buttons use the same scale.</small>
+        </figure>
+        <script>
+          (function() {
+            const article = document.currentScript.closest('article');
+            const scope = article.querySelector('.demo-color');
+            const controls = article.querySelector('.controls');
+            if (!scope || !controls) return;
+            const L = controls.querySelector('input[name="L"]');
+            const C = controls.querySelector('input[name="C"]');
+            const H = controls.querySelector('input[name="H"]');
+            const outL = L.nextElementSibling;
+            const outC = C.nextElementSibling;
+            const outH = H.nextElementSibling;
+            function apply() {
+              scope.style.setProperty('--l', L.value);
+              scope.style.setProperty('--c', C.value);
+              scope.style.setProperty('--h', H.value + 'deg');
+              outL.textContent = Number(L.value).toFixed(2);
+              outC.textContent = Number(C.value).toFixed(3);
+              outH.textContent = Math.round(H.value) + '°';
+            }
+            apply();
+            L.addEventListener('input', apply);
+            C.addEventListener('input', apply);
+            H.addEventListener('input', apply);
+          })();
+        </script>
+
+      </section>
+
+      
+
+      <section aria-labelledby="hierarchy">
+        <h2 id="hierarchy">Visual Hierarchy (Saturation &amp; Lightness)</h2>
+        <p>Guide attention with saturation/lightness steps instead of hue jumps.</p>
+        <style>
+          .demo-hierarchy { font-family: system-ui, sans-serif; --ink: oklch(.14 .02 260); --muted: oklch(.38 .02 260); --accent: oklch(.58 .10 260); }
+          .demo-hierarchy .meta { color: var(--muted); font-size: .9rem; }
+          .demo-hierarchy h3 { color: var(--ink); margin: 0 0 .25rem; }
+          .demo-hierarchy .subtitle { color: color-mix(in oklch, var(--ink) 60%, var(--accent)); margin: 0 0 .5rem; }
+          .demo-hierarchy p { margin: 0; }
+        </style>
+        <figure class="demo-hierarchy">
+          <p class="meta">Case Study</p>
+          <h3>Improving Onboarding Completion</h3>
+          <p class="subtitle">Small UI nudges increased task completion by 18%</p>
+          <p>Body text remains calm; accent appears in the subtitle only.</p>
+          <figcaption><small>Primary ink for headlines, desaturated meta, and a restrained accent for subheads establish hierarchy without noise.</small></figcaption>
+        </figure>
+        <pre><code>/* CSS */
+:root { --ink: oklch(.14 .02 260); --muted: oklch(.38 .02 260); --accent: oklch(.58 .10 260); }
+h3 { color: var(--ink); }
+.meta { color: var(--muted); }
+.subtitle { color: color-mix(in oklch, var(--ink) 60%, var(--accent)); }
+
+<!-- HTML -->
+&lt;p class=&quot;meta&quot;&gt;Case Study&lt;/p&gt;
+&lt;h3&gt;Improving Onboarding&lt;/h3&gt;
+&lt;p class=&quot;subtitle&quot;&gt;Small UI changes → +18%&lt;/p&gt;
+</code></pre>
+      </section>
+
+      <section aria-labelledby="dataviz">
+        <h2 id="dataviz">Data Visualization (Accessible Colors)</h2>
+        <p>Use colorblind‑safe hues and add redundant cues (labels or patterns).</p>
+        <style>
+          .demo-chart { display: inline-block; border: 1px solid #ddd; border-radius: 10px; padding: .75rem; }
+          .demo-chart svg { display: block; height: 120px; width: 260px; }
+        </style>
+        <figure class="demo-chart" aria-labelledby="chart-title">
+          <figcaption id="chart-title"><strong>Quarterly Revenue</strong> (in $k)</figcaption>
+          <svg role="img" aria-labelledby="chart-title" viewBox="0 0 260 120">
+            <title id="chart-title">Quarterly Revenue (in thousands)</title>
+            <!-- Bars: colorblind‑safe blues/greens -->
+            <rect x="20"  y="60" width="40" height="40" fill="oklch(0.65 0.05 250)"><title>Q1: 40</title></rect>
+            <rect x="80"  y="50" width="40" height="50" fill="oklch(0.62 0.10 180)"><title>Q2: 50</title></rect>
+            <rect x="140" y="40" width="40" height="60" fill="oklch(0.58 0.11 210)"><title>Q3: 60</title></rect>
+            <rect x="200" y="30" width="40" height="70" fill="oklch(0.55 0.12 150)"><title>Q4: 70</title></rect>
+            <!-- Baseline -->
+            <line x1="10" y1="100" x2="250" y2="100" stroke="#999" stroke-dasharray="2 3" />
+          </svg>
+          <small>Bars include <code>&lt;title&gt;</code> for screen readers; hues chosen for common color‑vision deficiencies.</small>
+        </figure>
+        <pre><code>&lt;svg role=&quot;img&quot; aria-labelledby=&quot;chart-title&quot; viewBox=&quot;0 0 260 120&quot;&gt;
+  &lt;title id=&quot;chart-title&quot;&gt;Quarterly Revenue&lt;/title&gt;
+  &lt;rect x=&quot;20&quot; y=&quot;60&quot; width=&quot;40&quot; height=&quot;40&quot; fill=&quot;oklch(0.65 0.05 250)&quot;&gt;
+    &lt;title&gt;Q1: 40&lt;/title&gt;
+  &lt;/rect&gt;
+  ...
+&lt;/svg&gt;
+</code></pre>
+      </section>
+
+      <section aria-labelledby="a11y">
+        <h2 id="a11y">Accessibility (Beyond Color)</h2>
+        <p>Never rely on color alone, add redundant signals like icons and labels to clarify intent.</p>
+        <style>
+          .demo-a11y .row { display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; }
+          .demo-a11y .chip { display: inline-flex; align-items: center; gap: .4rem; border-radius: 999px; padding: .3rem .6rem; font: 600 12px/1 system-ui, sans-serif; border: 1px solid #d0d6df; }
+          .demo-a11y .chip[data-status="ok"] { background: oklch(.96 .02 150); color: oklch(.28 .04 150); }
+          .demo-a11y .chip[data-status="warn"] { background: oklch(.97 .04 85); color: oklch(.30 .06 85); }
+          .demo-a11y .chip[data-status="err"] { background: oklch(.97 .05 25); color: oklch(.30 .08 25); }
+          .demo-a11y kbd { background: #f0f3f7; border: 1px solid #cfd6e0; border-radius: 4px; padding: .1rem .3rem; font: 600 12px/1 ui-monospace, SFMono-Regular, Menlo, monospace; }
+        </style>
+        <figure class="demo-a11y">
+          <div class="row">
+            <span class="chip" data-status="ok" aria-label="Status: Success">✓ Success</span>
+            <span class="chip" data-status="warn" aria-label="Status: Warning">! Warning</span>
+            <span class="chip" data-status="err" aria-label="Status: Error">× Error</span>
+          </div>
+          <figcaption><small>Icons + labels communicate status.</small></figcaption>
+        </figure>
+        <pre><code>/* CSS */
+.chip[data-status=&quot;ok&quot;]   { background: oklch(.96 .02 150); color: oklch(.28 .04 150); }
+.chip[data-status=&quot;warn&quot;] { background: oklch(.97 .04 85);  color: oklch(.30 .06 85); }
+.chip[data-status=&quot;err&quot;]  { background: oklch(.97 .05 25);  color: oklch(.30 .08 25); }
+
+<!-- HTML -->
+&lt;span class=&quot;chip&quot; data-status=&quot;ok&quot;&gt;✓ Success&lt;/span&gt;
+</code></pre>
+      </section>
+
+      <section aria-labelledby="wrap">
+        <h2 id="wrap">Takeaways</h2>
+        <ul>
+          <li>Use consistent rhythm (type + spacing) for immediate harmony.</li>
+          <li>Prefer S‑curve easing for micro‑interactions.</li>
+          <li>Build palettes in OKLCH; derive steps with <code>color-mix()</code>.</li>
+          <li>Signal hierarchy via saturation/lightness; reserve hue for meaning.</li>
+          <li>Make charts accessible: safe palettes + text/labels.</li>
+          <li>Never rely on color alone; design for focus and clarity.</li>
+        </ul>
+      </section>
+    </article>
+  </main>
+
+  <aside>
+    <section>
+      <h2>Related Topics</h2>
+      <ul>
+        <li>OKLCH color: <a href="https://developer.mozilla.org/docs/Web/CSS/color_value/oklch" rel="external noopener noreferrer">MDN</a></li>
+        <li>color-mix(): <a href="https://developer.mozilla.org/docs/Web/CSS/color_value/color-mix" rel="external noopener noreferrer">MDN</a></li>
+        <li>prefers-color-scheme: <a href="https://developer.mozilla.org/docs/Web/CSS/@media/prefers-color-scheme" rel="external noopener noreferrer">MDN</a></li>
+        <li>prefers-reduced-motion: <a href="https://developer.mozilla.org/docs/Web/CSS/@media/prefers-reduced-motion" rel="external noopener noreferrer">MDN</a></li>
+        <li>Color‑blind friendly palettes: <a href="https://davidmathlogic.com/colorblind/" rel="external noopener noreferrer">Reference</a></li>
+      </ul>
+    </section>
+  </aside>
+
+  <footer>
+    <nav aria-label="Post navigation">
+      <a href="../index.html" rel="home">← Back to blog</a>
+    </nav>
+    <p><small>Last updated: <time datetime="2025-10-16">October 16, 2025</time></small></p>
+  </footer>
+</body>
+<!--
+This page contains scoped, inline demos only. The site has no global CSS.
+-->
+</html>
