@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Don’t prompt agents to ‘build a beautiful UI’. Beauty is undefined. Give concrete visual references and style guides instead. Includes before/after prompts and a calculator mini‑demo with multiple reference styles.">
+  <meta name="author" content="Storbeck">
+  <title>Don’t Say “Build a Beautiful UI” — Use References - Storbeck Blog</title>
+  <link rel="preconnect" href="https://github.com">
+  <link rel="dns-prefetch" href="https://www.linkedin.com">
+  <meta itemprop="author" content="Geoff Storbeck">
+  <meta itemprop="headline" content="Don’t Say “Build a Beautiful UI” — Use References">
+  <meta itemprop="datePublished" content="2025-10-16">
+  <meta itemprop="description" content="LLMs don’t know your ‘beautiful’. Anchor prompts with references: artists, apps, and style guides. Demos and a mini calculator with multiple styles.">
+  <meta itemprop="url" content="https://storbeck.dev/posts/2025-10-16-design-prompts-references.html">
+  <meta itemprop="mainEntityOfPage" content="https://storbeck.dev/posts/2025-10-16-design-prompts-references.html">
+  <meta itemprop="inLanguage" content="en">
+  <meta itemprop="genre" content="Blog">
+</head>
+<body>
+  <header>
+    <nav aria-label="Site navigation">
+      <a href="../index.html" rel="home">← Storbeck Blog</a>
+    </nav>
+  </header>
+
+  <main>
+    <article itemscope itemtype="http://schema.org/BlogPosting">
+      <header>
+        <h1 itemprop="headline">Don’t Say “Build a Beautiful UI” — Use References</h1>
+        <p>
+          <time datetime="2025-10-16" itemprop="datePublished">Published October 16, 2025</time>
+          <span> • </span>
+          <span>Design, Prompting</span>
+        </p>
+      </header>
+
+      <section aria-labelledby="why">
+        <h2 id="why">“Beautiful” is undefined</h2>
+        <p>When you ask an agent to “build a beautiful UI,” you’ve given it two hard problems: decide what <em>beautiful</em> means to you, then build it. The first step usually fails because beauty is subjective. Without anchors, the model will invent a style you didn’t intend.</p>
+      </section>
+
+      <section aria-labelledby="references">
+        <h2 id="references">Anchor with references</h2>
+        <p>Give the agent specific visual anchors so it doesn’t have to guess. References shrink the search space and align expectations.</p>
+        <ul>
+          <li><strong>Artists</strong>: cite real people or movements (e.g., <em>Dieter Rams</em>, <em>Memphis</em>, <em>Brutalist web</em>, <em>Susan Kare</em>, <em>Syd Mead</em>).</li>
+          <li><strong>Style guides</strong>: <a href="https://m3.material.io/" rel="external noopener noreferrer">Material Design 3</a>, <a href="https://developer.apple.com/design/human-interface-guidelines/" rel="external noopener noreferrer">Apple HIG</a>, <a href="https://carbondesignsystem.com/" rel="external noopener noreferrer">IBM Carbon</a>, <a href="https://fluent2.microsoft.design/" rel="external noopener noreferrer">Microsoft Fluent</a>.</li>
+          <li><strong>App references</strong>: “like the Braun ET66 calculator,” “like Apple Clock,” “like Notion tables.”</li>
+          <li><strong>Constraints</strong>: color palette, typography, spacing scale, motion tone, device targets.</li>
+          <li><strong>Deliverables</strong>: ask for a <em>wireframe first</em>, list of components, then a styled pass.</li>
+        </ul>
+      </section>
+
+      <section aria-labelledby="demos">
+        <h2 id="demos">Prompt demos</h2>
+        <h3>Demo A — Vague vs. referenced</h3>
+        <figure>
+          <figcaption>Vague prompt (likely miss):</figcaption>
+          <pre><code>Build a beautiful dashboard for a finance app.</code></pre>
+        </figure>
+        <figure>
+          <figcaption>Referenced prompt (clearer):</figcaption>
+          <pre><code>Design a finance dashboard inspired by Material Design 3 and Bloomberg terminals.
+- Deliver a wireframe first: navigation, positions, and data density.
+- Then apply styles: MD3 color roles (primary/secondary/tertiary), elevation tokens, and compact density.
+- Charts should resemble Bloomberg: dark background, high contrast, mono type for tickers.
+- Outputs: component list, wireframe description, then styled HTML/CSS (separate steps).</code></pre>
+        </figure>
+
+        <h3>Demo B — “Act as a design expert” vs. concrete scope</h3>
+        <figure>
+          <figcaption>Unscoped persona (likely to wander):</figcaption>
+          <pre><code>Act as a design expert and make a beautiful landing page.</code></pre>
+        </figure>
+        <figure>
+          <figcaption>Concrete scope with references:</figcaption>
+          <pre><code>Design a SaaS landing page in the style of Apple HIG typography and IBM Carbon spacing.
+- References: apple.com/mac (hero rhythm), slack.com (section scannability).
+- Constraints: two-column grid, 8px spacing scale, max width 1200px, no stock photos.
+- Deliver wireframe → copy draft → styled pass. Include alt text for all imagery.</code></pre>
+        </figure>
+
+        <h3>Demo C — “Modern and sleek” vs. movement + palette</h3>
+        <figure>
+          <figcaption>Vibes only:</figcaption>
+          <pre><code>Make a modern, sleek, minimal settings page.</code></pre>
+        </figure>
+        <figure>
+          <figcaption>Movement + palette:</figcaption>
+          <pre><code>Create a settings page in a Brutalist web style (heavy borders, mono, flat boxes).
+Palette: #111 background, #fff text, #0ff accent. Typography: monospace only. No shadows or gradients.
+Deliver: IA outline → wireframe → styled markup.</code></pre>
+        </figure>
+      </section>
+
+      <section aria-labelledby="calc">
+        <h2 id="calc">Mini‑demo: the same calculator, different references</h2>
+        <p>Ask for one object — a simple calculator — then swap references. The agent shouldn’t invent “beauty”; it should <em>map</em> your references to UI choices.</p>
+
+        <h3>1) Braun/Rams minimalism</h3>
+        <pre><code>Design a four‑function calculator like the Braun ET66 (Dieter Rams):
+- Low‑contrast plastic body, circular buttons, yellow = key.
+- Typeface: DIN‑like grotesk. No shadows. Tight tolerances.
+Deliver: wireframe → styled markup. Note which details map to the ET66.</code></pre>
+
+        <h3>2) Apple HIG (iOS)</h3>
+        <pre><code>Design an iOS calculator per Apple HIG:
+- Large tappable targets, San Francisco, dynamic type sizes.
+- Clear button roles: numeric (neutral), ops (accent), = (prominent).
+- Motion: subtle spring on press.
+Deliver: wireframe → styled markup. Include accessibility notes.</code></pre>
+
+        <h3>3) Material Design 3</h3>
+        <pre><code>Design the calculator in Material Design 3:
+- Use MD3 color roles and elevation tokens; rounded rectangles, medium density.
+- Use Filled Tonal for ops, Primary for =.
+Deliver: component tokens used, then styled markup.</code></pre>
+
+        <h3>4) Memphis design (’80s)</h3>
+        <pre><code>Design a playful Memphis‑style calculator:
+- Bold shapes, high‑contrast patterns, asymmetry. Bright primaries with black outlines.
+- Typography: geometric sans. Exaggerate the = key.
+Deliver: wireframe → styled markup. Explain how each choice maps to Memphis.</code></pre>
+
+        <h3>5) Brutalist web</h3>
+        <pre><code>Design a Brutalist web calculator:
+- Thick borders, no gradients, monospace, minimal spacing. Visible focus states.
+- No rounded corners. Pure layout boxes.
+Deliver: semantic HTML → minimal CSS. Accessibility first.</code></pre>
+
+        <h3>Prompt frame you can reuse</h3>
+        <pre><code>Task: [Component/Page]
+References: [Artists/Apps/Movements]
+Style guide: [Material 3 / Apple HIG / Carbon / Fluent]
+Constraints: [Palette, Type, Grid, Density, Platforms]
+Process: Wireframe → Component list → Styled pass → Accessibility notes
+Non‑goals: [What to avoid]
+Output: [Deliverable order]
+</code></pre>
+      </section>
+
+      <section aria-labelledby="summary">
+        <h2 id="summary">Takeaways</h2>
+        <ul>
+          <li>“Beautiful” is subjective; don’t make the model guess.</li>
+          <li>Use concrete references and style guides to set the target.</li>
+          <li>Ask for wireframes first; style later.</li>
+          <li>Be explicit about constraints and non‑goals.</li>
+        </ul>
+      </section>
+    </article>
+  </main>
+
+  <aside>
+    <section>
+      <h2>Related Topics</h2>
+      <ul>
+        <li><a href="https://m3.material.io/" rel="external noopener noreferrer">Material Design 3</a></li>
+        <li><a href="https://developer.apple.com/design/human-interface-guidelines/" rel="external noopener noreferrer">Apple Human Interface Guidelines</a></li>
+        <li><a href="https://carbondesignsystem.com/" rel="external noopener noreferrer">IBM Carbon Design System</a></li>
+        <li><a href="https://fluent2.microsoft.design/" rel="external noopener noreferrer">Microsoft Fluent 2</a></li>
+      </ul>
+    </section>
+  </aside>
+
+  <footer>
+    <nav aria-label="Post navigation">
+      <a href="../index.html" rel="home">← Back to blog</a>
+    </nav>
+    <p><small>Last updated: <time datetime="2025-10-16">October 16, 2025</time></small></p>
+  </footer>
+</body>
+</html>
+
