@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Make a moving, zine‑style background by generating ASCII art with Linux tools and rendering it into an animated image with ImageMagick—no CSS or JavaScript required.">
+  <meta name="author" content="Storbeck">
+  <title>Textmode Vibes That Move (ASCII → Animated Image) - Storbeck Blog</title>
+  <link rel="preconnect" href="https://github.com">
+  <link rel="dns-prefetch" href="https://www.linkedin.com">
+  <meta itemprop="author" content="Geoff Storbeck">
+  <meta itemprop="headline" content="Textmode Vibes That Move (ASCII → Animated Image)">
+  <meta itemprop="datePublished" content="2025-10-16">
+  <meta itemprop="description" content="Make a moving, zine‑style background by generating ASCII art with Linux tools and rendering it into an animated image with ImageMagick—no CSS or JavaScript required.">
+  <meta itemprop="url" content="https://storbeck.dev/posts/2025-10-16-moving-zine-ascii.html">
+  <meta itemprop="mainEntityOfPage" content="https://storbeck.dev/posts/2025-10-16-moving-zine-ascii.html">
+  <meta itemprop="inLanguage" content="en">
+  <meta itemprop="genre" content="Blog">
+  <meta name="robots" content="index,follow">
+</head>
+<body>
+  <header>
+    <nav aria-label="Site navigation">
+      <a href="../index.html" rel="home">← Storbeck Blog</a>
+    </nav>
+  </header>
+
+  <main>
+    <article itemscope itemtype="http://schema.org/BlogPosting">
+      <header>
+        <h1 itemprop="headline">Textmode Vibes That Move (ASCII → Animated Image)</h1>
+        <p>
+          <time datetime="2025-10-16" itemprop="datePublished">Published October 16, 2025</time>
+          <span> • </span>
+          <span>Design, Terminal</span>
+        </p>
+      </header>
+
+      <section itemprop="articleBody">
+        <p>Zine‑ish, textmode, ANSI/ASCII—think <abbr title="classic hacker e‑zine">Phrack</abbr> meets demoscene. You can get that gritty moving background vibe without CSS or JavaScript by pre‑rendering the motion into an animated image (WebP/GIF) and embedding it like any other image. This post shows a minimal Linux toolchain: generate ASCII, render to images, pan subtly across frames, then assemble into an animation.</p>
+
+        <h2 id="overview">Overview</h2>
+        <ol>
+          <li>Create a repeating ASCII tile (banner, symbols, or a converted image).</li>
+          <li>Rasterize the ASCII into a high‑contrast image.</li>
+          <li>Generate animation frames by panning the tile.</li>
+          <li>Assemble frames into animated WebP (with GIF fallback).</li>
+        </ol>
+
+        <h2 id="tools">Tools</h2>
+        <ul>
+          <li><code>figlet</code> or <code>toilet</code> — banner text.</li>
+          <li><code>chafa</code> or <code>jp2a</code> — convert images to ASCII (optional).</li>
+          <li><code>magick</code> (ImageMagick) — rasterize text and build animations.</li>
+          <li><code>ffmpeg</code> (optional) — alternative encoder, post‑processing.</li>
+        </ul>
+
+        <h2 id="step-1">1) Build an ASCII tile</h2>
+        <p>Make a noisy, repeatable pattern. Use a mix of symbols to mimic photocopy texture, plus a title banner:</p>
+        <pre><code>mkdir -p work && cd work
+printf '%s\n' "@@@@ #### **** //// \\\\ \\// -- ++ == ~~" \
+              "@@@@ #### **** //// \\\\ \\// -- ++ == ~~" \
+              "@@@@ #### **** //// \\ \\// -- ++ == ~~" \
+              "@@@@ #### **** //// \\ \\// -- ++ == ~~" \
+              > noise.txt
+
+figlet -f slant "ZINE" &gt; banner.txt
+cat banner.txt noise.txt banner.txt noise.txt &gt; tile.txt
+</code></pre>
+
+        <p>Or convert any source image into ASCII (coarse, high contrast works best):</p>
+        <pre><code># Example using chafa (install via package manager)
+chafa --symbols 2x2 --size 120x40 ../images/originals/sample.jpg &gt; tile.txt
+</code></pre>
+
+        <h2 id="step-2">2) Rasterize the ASCII to an image</h2>
+        <p>Render the ASCII with a monospace font to a large tile you can pan across. The <code>label:@file</code> trick reads text directly:</p>
+        <pre><code>magick -background black -fill white \
+  -font DejaVu-Sans-Mono -pointsize 22 \
+  label:@tile.txt tile.png
+</code></pre>
+        <p>If the line breaks are too tight or too loose, adjust <code>-pointsize</code> or pad with <code>-splice</code>/<code>-extent</code>:</p>
+        <pre><code>magick tile.png -bordercolor black -border 20x20 tile-padded.png
+</code></pre>
+
+        <h2 id="step-3">3) Generate subtle motion frames</h2>
+        <p>Loop the tile on a larger canvas and crop moving windows to simulate a drifting background:</p>
+        <pre><code>magick tile-padded.png -virtual-pixel tile -distort SRT 0 \
+  -resize 1600x900! large-tile.png
+
+mkdir frames
+# 48 frames of slow diagonal pan
+for i in $(seq 0 47); do 
+  x=$((i*6)); y=$((i*4));
+  magick large-tile.png -crop 1280x720+${x}+${y} +repage frames/f-$(printf %02d $i).png
+done
+</code></pre>
+
+        <h2 id="step-4">4) Assemble into animated WebP (and GIF fallback)</h2>
+        <pre><code># WebP (small, widely supported in modern browsers)
+magick -delay 7 -loop 0 frames/f-*.png -quality 85 zine-bg.webp
+
+# GIF fallback (bigger, universal)
+magick -delay 7 -loop 0 -dither FloydSteinberg -colors 32 \
+  frames/f-*.png zine-bg.gif
+</code></pre>
+        <p>Tip: If the motion feels too fast/slow, tweak <code>-delay</code> or change the per‑frame offset in the loop. Keep the movement subtle—your eye should feel texture, not distraction.</p>
+
+        <h2 id="embed">Embed on the blog</h2>
+        <p>This site avoids CSS/JS frameworks, so just embed the pre‑rendered animation like any other image. For best performance, prefer animated WebP with a GIF fallback:</p>
+        <pre><code>&lt;picture&gt;
+  &lt;source type="image/webp" srcset="images/zine-bg-800w.webp 800w, images/zine-bg-1200w.webp 1200w"&gt;
+  &lt;img src="images/zine-bg-800w.gif" alt="Animated ASCII zine‑style texture" 
+       width="800" height="450" loading="lazy" decoding="async"&gt;
+&lt;/picture&gt;
+</code></pre>
+        <p>If you want it as a hero background behind text without CSS, place the image above your content as a figure with a descriptive caption; keep contrast high for readability.</p>
+
+        <h2 id="demo">Live Demo (click to start)</h2>
+        <p>The animation below is opt‑in. Click the button to reveal and begin the motion. For the demo only, it references an external background texture similar to what inspired this post. For production, generate your own tile and use an animated WebP as shown above.</p>
+        <details>
+          <summary>Show animated demo</summary>
+          <figure>
+            <figcaption>Subtle drifting background — example demo</figcaption>
+            <style>
+              @keyframes asciiDrift {
+                0% { background-position: center center; }
+                25% { background-position: 15% 20%; }
+                50% { background-position: 85% 80%; }
+                75% { background-position: 20% 85%; }
+                100% { background-position: center center; }
+              }
+            </style>
+            <div role="img" aria-label="Moving zine-style background demo"
+                 style="width:100%;max-width:640px;height:240px;
+                        background-image:url('https://colonelpanic.tech/wp-content/themes/colonelpanic-theme/background.png');
+                        background-size:150% auto;background-repeat:no-repeat;background-position:center center;
+                        animation: asciiDrift 28s linear infinite;">
+            </div>
+            <p><small>Note: This uses an external texture for demonstration. Replace with your generated animated WebP/GIF to keep everything local.</small></p>
+          </figure>
+        </details>
+
+        <h2 id="variations">Variations</h2>
+        <ul>
+          <li><strong>ASCII from video:</strong> Use <code>ffmpeg</code> to extract frames, <code>chafa</code>/<code>jp2a</code> to ASCII, then assemble.</li>
+          <li><strong>Terminal capture:</strong> Record a session with <code>asciinema</code> and export to GIF/MP4 for authentic keystroke motion.</li>
+          <li><strong>Halftone feel:</strong> Render text in off‑white on near‑black and add grain via <code>+noise</code> before encoding.</li>
+        </ul>
+
+        <h2 id="notes">Notes on licensing and performance</h2>
+        <ul>
+          <li>Don’t hotlink other sites’ assets; generate your own textures.</li>
+          <li>Animated WebP is usually much smaller than GIF at similar quality.</li>
+          <li>Keep motion gentle to avoid eye strain and preserve readability.</li>
+        </ul>
+      </section>
+    </article>
+  </main>
+
+  <aside>
+    <section>
+      <h2>Related Topics</h2>
+      <ul>
+        <li>ImageMagick tips</li>
+        <li>Terminal tooling</li>
+        <li>Accessible motion design</li>
+      </ul>
+    </section>
+  </aside>
+
+  <footer>
+    <nav aria-label="Post navigation">
+      <a href="../index.html" rel="home">← Back to blog</a>
+    </nav>
+    <p><small>Last updated: <time datetime="2025-10-16">October 16, 2025</time></small></p>
+  </footer>
+</body>
+</html>
