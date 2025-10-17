@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Automate persona‑driven usability testing with Playwright MCP. Use a demo repo of personas and system instructions to generate screenshots and UX reports. Fast signal before real studies.">
+  <meta name="author" content="Storbeck">
+  <title>Automating Persona‑Driven Usability Testing with Playwright MCP - Storbeck Blog</title>
+  <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+  <header>
+    <nav aria-label="Site navigation">
+      <a href="../index.html" rel="home">← Go Home</a>
+    </nav>
+  </header>
+
+  <main>
+    <article>
+      <header>
+        <h1>Automating Persona‑Driven Usability Testing with Playwright MCP</h1>
+        <p>
+          <time datetime="2025-10-17">Published October 17, 2025</time>
+          <span> • </span>
+          <span>UX, Testing, Automation</span>
+        </p>
+      </header>
+
+      <p><strong>You can simulate realistic user behavior with personas and Playwright to catch obvious UX issues before recruiting real participants.</strong> This doesn’t replace moderated studies, but it’s great for fast feedback and regression‑testing known behaviors.</p>
+
+      <section>
+        <h2>What We’ll Use</h2>
+        <ul>
+          <li><strong>Playwright</strong> via an MCP‑compatible AI client (e.g., Claude Desktop + Playwright MCP)</li>
+          <li>A small demo repo with personas and a testing framework: <a href="https://github.com/storbeck/user_persona_tests" rel="external">github.com/storbeck/user_persona_tests</a></li>
+        </ul>
+        <p>The repo includes <code>CLAUDE.md</code> (system instructions) and <code>personas/</code> (ready prompts). Running a session will generate <code>report.md</code> and screenshots locally.</p>
+      </section>
+
+      <section>
+        <h2>Setup</h2>
+        <ol>
+          <li>
+            Install the Playwright MCP server:
+            <pre><code>claude mcp add playwright npx '@playwright/mcp@latest'</code></pre>
+          </li>
+          <li>
+            Clone the example repo:
+            <pre><code>git clone https://github.com/storbeck/user_persona_tests
+cd user_persona_tests</code></pre>
+          </li>
+          <li>Open your MCP client and ensure Chromium is available to Playwright.<br><em>Tip:</em> Install the browser binaries with:<br><pre><code>npx playwright install chromium</code></pre></li>
+        </ol>
+      </section>
+
+      <section>
+        <h2>Run a Persona Session</h2>
+        <ol>
+          <li>Load <code>CLAUDE.md</code> as the system instruction.</li>
+          <li>Pick a persona in <code>personas/</code> (e.g., Efficient Shopper) and paste it as the user prompt.</li>
+          <li>Start the run. The agent will:
+            <ul>
+              <li>Launch a browser with tracing/video (as supported)</li>
+              <li>Follow the persona’s behavior and mission (we sign up first with demo data)</li>
+              <li>Capture screenshots of key steps</li>
+              <li>Generate a Markdown UX report (<code>report.md</code>)</li>
+            </ul>
+          </li>
+        </ol>
+        <p><em>Note:</em> The included demo personas target a clothing site built for automation practice. </p>
+      </section>
+
+      <section>
+        <h2>Customize for Your Product</h2>
+        <p>Duplicate a file in <code>personas/</code> and tweak:</p>
+        <ul>
+          <li><strong>Mindset &amp; behavior</strong> (search‑first vs. browse‑first, cautious vs. fast)</li>
+          <li><strong>Mission</strong> (what to accomplish and how to judge success)</li>
+          <li><strong>Device</strong> (mobile viewport or desktop)</li>
+        </ul>
+        <p>Keep instructions concise and literal; the agent follows them exactly.</p>
+      </section>
+
+      <section>
+        <h2>Interpreting Outputs</h2>
+        <ul>
+          <li><code>report.md</code> — Step log, observations, pain points, strengths, and recommendations</li>
+          <li><code>.playwright-mcp/</code> — Screenshots/traces to attach to tickets or PRs</li>
+        </ul>
+        <p>Use these artifacts to gate UI changes with a quick “persona pass,” compare behavior before/after design tweaks, and share reproducible UX issues with designers and engineers.</p>
+      </section>
+
+      <section>
+        <h2>Where This Helps (and Where It Doesn’t)</h2>
+        <p><strong>Great for:</strong> early discovery of obvious issues, consistent regression checks, and exercising flows under different mindsets.</p>
+        <p><strong>Not a replacement for:</strong> moderated tests, accessibility audits, or research with representative users. Treat this as a fast feedback layer before deeper studies.</p>
+      </section>
+
+      <section>
+        <h2>Repo Link</h2>
+        <p>Start here and adapt to your product: <a href="https://github.com/storbeck/user_persona_tests" rel="external">github.com/storbeck/user_persona_tests</a></p>
+      </section>
+
+    </article>
+  </main>
+</body>
+</html>
