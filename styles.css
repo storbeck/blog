@@ -66,10 +66,7 @@ a:active { color: color-mix(in oklch, var(--link-hover) 80%, black); }
 /* Focus visibility */
 :focus-visible { outline: 2px solid currentColor; outline-offset: 2px; }
 
-/* Post-specific demo tuning: scale type slightly smaller */
-article .demo-harmony h3 { font-size: clamp(1.1rem, 0.9rem + 0.8vw, 1.3rem); }
-article .demo-harmony p { font-size: clamp(0.95rem, 0.85rem + 0.3vw, 1.05rem); }
-article .demo-harmony small { font-size: 0.9rem; }
+/* Post-specific demo tuning: keep calculators intact */
 
 /* Calculator demos: keep internal type at 16px for layout fidelity */
 article section[aria-label^="Calculator mockup"] { font-size: 16px; line-height: 1.4; }

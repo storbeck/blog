@@ -40,6 +40,23 @@
 
       <section aria-labelledby="harmony">
         <h2 id="harmony">Harmony &amp; Proportion (Rhythm)</h2>
+        <h3>Problem</h3>
+        <p>When type and spacing change independently across breakpoints, layouts feel jumpy. Cards end up dense at one size and airy at another because margins and paddings don’t keep the same beat as type.</p>
+        <h3>Fix</h3>
+        <p>Use one modest ratio for everything (about <code>1.125–1.2</code>). Define a tiny scale for type and reuse it for spacing so proportions stay calm across sizes.</p>
+        <pre><code>/* Setup: one rhythm for type + spacing */
+:root {
+  --step: 1.18;           /* ratio */
+  --base: 1rem;           /* body size */
+  /* Type scale */
+  --s-1: calc(var(--base) / var(--step));
+  --s0:  var(--base);
+  --s1:  calc(var(--base) * var(--step));
+  --s2:  calc(var(--base) * var(--step) * var(--step));
+  /* Spacing beat tied to the same scale */
+  --beat: var(--s1);
+}
+</code></pre>
         <p>Use a modular type/spacing rhythm so pages “feel” coherent across breakpoints.</p>
         <pre><code>/* Key ideas */
 • Pick a modest ratio (1.125–1.2)
@@ -47,44 +64,60 @@
 • Keep spacing tied to the same beat
         </code></pre>
         <style>
-          .demo-harmony { font-family: system-ui, sans-serif; }
-          .demo-harmony { --step: 1.18; --base: 1rem; }
-          .demo-harmony h3 { font-size: clamp(1.25rem, 1rem + 1.2vw, calc(var(--base) * var(--step) * var(--step) * var(--step))); margin: 0 0 .6em; }
-          .demo-harmony p { font-size: clamp(1rem, .95rem + .4vw, calc(var(--base) * var(--step))); margin: 0 0 .8em; }
-          .demo-harmony small { font-size: clamp(.9rem, .85rem + .2vw, .95rem); opacity: .8; }
-          .demo-harmony .card { border: 1px solid #ddd; border-radius: 10px; padding: 1.25rem; }
-          .demo-harmony .row { display: flex; gap: 1rem; }
-          .demo-harmony .col { flex: 1 1 0; }
+          .demo-harmony {
+            font-family: system-ui, sans-serif;
+            /* Shared rhythm tokens used by BOTH cards */
+            --step: 1.18;           /* ratio */
+            --base: 1rem;           /* body size */
+            --s0:  var(--base);
+            --s1:  calc(var(--base) * var(--step));
+            --s2:  calc(var(--base) * var(--step) * var(--step));
+            /* Spacing beat tied to scale (stronger effect for demo) */
+            --beat: clamp(0.6rem, 0.4rem + 1.6vw, 1.8rem);
+          }
+          /* Desktop: type responds to page resize */
+          .demo-harmony h3 { font-size: clamp(1.1rem, 1rem + 1.2vw, var(--s2)); margin: 0 0 .6em; }
+          .demo-harmony p { font-size: clamp(0.95rem, .9rem + .6vw, var(--s1)); margin: 0 0 .8em; }
+          .demo-harmony small { font-size: clamp(.85rem, .8rem + .2vw, .95rem); opacity: .8; }
+          .demo-harmony .card { border: 1px solid #ddd; border-radius: 10px; }
+          /* Left card: intentionally fixed spacing to contrast */
+          .demo-harmony .card.fixed { padding: 0.75rem; }
+          .demo-harmony .card.fixed h3,
+          .demo-harmony .card.fixed p,
+          .demo-harmony .card.fixed small { margin-block: 0.75rem; }
+          /* Space-tied version uses the rhythm beat explicitly */
+          .demo-harmony .card.space { padding: var(--beat); }
+          .demo-harmony .card.space p,
+          .demo-harmony .card.space h3,
+          .demo-harmony .card.space small { margin-block: var(--beat); }
+          .demo-harmony .card.space h3 { margin-top: 0; }
+          /* Two-up on desktop, stack on small screens */
+          .demo-harmony .row { display: grid; grid-template-columns: 1fr; gap: 1rem; }
+          @media (min-width: 800px) { .demo-harmony .row { grid-template-columns: 1fr 1fr; } }
+          .demo-harmony .col { min-width: 0; }
         </style>
         <figure class="demo-harmony">
           <div class="row">
             <div class="col">
-              <div class="card">
+              <div class="card fixed">
                 <h3>Modular Rhythm</h3>
                 <p>Headings, body, and meta scale from the same ratio.</p>
                 <p><small>Resize the window to see fluid steps.</small></p>
               </div>
             </div>
             <div class="col">
-              <div class="card">
+              <div class="card space">
                 <h3>Consistent Spacing</h3>
                 <p>Gaps and padding align with the type rhythm for a calmer layout.</p>
                 <p><small>One beat ≈ one spacing unit.</small></p>
               </div>
             </div>
           </div>
-          <figcaption><small>Both cards use the same scale for type and spacing, producing a stable visual cadence.</small></figcaption>
+          <figcaption><small>Desktop: resize the window — both cards scale together because type and spacing share the same rhythm.</small></figcaption>
         </figure>
-        <pre><code>/* CSS */
-.demo-harmony { --step: 1.18; --base: 1rem; }
-.demo-harmony h3 { font-size: clamp(1.25rem, 1rem + 1.2vw, calc(var(--base) * var(--step) * var(--step) * var(--step))); }
-.demo-harmony p  { font-size: clamp(1rem, .95rem + .4vw, calc(var(--base) * var(--step))); }
-
-<!-- HTML -->
-&lt;section class="demo-harmony"&gt;
-  &lt;h3&gt;Modular Rhythm&lt;/h3&gt;
-  &lt;p&gt;Fluid steps keep proportions consistent.&lt;/p&gt;
-&lt;/section&gt;
+        <pre><code>/* Apply */
+h1 { font-size: clamp(var(--s1), 1rem + 3vw, var(--s2)); }
+.card { padding: calc(var(--beat) * 1.25); gap: var(--beat); }
 </code></pre>
       </section>
 
@@ -97,7 +130,9 @@
           .demo-motion .ball { inline-size: 44px; block-size: 44px; border-radius: 50%; background: #555; transform: translateX(0); }
           .demo-motion .linear .ball { transition: transform 600ms linear; }
           .demo-motion .ease .ball { transition: transform 600ms cubic-bezier(.25,.1,.25,1); }
-          .demo-motion .box:hover .ball { transform: translateX(160px); }
+          .demo-motion .box.go .ball { transform: translateX(160px); }
+          .demo-motion .controls { grid-column: 1 / -1; display: flex; gap: .5rem; align-items: center; }
+          .demo-motion .controls button { font-size: 1rem; padding: .45rem .8rem; border-radius: 8px; }
         </style>
         <figure class="demo-motion">
           <div class="box linear">
@@ -108,8 +143,26 @@
             <p><strong>S‑Curve</strong> (ease‑in‑out)</p>
             <div class="ball" aria-hidden="true"></div>
           </div>
-          <figcaption><small>Hover either box. The S‑curve starts and ends gently; the linear version feels mechanical.</small></figcaption>
+          <div class="controls">
+            <button id="motion-play" type="button">Play</button>
+            <button id="motion-reset" type="button">Reset</button>
+          </div>
+          <figcaption><small>Tap Play to compare. The S‑curve starts and ends gently; the linear version feels mechanical.</small></figcaption>
         </figure>
+        <script>
+          // Motion play/reset for touch
+          (function(){
+            const play = document.getElementById('motion-play');
+            const reset = document.getElementById('motion-reset');
+            const boxes = document.querySelectorAll('.demo-motion .box');
+            function trigger(){
+              boxes.forEach(b => { b.classList.remove('go'); void b.offsetWidth; b.classList.add('go'); });
+            }
+            function clear(){ boxes.forEach(b => b.classList.remove('go')); }
+            if (play) play.addEventListener('click', trigger);
+            if (reset) reset.addEventListener('click', clear);
+          })();
+        </script>
         <pre><code>/* CSS */
 .box .ball { transition: transform 600ms cubic-bezier(.25,.1,.25,1); }
 .box:hover .ball { transform: translateX(160px); }
@@ -164,7 +217,7 @@
       <section aria-labelledby="color">
         <h2 id="color">Color Relationships (Perceptual Space)</h2>
         <p>Build palettes in OKLCH so steps feel even to the eye, then mix and match with small hue offsets for accents.</p>
-        <div class="controls" aria-label="Adjust base OKLCH color for interactive palette">
+        <div id="color-controls" class="controls" aria-label="Adjust base OKLCH color for interactive palette">
           <p class="label"><strong>Adjust Base Color (OKLCH)</strong></p>
           <label class="row">L (lightness)
             <input name="L" type="range" min="0" max="1" step="0.01" value="0.65">
@@ -217,7 +270,7 @@
                 <div class="swatch" style="background: var(--s4)" role="listitem" aria-label="interactive‑4"></div>
                 <div class="swatch" style="background: var(--s5)" role="listitem" aria-label="interactive‑5"></div>
               </div>
-              <p><a class="btn" style="background: var(--s4)" href="#" role="button" aria-label="Interactive Action">Interactive Action</a></p>
+              <p><button class="btn" type="button" style="background: var(--s4)" aria-label="Interactive Action">Interactive Action</button></p>
             </div>
 
             
@@ -228,7 +281,7 @@
           (function() {
             const article = document.currentScript.closest('article');
             const scope = article.querySelector('.demo-color');
-            const controls = article.querySelector('.controls');
+            const controls = article.querySelector('#color-controls') || scope?.nextElementSibling?.matches('.controls') && scope.nextElementSibling;
             if (!scope || !controls) return;
             const L = controls.querySelector('input[name="L"]');
             const C = controls.querySelector('input[name="C"]');
