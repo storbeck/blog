@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="A conversational tour of Cassandra’s tombstones, timestamps, SSTables, compaction, read repair, and the gossip protocol — plus lessons you can borrow for other systems.">
+  <meta name="author" content="Storbeck">
+  <title>Tombstones, Timestamps, and Gossip: Cassandra’s Way of Staying Consistent - Storbeck Blog</title>
+  <link rel="preconnect" href="https://github.com">
+  <link rel="dns-prefetch" href="https://www.linkedin.com">
+  <meta itemprop="author" content="Geoff Storbeck">
+  <meta itemprop="headline" content="Tombstones, Timestamps, and Gossip: Cassandra’s Way of Staying Consistent">
+  <meta itemprop="datePublished" content="2025-10-17">
+  <meta itemprop="description" content="A conversational tour of Cassandra’s tombstones, timestamps, SSTables, compaction, read repair, and the gossip protocol — plus lessons you can borrow for other systems.">
+  <meta itemprop="url" content="https://storbeck.dev/posts/2025-10-17-cassandra-tombstones-timestamps-compaction.html">
+  <meta itemprop="mainEntityOfPage" content="https://storbeck.dev/posts/2025-10-17-cassandra-tombstones-timestamps-compaction.html">
+  <meta itemprop="inLanguage" content="en">
+  <meta itemprop="genre" content="Blog">
+  <link rel="stylesheet" href="../styles.css">
+  
+</head>
+<body>
+  <header>
+    <nav aria-label="Site navigation">
+      <a href="../index.html" rel="home">← Storbeck Blog</a>
+    </nav>
+  </header>
+
+  <main>
+    <article itemscope itemtype="http://schema.org/BlogPosting">
+      <header>
+        <h1 itemprop="headline">Tombstones, Timestamps, and Gossip: Cassandra’s Way of Staying Consistent</h1>
+        <p>
+          <time datetime="2025-10-17" itemprop="datePublished">Published October 17, 2025</time>
+          <span> • </span>
+          <span>Databases, Distributed Systems</span>
+        </p>
+      </header>
+
+      <p itemprop="description">Cassandra gets a lot of things “right” for large, write‑heavy, always‑on systems. The trick isn’t one feature but a few ideas working together: immutable SSTables, last‑write‑wins timestamps, explicit tombstones for deletes, background compaction, read/repair workflows, and a lightweight gossip protocol to keep the cluster in the same reality. Here’s a conversational tour of how those pieces fit—and patterns worth stealing for other software.</p>
+
+      <section aria-labelledby="how-writes-work">
+        <h2 id="how-writes-work">A quick mental model: writes, reads, and files</h2>
+        <p>On write, Cassandra appends to a commit log (durability) and updates an in‑memory <strong>memtable</strong>. When the memtable fills, it flushes to disk as an immutable <strong>SSTable</strong>. Because SSTables never change in place, you never rewrite data on random disks—great for throughput and predictability.</p>
+        <p>On read, Cassandra may need to consult several SSTables for the same row or partition. It <em>merges</em> those views on the fly using per‑cell <strong>timestamps</strong> (and tombstones—more below) to figure out which value wins. Background <strong>compaction</strong> later makes those merges cheaper by coalescing overlapping SSTables.</p>
+        <figure>
+          <figcaption><strong>Write → Flush → Read merge → Compaction</strong></figcaption>
+          <pre><code>Client
+  | write(k=v @ t100)
+  v
+Coordinator
+  |---- to R1 ---->|   |---- to R2 ---->|   |---- to R3 ---->|
+
+Replica Rx (each):
+  +------------------------------+
+  | Commit Log (append only)     |
+  +------------------------------+
+  | Memtable (in-memory index)   |
+  +------------------------------+
+               | (flush)
+               v
+  +------------------------------+
+  | SSTable A (immutable)        |   ... later: A,B,C
+  +------------------------------+               │
+                                                v
+Compaction:   [A]  [B]  [C]   ==>   [D]
+              - drop overwritten cells by timestamp
+              - keep tombstones until gc_grace_seconds expires
+          </code></pre>
+        </figure>
+      </section>
+
+      <section aria-labelledby="timestamps">
+        <h2 id="timestamps">Timestamps: resolving conflicts without a coordinator</h2>
+        <p>In a distributed system, two replicas can receive different updates in different orders. Cassandra’s default conflict rule is simple: <strong>last‑write‑wins (LWW)</strong> based on a microsecond‑precision timestamp associated with each cell. Clients may send timestamps explicitly; otherwise the server assigns them.</p>
+        <p>Because the value with the highest timestamp wins, replicas don’t need a global lock or a central sequencer. They can accept writes independently and reconcile later during reads, repairs, or compaction. The trade‑off is that LWW is not an <abbr title="Conflict‑free Replicated Data Type">CRDT</abbr>: if two updates are simultaneous, the “later” one (by timestamp) will clobber the other rather than merge their intent. That’s usually fine for operational data, but it’s a design choice to make consciously.</p>
+        <figure>
+          <figcaption><strong>Last‑Write‑Wins (per cell)</strong></figcaption>
+          <pre><code>Node A:  k = 4   @ t100
+Node B:  k = 5   @ t101
+Merge:   k = 5   @ t101  (highest timestamp wins)
+
+Delete at t102 writes a tombstone:
+Node C:  k = ⟂   @ t102  (tombstone beats any older value)
+          </code></pre>
+        </figure>
+      </section>
+
+      <section aria-labelledby="tombstones">
+        <h2 id="tombstones">Tombstones: deletes that safely propagate</h2>
+        <p>Deletes in Cassandra don’t remove data immediately. They write a <strong>tombstone</strong>—a marker that says “this cell (or range) was deleted at time T.” There are a few flavors:</p>
+        <ul>
+          <li><strong>Cell tombstones</strong> for single columns/values</li>
+          <li><strong>Partition/row tombstones</strong> for broader scopes</li>
+          <li><strong>Range tombstones</strong> for slices in wide rows</li>
+          <li><strong>TTL expiry</strong> also creates tombstones when time runs out</li>
+        </ul>
+        <p>Why a marker? Because an immediate physical delete would be dangerous: another replica might still hold an older version and later propagate it back. The tombstone, with its timestamp, beats that older value during reads and repairs, preventing <em>resurrection</em>.</p>
+        <figure>
+          <figcaption><strong>Why tombstones prevent resurrection</strong></figcaption>
+          <pre><code>Timeline
+t100: write  k=4
+t101: write  k=5
+t102: delete k   → tombstone(k @ t102)
+
+Replicas right after t102:
+  R1: tombstone @ t102
+  R2: tombstone @ t102
+  R3: (missed)   k=5 @ t101
+
+Read at QUORUM → merge:
+  tombstone @ t102 wins → return &quot;not found&quot;
+  coordinator repairs R3 with tombstone
+
+After gc_grace_seconds and successful repairs:
+  compaction drops k=5 and the tombstone (safe to purge)
+          </code></pre>
+        </figure>
+      </section>
+
+      <section aria-labelledby="compaction">
+        <h2 id="compaction">Compaction: cleaning up once it’s safe</h2>
+        <p><strong>Compaction</strong> rewrites sets of SSTables into fewer, larger ones—dropping overwritten values and, eventually, <em>purging</em> tombstones. Cassandra uses strategies like Size‑Tiered, Leveled, and Time‑Window compaction to balance write amplification and read amplification for different workloads.</p>
+        <p>The key safety valve is <code>gc_grace_seconds</code>. Cassandra waits at least this long before discarding tombstones during compaction. That delay gives the cluster time to run <strong>repairs</strong> so that any replica missing the tombstone can learn about it. If you purge too early, an out‑of‑date replica could re‑introduce deleted data.</p>
+        <figure>
+          <figcaption><strong>Compaction coalesces overlapping SSTables</strong></figcaption>
+          <pre><code>Before (overlapping data):  [A] [B] [C] [D]
+After  (merged & sorted):           [E]
+
+Rules during merge:
+  - Keep the newest cell by timestamp
+  - Retain tombstones until gc_grace_seconds
+  - Drop fully shadowed older cells
+          </code></pre>
+        </figure>
+      </section>
+
+      <section aria-labelledby="reads-repairs">
+        <h2 id="reads-repairs">Reads and repairs: reconciling on the fly</h2>
+        <p>Two mechanisms keep replicas converging:</p>
+        <ul>
+          <li><strong>Read path reconciliation</strong>: a read at QUORUM (or higher) merges versions by timestamp and tombstone. If replicas disagree, the coordinator can perform a <strong>read repair</strong> to write the reconciled value to the out‑of‑date replica(s).</li>
+          <li><strong>Anti‑entropy repair</strong>: an explicit background task (node‑to‑node) that compares data segments and streams the differences. Modern clusters favor <em>incremental repair</em> to limit scope and overhead.</li>
+        </ul>
+        <p>Together with tombstones and LWW, these make progress inevitable: newer data wins, deletes beat stale values, and compaction eventually makes the “merged” view inexpensive to read.</p>
+        <figure>
+          <figcaption><strong>Read repair at QUORUM</strong></figcaption>
+          <pre><code>Coordinator issues read to 3 replicas (RF=3, CL=QUORUM)
+R1 → k=5 @ t101
+R2 → k=5 @ t101
+R3 → k=4 @ t100   (stale)
+
+Merge result → k=5 @ t101 (return to client)
+Repair: write k=5 @ t101 to R3
+          </code></pre>
+        </figure>
+      </section>
+
+      <section aria-labelledby="gossip">
+        <h2 id="gossip">Gossip: how the cluster stays in touch</h2>
+        <p>Cassandra nodes use a lightweight <strong>gossip protocol</strong> to exchange membership and liveness information. Each node periodically talks to a few peers, spreading state quickly without a central coordinator. A <em>phi‑accrual</em> failure detector estimates whether a node is down based on heartbeat inter‑arrival times rather than a fixed timeout.</p>
+        <p>Gossip doesn’t move your data—that’s handled by replication and streaming—but it tells the cluster who’s alive, which tokens they own, and when to reroute traffic. It’s the cluster’s shared sense of reality.</p>
+        <figure>
+          <figcaption><strong>Epidemic‑style gossip</strong></figcaption>
+          <pre><code>Round 0:  A
+Round 1:  A → B
+Round 2:  A → C    B → D
+Round 3:  A → D    B → C    C → E    D → F
+
+Few rounds spread state to all nodes without coordination.
+Failure suspicion uses phi accrual, not fixed timeouts.
+          </code></pre>
+        </figure>
+      </section>
+
+      <section aria-labelledby="consistency">
+        <h2 id="consistency">Consistency levels: choosing your trade‑offs</h2>
+        <p>Per‑query consistency levels (e.g., <code>ONE</code>, <code>QUORUM</code>, <code>ALL</code>) let you trade availability and latency for stronger reads/writes when needed. Higher levels reduce the window where conflicting versions exist, but Cassandra’s tombstones, timestamps, and repairs mean even <code>ONE</code> eventually converges.</p>
+      </section>
+
+      <section aria-labelledby="lessons">
+        <h2 id="lessons">Stealable ideas for other systems</h2>
+        <ul>
+          <li><strong>Immutable storage + background merges</strong>: write fast, reconcile later.</li>
+          <li><strong>Explicit delete markers</strong>: avoid resurrection; purge only after a safety window.</li>
+          <li><strong>Simple conflict rule</strong>: LWW is easy to reason about; use CRDTs only when you truly need merge semantics.</li>
+          <li><strong>Health via gossip</strong>: spread liveness cheaply; avoid single‑point coordinators.</li>
+          <li><strong>Operator dials</strong>: compaction strategy, <code>gc_grace_seconds</code>, and consistency level are powerful workload levers.</li>
+        </ul>
+        <p>None of these ideas are Cassandra‑only. They’re general patterns for building systems that stay fast under stress while remaining correct <em>enough</em> for the domain.</p>
+      </section>
+
+      <section aria-labelledby="footnotes">
+        <h2 id="footnotes">Notes and practical cautions</h2>
+        <ul>
+          <li>Very high tombstone density can hurt reads until compaction catches up; model deletes thoughtfully.</li>
+          <li>Don’t set <code>gc_grace_seconds</code> too low unless you’re confident repairs complete within that window.</li>
+          <li>Be explicit about timestamp sources; clock skew plus client‑supplied timestamps can surprise you.</li>
+        </ul>
+      </section>
+    </article>
+  </main>
+
+  <aside>
+    <section>
+      <h2>Related Topics</h2>
+      <ul>
+        <li>Immutable data structures and log‑structured storage</li>
+        <li>Conflict‑resolution strategies (LWW vs CRDTs)</li>
+        <li>Operational tuning: compaction, repairs, and consistency levels</li>
+      </ul>
+    </section>
+  </aside>
+
+  <footer>
+    <nav aria-label="Post navigation">
+      <a href="../index.html" rel="home">← Back to blog</a>
+    </nav>
+    <p><small>Last updated: <time datetime="2025-10-17">October 17, 2025</time></small></p>
+  </footer>
+</body>
+</html>
