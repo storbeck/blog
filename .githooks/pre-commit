@@ -6,6 +6,78 @@
 
 set -euo pipefail
 
+# --- Update RSS feed dates from post modification times ---
+update_rss_dates() {
+  local feed="feed.xml"
+  [[ -f "$feed" ]] || return 0
+
+  # Helpers: portable stat/date
+  file_epoch() {
+    # GNU stat: -c %Y, BSD stat: -f %m
+    if epoch=$(stat -c %Y "$1" 2>/dev/null); then
+      printf '%s' "$epoch"
+    else
+      stat -f %m "$1" 2>/dev/null || true
+    fi
+  }
+  rfc822() {
+    # GNU date: -d @EPOCH; BSD: -r EPOCH
+    date -u -d @"$1" '+%a, %d %b %Y %H:%M:%S +0000' 2>/dev/null \
+      || date -ur "$1" '+%a, %d %b %Y %H:%M:%S +0000'
+  }
+
+  local tmp
+  tmp=$(mktemp -d 2>/dev/null || mktemp -d -t rss)
+  local out="$tmp/feed.xml"
+  local current_post_path="" current_epoch="" max_epoch=0
+
+  while IFS= read -r line; do
+    if [[ $line =~ \<link\>https?://storbeck\.dev/(posts/[^<]+)\</link\> ]]; then
+      current_post_path="${BASH_REMATCH[1]}"
+      if [[ -f "$current_post_path" ]]; then
+        current_epoch=$(file_epoch "$current_post_path" || true)
+        if [[ -n "${current_epoch:-}" && $current_epoch -gt ${max_epoch:-0} ]]; then
+          max_epoch=$current_epoch
+        fi
+      else
+        current_epoch=""
+      fi
+      printf '%s\n' "$line" >> "$out"
+      continue
+    fi
+
+    if [[ -n "${current_post_path:-}" && $line =~ \<pubDate\>.*\</pubDate\> ]]; then
+      if [[ -n "${current_epoch:-}" ]]; then
+        printf '      <pubDate>%s</pubDate>\n' "$(rfc822 "$current_epoch")" >> "$out"
+      else
+        printf '%s\n' "$line" >> "$out"
+      fi
+      current_post_path=""
+      current_epoch=""
+      continue
+    fi
+
+    printf '%s\n' "$line" >> "$out"
+  done < "$feed"
+
+  if [[ ${max_epoch:-0} -gt 0 ]]; then
+    local max_rfc
+    max_rfc=$(rfc822 "$max_epoch")
+    # In-place replace lastBuildDate
+    sed -E "s|<lastBuildDate>.*</lastBuildDate>|<lastBuildDate>${max_rfc}</lastBuildDate>|" "$out" > "$out.tmp" && mv "$out.tmp" "$out"
+  fi
+
+  if ! cmp -s "$feed" "$out"; then
+    mv "$out" "$feed"
+    git add "$feed" >/dev/null 2>&1 || true
+  else
+    rm -f "$out"
+  fi
+  rm -rf "$tmp" || true
+}
+
+update_rss_dates || true
+
 if ! command -v noseyparker >/dev/null 2>&1; then
   echo "[noseyparker] Not installed. Install: https://github.com/praetorian-inc/noseyparker"
   echo "[noseyparker] Proceeding without scan."

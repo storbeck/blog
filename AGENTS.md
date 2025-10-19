@@ -25,7 +25,7 @@ blog/
 - Use semantic HTML elements. Do not use `<div>` when a more meaningful element exists.
   - Prefer: `<article>`, `<section>`, `<nav>`, `<aside>`, `<header>`, `<footer>`, `<main>`, `<figure>`, `<figcaption>`, `<address>`, `<time>`, `<dl>/<dt>/<dd>`.
   - Only fall back to `<div>` when no semantic element fits (e.g., for microdata grouping).
-- No CSS or JavaScript files. Avoid inline styles unless they already exist and are necessary for content clarity.
+- Avoid CSS/JS frameworks. A single shared stylesheet is allowed; link `../styles.css` from posts and `./styles.css` from top‑level pages. Avoid inline styles unless necessary for content clarity.
 - Maintain a meaningful heading hierarchy (`h1` → `h2` → `h3`).
 - Use `<time>` with accurate `datetime` values.
 - Favor accessibility: clear structure, proper ARIA only when semantics aren’t sufficient.
@@ -46,6 +46,7 @@ Use this baseline and adapt sections as needed while keeping semantics intact:
   <title>Post Title - Storbeck Blog</title>
   <link rel="preconnect" href="https://github.com">
   <link rel="dns-prefetch" href="https://www.linkedin.com">
+  <link rel="stylesheet" href="../styles.css">
   <meta itemprop="author" content="Geoff Storbeck">
   <meta itemprop="headline" content="Post Title">
   <meta itemprop="datePublished" content="YYYY-MM-DD">
@@ -95,6 +96,11 @@ Use this baseline and adapt sections as needed while keeping semantics intact:
 </body>
 </html>
 ```
+
+## Navigation Conventions
+- Header backlink: within the header’s site nav, use `<a href="../index.html" rel="home">← Storbeck Blog</a>`.
+- Footer backlink: within the footer’s post nav, use `<a href="../index.html" rel="home">← Back to blog</a>`.
+- Keep `rel="home"` for these internal backlinks and ensure consistent phrasing across posts.
 
 ## Structured Data (Schema.org Microdata)
 - Blog post snippet pattern:
@@ -156,3 +162,11 @@ Use this baseline and adapt sections as needed while keeping semantics intact:
 - Open `index.html` directly in a browser to verify structure and links.
 - Image generation requires ImageMagick (`magick`). Run: `./optimize-images.sh` from repo root.
 
+## RSS
+- The site publishes a static RSS 2.0 feed at `/feed.xml`.
+- When adding a post, update `feed.xml` by adding a new `<item>` with the title, `link`/`guid` (absolute URL), a `pubDate` in RFC‑822 format (e.g., `Thu, 16 Oct 2025 00:00:00 +0000`), and a short description (use the post’s `<meta name="description">`).
+- Keep items in reverse chronological order. Consider keeping the most recent 10–20 items for brevity.
+- Ensure pages expose discovery with: `<link rel="alternate" type="application/rss+xml" title="Storbeck Blog RSS" href="/feed.xml">` (already added to `index.html`).
+- Pre‑commit hook auto‑updates `pubDate` and `lastBuildDate` from post file modification times. Enable hooks once per repo:
+  - `git config core.hooksPath .githooks`
+  - Commit as usual; the hook will rewrite dates in `feed.xml` and stage the change.

@@ -63,6 +63,30 @@ a:visited { color: var(--link-visited); }
 a:hover { color: var(--link-hover); text-decoration-thickness: 0.12em; }
 a:active { color: color-mix(in oklch, var(--link-hover) 80%, black); }
 
+/* Sharing icons: no underline on image buttons */
+/* Share/subscribe row as compact brand-colored buttons */
+nav[aria-label="Feeds and sharing"] p { font-size: 0.85em; }
+nav[aria-label="Feeds and sharing"] .share-btn {
+  display: inline-block;
+  padding: 0.2rem 0.5rem;
+  border-radius: 6px;
+  color: #fff;
+  text-decoration: none;
+  line-height: 1.2;
+  border: 1px solid rgba(0,0,0,0.06);
+}
+nav[aria-label="Feeds and sharing"] .share-btn:hover { filter: brightness(0.92); }
+nav[aria-label="Feeds and sharing"] .share-btn:active { filter: brightness(0.85); }
+nav[aria-label="Feeds and sharing"] .share-btn + .share-btn { margin-left: 0.25rem; }
+
+/* Brand colors */
+nav[aria-label="Feeds and sharing"] .rss { background: #f26522; }
+nav[aria-label="Feeds and sharing"] .x { background: #111; }
+nav[aria-label="Feeds and sharing"] .linkedin { background: #0a66c2; }
+nav[aria-label="Feeds and sharing"] .facebook { background: #1877f2; }
+nav[aria-label="Feeds and sharing"] .hn { background: #ff6600; }
+nav[aria-label="Feeds and sharing"] .reddit { background: #ff4500; }
+
 /* Focus visibility */
 :focus-visible { outline: 2px solid currentColor; outline-offset: 2px; }
 
