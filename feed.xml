@@ -6,7 +6,15 @@
     <description>Technical blog by Geoff Storbeck covering frontend development, web performance, security, DevOps, and practical tooling.</description>
     <language>en</language>
     <atom:link href="https://storbeck.dev/feed.xml" rel="self" type="application/rss+xml" />
-    <lastBuildDate>Sun, 19 Oct 2025 12:21:49 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 22 Oct 2025 16:03:29 +0000</lastBuildDate>
+
+    <item>
+      <title>Bodywork and Interfaces</title>
+      <link>https://storbeck.dev/posts/2025-10-22-bodywork-and-interfaces.html</link>
+      <guid>https://storbeck.dev/posts/2025-10-22-bodywork-and-interfaces.html</guid>
+      <pubDate>Wed, 22 Oct 2025 16:03:29 +0000</pubDate>
+      <description>Note from time around auto body repair shops, and why interfaces need the same patient, layer-by-layer inspection if you want them to actually shine.</description>
+    </item>
 
     <item>
       <title>Vibe Coding Fundamentals — Practical AI‑Powered Development</title>
