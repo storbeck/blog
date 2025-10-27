@@ -6,7 +6,15 @@
     <description>Technical blog by Geoff Storbeck covering frontend development, web performance, security, DevOps, and practical tooling.</description>
     <language>en</language>
     <atom:link href="https://storbeck.dev/feed.xml" rel="self" type="application/rss+xml" />
-    <lastBuildDate>Mon, 27 Oct 2025 10:32:01 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 27 Oct 2025 15:02:17 +0000</lastBuildDate>
+
+    <item>
+      <title>A Tiny MCP To Track App Store Feedback</title>
+      <link>https://storbeck.dev/posts/2025-10-27-creating-appstore-mcp-server.html</link>
+      <guid>https://storbeck.dev/posts/2025-10-27-creating-appstore-mcp-server.html</guid>
+      <pubDate>Mon, 27 Oct 2025 15:02:17 +0000</pubDate>
+      <description>Keep a free, daily pulse by pulling App Store reviews into an AI‑enabled loop, bucketing wins vs fixes, and shipping low‑hanging improvements fast.</description>
+    </item>
 
     <item>
       <title>React Context vs Zustand vs Jotai — A Visual Guide</title>
