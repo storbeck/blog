@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="A clear, dependency‑free visual guide to why React Context updates rerender every consumer — and how Zustand selectors and Jotai atoms keep updates narrow. Includes simple simulated demos.">
+  <meta name="author" content="Storbeck">
+  <title>React Context vs Zustand vs Jotai — A Visual Guide - Storbeck Blog</title>
+  <link rel="preconnect" href="https://github.com">
+  <link rel="dns-prefetch" href="https://www.linkedin.com">
+  <link rel="stylesheet" href="../styles.css">
+  <meta itemprop="author" content="Geoff Storbeck">
+  <meta itemprop="headline" content="React Context vs Zustand vs Jotai — A Visual Guide">
+  <meta itemprop="datePublished" content="2025-10-26">
+  <meta itemprop="description" content="Why Context rerenders every consumer and how Zustand/Jotai avoid it. Simulated demos and copy‑paste snippets.">
+  <meta itemprop="url" content="https://storbeck.dev/posts/2025-10-26-react-state-updates-visual-guide.html">
+  <meta itemprop="mainEntityOfPage" content="https://storbeck.dev/posts/2025-10-26-react-state-updates-visual-guide.html">
+  <meta itemprop="inLanguage" content="en">
+  <meta itemprop="genre" content="Blog">
+</head>
+<body>
+  <header>
+    <nav aria-label="Site navigation">
+      <a href="../index.html" rel="home">← Storbeck Blog</a>
+    </nav>
+  </header>
+
+  <main>
+    <article itemscope itemtype="http://schema.org/BlogPosting">
+      <header>
+        <h1 itemprop="headline">React Context vs Zustand vs Jotai — A Visual Guide</h1>
+        <p>
+          <time datetime="2025-10-26" itemprop="datePublished">Published October 26, 2025</time>
+          <span> • </span>
+          <span>React, State Management</span>
+        </p>
+      </header>
+
+      <section>
+        <h2>When UI updates are bigger than the change</h2>
+        <p>Most React slowness is just too many components waking up at once. Here’s the same event—a notification added to a user profile—handled three ways. Each box below is a simulated component with a render counter; the buttons trigger the update. Context broadcasts to every consumer; Zustand and Jotai update only what depends on the changed data.</p>
+        <style>
+          :root{
+            --violet:#4f46e5; --violet-600:#4338ca; --violet-200:#e0e7ff;
+            --green:#10b981; --green-600:#059669; --green-200:#d1fae5;
+            --border:#d9def7; --panel:#ffffff; --shadow:rgba(0,0,0,.08);
+          }
+          .demo { margin: 1rem 0 1.25rem; }
+          .controls { display:flex; gap:.6rem; flex-wrap:wrap; align-items:center; margin-bottom:.65rem; }
+          .grid { display:grid; grid-template-columns: repeat(4, minmax(140px,1fr)); gap:.9rem; width: 100%; }
+          .cell { background:var(--panel); border:1px solid var(--border); border-radius:12px; padding:.8rem .9rem; box-shadow:0 2px 8px var(--shadow); transition: background-color .2s ease; }
+          .cell h3 { margin:.15rem 0 .25rem; font-size:1rem; }
+          .meta { color:#1f2937; font-size:.92rem; }
+          .cell [data-count]{ display:inline-block; min-width:1.4ch; padding:.12rem .38rem; border-radius:6px; background:#e5e7eb; color:#111827; font-weight:600; font-size:1rem; }
+
+          /* Flash animations */
+          @keyframes flashV { 
+            0%{ box-shadow:0 0 0 0 rgba(79,70,229,.45); background:var(--violet-200);} 
+            60%{ box-shadow:0 0 0 10px rgba(79,70,229,.10); background:var(--violet-200);} 
+            100%{ box-shadow:0 0 0 0 transparent; background:var(--panel);} }
+          @keyframes flashG { 
+            0%{ box-shadow:0 0 0 0 rgba(16,185,129,.45); background:var(--green-200);} 
+            60%{ box-shadow:0 0 0 10px rgba(16,185,129,.10); background:var(--green-200);} 
+            100%{ box-shadow:0 0 0 0 transparent; background:var(--panel);} }
+          .pulse-v { animation: flashV 900ms ease-out; border-color:#4338ca; }
+          .pulse-g { animation: flashG 900ms ease-out; border-color:#059669; }
+
+          /* Buttons — simple, accessible */
+          .btn {
+            appearance:none;
+            border:1px solid #3f3f46;
+            background:#111827; /* near-black */
+            color:#ffffff;
+            padding:.5rem .75rem;
+            border-radius:8px;
+            cursor:pointer;
+            font-weight:600;
+          }
+          .btn:hover { background:#0f172a; }
+          .btn:active { background:#0b1224; }
+          .btn:focus-visible { outline:3px solid #e5e7eb; outline-offset:2px; }
+          /* Secondary action */
+          .controls .btn[data-action="promote"]{
+            background:#14532d; border-color:#064e3b; /* deep green */
+          }
+          .controls .btn[data-action="promote"]:hover{ background:#0f3f25; }
+
+          .mono { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size:.9rem; }
+          .aside { font-size:.92rem; color:#374151; margin:.35rem 0; }
+
+          @media (prefers-reduced-motion: reduce){
+            .pulse-v,.pulse-g{ animation:none; }
+            .btn{ transition:none; }
+          }
+          /* Responsive columns */
+          @media (max-width: 900px){ .grid{ grid-template-columns: repeat(3, minmax(140px,1fr)); } }
+          @media (max-width: 640px){ .grid{ grid-template-columns: repeat(2, minmax(140px,1fr)); } }
+          @media (max-width: 380px){ .grid{ grid-template-columns: repeat(1, minmax(140px,1fr)); } }
+
+          
+        </style>
+      </section>
+
+      <section>
+        <h2>Context (baseline)</h2>
+        <p>All consumers rerender when the provider’s value changes — even if they only read a different field.</p>
+        <pre><code>&lt;UserContext.Provider value={{ user, setUser }}&gt;
+  &lt;App&gt;
+    &lt;Navbar /&gt;          // reads user.role
+    &lt;Settings /&gt;        // reads user.role
+    &lt;NotificationBell /&gt; // reads user.notifications
+  &lt;/App&gt;
+&lt;/UserContext.Provider&gt;
+</code></pre>
+        <p class="aside">How a notification changes Context:</p>
+        <pre><code>// inside App
+function pushNotification(n) {
+  // New object identity → every consumer of UserContext rerenders
+  setUser(u =&gt; ({
+    ...u,
+    notifications: [...u.notifications, n]
+  }));
+}
+</code></pre>
+        <div class="demo" id="demo-context">
+          <div class="controls">
+            <button class="btn" data-action="notif">new notification</button>
+            <button class="btn" data-action="promote">promote role</button>
+            <span class="meta">role: <span data-role>member</span> • notifs: <span data-notifs>0</span></span>
+          </div>
+          <div class="grid">
+            <div class="cell" data-cell="App"><h3>App (provider)</h3><div class="meta">renders: <span class="mono" data-count>0</span></div></div>
+            <div class="cell" data-cell="Navbar"><h3>Navbar (reads role)</h3><div class="meta">renders: <span class="mono" data-count>0</span></div></div>
+            <div class="cell" data-cell="Settings"><h3>Settings (reads role)</h3><div class="meta">renders: <span class="mono" data-count>0</span></div></div>
+            <div class="cell" data-cell="Bell"><h3>Bell (reads notifications)</h3><div class="meta">renders: <span class="mono" data-count>0</span></div></div>
+          </div>
+          <p class="aside">Simulated Context: any change to <code>user</code> (role or notifications) rerenders all consumers.</p>
+        </div>
+      </section>
+
+      <section>
+        <h2>Zustand (selectors)</h2>
+        <p>Components subscribe to slices. Only the slice’s subscribers rerender.</p>
+        <pre><code>// one small store
+const useUser = create(set =&gt; ({
+  role: 'member',          // Navbar, Settings select this slice
+  notifications: [],       // Bell selects this slice
+  promote: () =&gt; set(s =&gt; ({ role: s.role === 'member' ? 'admin' : 'member' })),
+  push: (n) =&gt; set(s =&gt; ({ notifications: [...s.notifications, n] }))
+}));
+
+// layout
+&lt;App&gt;
+  &lt;Navbar role={useUser(s =&gt; s.role)} /&gt;
+  &lt;Settings role={useUser(s =&gt; s.role)} /&gt;
+  &lt;Bell count={useUser(s =&gt; s.notifications.length)} /&gt;
+&lt;/App&gt;
+</code></pre>
+        <div class="demo" id="demo-zustand">
+          <div class="controls">
+            <button class="btn" data-action="notif">new notification</button>
+            <button class="btn" data-action="promote">promote role</button>
+            <span class="meta">role: <span data-role>member</span> • notifs: <span data-notifs>0</span></span>
+          </div>
+          <div class="grid">
+            <div class="cell" data-cell="App"><h3>App</h3><div class="meta">renders: <span class="mono" data-count>0</span></div></div>
+            <div class="cell" data-cell="Navbar"><h3>Navbar (role)</h3><div class="meta">renders: <span class="mono" data-count>0</span></div></div>
+            <div class="cell" data-cell="Settings"><h3>Settings (role)</h3><div class="meta">renders: <span class="mono" data-count>0</span></div></div>
+            <div class="cell" data-cell="Bell"><h3>Bell (notifications)</h3><div class="meta">renders: <span class="mono" data-count>0</span></div></div>
+          </div>
+          <p class="aside">Simulated Zustand: <code>role</code> updates rerender Navbar/Settings; <code>notifications</code> updates rerender Bell.</p>
+        </div>
+      </section>
+
+      <section>
+        <h2>Jotai (atoms)</h2>
+        <p>Atoms update only dependents. Derived atoms recompute without waking unrelated readers.</p>
+        <pre><code>// atoms
+const roleAtom = atom('member');
+const notificationsAtom = atom([]);
+const notifCountAtom = atom(get =&gt; get(notificationsAtom).length);
+
+// write‑only setter atom for notifications
+const pushNotificationAtom = atom(null, (get, set, n) =&gt; {
+  set(notificationsAtom, [...get(notificationsAtom), n]);
+});
+
+// layout
+&lt;App&gt;
+  &lt;Navbar role={useAtomValue(roleAtom)} /&gt;
+  &lt;Settings role={useAtomValue(roleAtom)} /&gt;
+  &lt;Bell count={useAtomValue(notifCountAtom)} /&gt;
+  &lt;button onClick={() =&gt; useSetAtom(pushNotificationAtom)({ id: Date.now() })}&gt;new notification&lt;/button&gt;
+  &lt;button onClick={() =&gt; useSetAtom(roleAtom)(r =&gt; r === 'member' ? 'admin' : 'member')}&gt;promote role&lt;/button&gt;
+&lt;/App&gt;
+</code></pre>
+        <div class="demo" id="demo-jotai">
+          <div class="controls">
+            <button class="btn" data-action="notif">new notification</button>
+            <button class="btn" data-action="promote">promote role</button>
+            <span class="meta">role: <span data-role>member</span> • notifs: <span data-notifs>0</span></span>
+          </div>
+          <div class="grid">
+            <div class="cell" data-cell="App"><h3>App</h3><div class="meta">renders: <span class="mono" data-count>0</span></div></div>
+            <div class="cell" data-cell="Navbar"><h3>Navbar (reads role atom)</h3><div class="meta">renders: <span class="mono" data-count>0</span></div></div>
+            <div class="cell" data-cell="Settings"><h3>Settings (reads role atom)</h3><div class="meta">renders: <span class="mono" data-count>0</span></div></div>
+            <div class="cell" data-cell="Bell"><h3>Bell (derived notif count)</h3><div class="meta">renders: <span class="mono" data-count>0</span></div></div>
+          </div>
+          <p class="aside">Simulated Jotai: role atom changes rerender role readers; notifications atom changes rerender Bell.</p>
+        </div>
+      </section>
+
+      <section>
+        <h2>Why atomic writes and slices matter</h2>
+        <p>React reconciliation is fast; the expensive part is <em>how many places</em> you ask React to look. Two ideas keep that number small:</p>
+        <p><strong>Atomic writes.</strong> Update only the thing that changed. In Context you often end up writing a bigger object (e.g., the whole <code>user</code>), which changes identity and wakes everything. With Zustand or Jotai you can write exactly the notification slice or the specific atom.</p>
+        <p><strong>Slices (or atoms).</strong> Subscribe to the smallest possible unit. Reading <code>role</code> should not subscribe you to <code>notifications</code>. Slices and atoms give you that boundary by default; you add work only where it belongs.</p>
+        <p>In practice this means: isolate cross‑cutting state that changes often (notifications, UI chrome) into its own slice/atom; keep capability objects (auth client, feature APIs) in Context; and let server data live in a cache (React Query) where freshness and background updates are already handled.</p>
+      </section>
+
+      <script>
+        function bumpCount(cell){ const span=cell.querySelector('[data-count]'); span.textContent=String((parseInt(span.textContent||'0',10)+1)); }
+        function pulse(cell, cls){ cell.classList.add(cls); setTimeout(()=>cell.classList.remove(cls), 220); }
+        function markRender(cells, key, cls){ const el=cells[key]; if(!el) return; bumpCount(el); pulse(el, cls); }
+
+        // Context demo (simulated): any state change rerenders all consumers
+        (function(){
+          const rootEl = document.getElementById('demo-context');
+          const roleEl = rootEl.querySelector('[data-role]');
+          const notifsEl = rootEl.querySelector('[data-notifs]');
+          const cells = Object.fromEntries(Array.from(rootEl.querySelectorAll('.cell')).map(c=>[c.getAttribute('data-cell'), c]));
+          const state = { role: 'member', notifications: 0 };
+          function renderAll(){
+            markRender(cells,'App','pulse-v');
+            markRender(cells,'Navbar','pulse-v');
+            markRender(cells,'Settings','pulse-v');
+            markRender(cells,'Bell','pulse-v');
+            roleEl.textContent = state.role;
+            notifsEl.textContent = String(state.notifications);
+          }
+          rootEl.querySelector('[data-action="notif"]').addEventListener('click',()=>{ state.notifications++; renderAll(); });
+          rootEl.querySelector('[data-action="promote"]').addEventListener('click',()=>{ state.role = state.role==='member'?'admin':'member'; renderAll(); });
+        })();
+
+        // Zustand demo (simulated selectors): rerender only slice subscribers
+        (function(){
+          const rootEl = document.getElementById('demo-zustand');
+          const roleEl = rootEl.querySelector('[data-role]');
+          const notifsEl = rootEl.querySelector('[data-notifs]');
+          const cells = Object.fromEntries(Array.from(rootEl.querySelectorAll('.cell')).map(c=>[c.getAttribute('data-cell'), c]));
+          const store = { role: 'member', notifications: 0 };
+          function renderRole(){ markRender(cells,'Navbar','pulse-g'); markRender(cells,'Settings','pulse-g'); roleEl.textContent = store.role; }
+          function renderNotifs(){ markRender(cells,'Bell','pulse-g'); notifsEl.textContent = String(store.notifications); }
+          rootEl.querySelector('[data-action="notif"]').addEventListener('click',()=>{ store.notifications++; renderNotifs(); });
+          rootEl.querySelector('[data-action="promote"]').addEventListener('click',()=>{ store.role = store.role==='member'?'admin':'member'; renderRole(); });
+        })();
+
+        // Jotai demo (simulated atoms): rerender only dependents
+        (function(){
+          const rootEl = document.getElementById('demo-jotai');
+          const roleEl = rootEl.querySelector('[data-role]');
+          const notifsEl = rootEl.querySelector('[data-notifs]');
+          const cells = Object.fromEntries(Array.from(rootEl.querySelectorAll('.cell')).map(c=>[c.getAttribute('data-cell'), c]));
+          let roleAtom = 'member';
+          let notificationsAtom = 0;
+          function renderRoleReaders(){ markRender(cells,'Navbar','pulse-g'); markRender(cells,'Settings','pulse-g'); roleEl.textContent = roleAtom; }
+          function renderNotifReaders(){ markRender(cells,'Bell','pulse-g'); notifsEl.textContent = String(notificationsAtom); }
+          rootEl.querySelector('[data-action="notif"]').addEventListener('click',()=>{ notificationsAtom += 1; renderNotifReaders(); });
+          rootEl.querySelector('[data-action="promote"]').addEventListener('click',()=>{ roleAtom = roleAtom==='member'?'admin':'member'; renderRoleReaders(); });
+        })();
+      </script>
+
+    </article>
+  </main>
+
+  <aside>
+    <section>
+      <h2>Related Topics</h2>
+      <ul>
+        <li><a href="2025-10-19-vibe-coding-fundamentals.html">Vibe Coding Fundamentals</a></li>
+        <li><a href="2025-10-17-playwright-automated-usability-testing.html">Automated UX Checks</a></li>
+      </ul>
+    </section>
+  </aside>
+
+  <footer>
+    <nav aria-label="Post navigation">
+      <a href="../index.html" rel="home">← Back to blog</a>
+    </nav>
+    <p><small>Last updated: <time datetime="2025-10-26">October 26, 2025</time></small></p>
+  </footer>
+</body>
+</html>

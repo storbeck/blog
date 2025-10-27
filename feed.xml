@@ -6,7 +6,15 @@
     <description>Technical blog by Geoff Storbeck covering frontend development, web performance, security, DevOps, and practical tooling.</description>
     <language>en</language>
     <atom:link href="https://storbeck.dev/feed.xml" rel="self" type="application/rss+xml" />
-    <lastBuildDate>Wed, 22 Oct 2025 16:03:29 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 27 Oct 2025 10:32:01 +0000</lastBuildDate>
+
+    <item>
+      <title>React Context vs Zustand vs Jotai — A Visual Guide</title>
+      <link>https://storbeck.dev/posts/2025-10-26-react-state-updates-visual-guide.html</link>
+      <guid>https://storbeck.dev/posts/2025-10-26-react-state-updates-visual-guide.html</guid>
+      <pubDate>Mon, 27 Oct 2025 10:32:01 +0000</pubDate>
+      <description>See why Context rerenders every consumer and how Zustand/Jotai keep updates narrow — three tiny, dependency‑free demos with render counters.</description>
+    </item>
 
     <item>
       <title>Bodywork and Interfaces</title>
