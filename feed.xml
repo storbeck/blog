@@ -6,7 +6,15 @@
     <description>Technical blog by Geoff Storbeck covering frontend development, web performance, security, DevOps, and practical tooling.</description>
     <language>en</language>
     <atom:link href="https://storbeck.dev/feed.xml" rel="self" type="application/rss+xml" />
-    <lastBuildDate>Mon, 27 Oct 2025 15:02:17 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 02 Nov 2025 01:10:28 +0000</lastBuildDate>
+
+    <item>
+      <title>What Is a CTA? Why We Need One</title>
+      <link>https://storbeck.dev/posts/2025-11-01-what-is-a-cta.html</link>
+      <guid>https://storbeck.dev/posts/2025-11-01-what-is-a-cta.html</guid>
+      <pubDate>Sun, 02 Nov 2025 01:10:28 +0000</pubDate>
+      <description>What a CTA is, why it matters, and practical ways to guide users with clear calls to action without losing your product’s voice.</description>
+    </item>
 
     <item>
       <title>A Tiny MCP To Track App Store Feedback</title>
