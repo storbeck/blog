@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Three-step Draw Things recipe for SDXL Turbo on an M5 Mac: 3 inference steps, Euler A Substep, and locally-run models that spit out assets in seconds.">
+  <meta name="author" content="Storbeck">
+  <title>3-Step SDXL Turbo Workflow in Draw Things - Storbeck Blog</title>
+  <link rel="preconnect" href="https://github.com">
+  <link rel="dns-prefetch" href="https://www.linkedin.com">
+  <link rel="stylesheet" href="../styles.css">
+  <meta itemprop="author" content="Geoff Storbeck">
+  <meta itemprop="headline" content="3-Step SDXL Turbo Workflow in Draw Things">
+  <meta itemprop="datePublished" content="2025-11-08">
+  <meta itemprop="description" content="Three-step Draw Things recipe for SDXL Turbo on an M5 Mac: 3 inference steps, Euler A Substep, and locally-run models that spit out assets in seconds.">
+  <meta itemprop="url" content="https://storbeck.dev/posts/2025-11-08-draw-things-sdxl-turbo.html">
+  <meta itemprop="mainEntityOfPage" content="https://storbeck.dev/posts/2025-11-08-draw-things-sdxl-turbo.html">
+  <meta itemprop="inLanguage" content="en">
+  <meta itemprop="genre" content="Blog">
+</head>
+<body>
+  <header>
+    <nav aria-label="Site navigation">
+      <a href="../index.html" rel="home">← Storbeck Blog</a>
+    </nav>
+  </header>
+
+  <main>
+    <article itemscope itemtype="http://schema.org/BlogPosting">
+      <header>
+        <h1 itemprop="headline">3-Step SDXL Turbo Workflow in Draw Things</h1>
+        <p>
+          <time datetime="2025-11-08" itemprop="datePublished">Published November 8, 2025</time>
+          <span> • </span>
+          <span>Generative Art, Workflow</span>
+        </p>
+      </header>
+
+      <p>SDXL Turbo plus Draw Things on an M5 Max makes high-res assets feel instant. The app runs the entire stack locally, so there is no ChatGPT or cloud subscription in the mix—just a one-time model download sitting on fast local storage. With 3 inference steps and the <strong>Euler A (Substep)</strong> sampler, I can turn a scribbled idea into a publishable render before Finder can finish syncing screenshots.</p>
+
+      <section>
+        <h2>Hardware baseline</h2>
+        <p>The M5 Max’s neural engine is available, but Draw Things leans on the GPU cores. I keep the project folder on the internal SSD, let the app allocate 12&nbsp;GB of VRAM, and disable background upscalers so Turbo can sprint. That combination keeps each generation under two seconds—even when I am juggling other creative apps.</p>
+      </section>
+
+      <section>
+        <h2>The three steps</h2>
+        <ol>
+          <li><strong>Load SDXL Turbo</strong>: Models live under <code>~/Library/Application Support/Draw Things/models/</code>. I point the project at <em>sdxl_turbo_v1.1</em> and lock <em>CFG</em> at 1.5 to stay faithful to prompts.</li>
+          <li><strong>Set Euler A Substep</strong>: In Sampler settings choose <em>Euler A (Substep)</em>, set <em>Step Count</em> to exactly <strong>3</strong>, and toggle <em>Turbo Mode</em>. This keeps paths sharp while honoring Turbo’s speed advantage.</li>
+          <li><strong>Prompt, queue, publish</strong>: I keep three prompt presets (character, creature, prop). Drop in the reference, queue two seeds, and export straight to the blog’s <code>images/originals</code> folder so the ImageMagick script can batch-resize everything.</li>
+        </ol>
+        <p>No loras, no ControlNet, and no extra passes—the point is to stay within three steps so ideation never stalls.</p>
+      </section>
+
+      <section>
+        <h2>Sample outputs</h2>
+        <p>The gallery below shows every render from tonight’s session—kaiju fluff studies, Siamese lighting tests, a crab spirit, and the animorph experiment. Each set shares prompts but diverges only by seed so I can compare composition side by side.</p>
+
+        <section class="figure-row" aria-label="Fluffy Godzilla variations">
+          <figure>
+            <picture>
+              <source type="image/webp" srcset="../images/sdxl-fluffy-godzilla-1-400w.webp 400w, ../images/sdxl-fluffy-godzilla-1-800w.webp 800w, ../images/sdxl-fluffy-godzilla-1-1200w.webp 1200w">
+              <source type="image/jpeg" srcset="../images/sdxl-fluffy-godzilla-1-400w.jpg 400w, ../images/sdxl-fluffy-godzilla-1-800w.jpg 800w, ../images/sdxl-fluffy-godzilla-1-1200w.jpg 1200w">
+              <img src="../images/sdxl-fluffy-godzilla-1-800w.jpg" alt="Fluffy Godzilla-style creature roaring on a neon-lit street." width="512" height="512" loading="lazy" decoding="async">
+            </picture>
+            <figcaption>Seed 42: softer rim light, same 3-step recipe.</figcaption>
+          </figure>
+          <figure>
+            <picture>
+              <source type="image/webp" srcset="../images/sdxl-fluffy-godzilla-2-400w.webp 400w, ../images/sdxl-fluffy-godzilla-2-800w.webp 800w, ../images/sdxl-fluffy-godzilla-2-1200w.webp 1200w">
+              <source type="image/jpeg" srcset="../images/sdxl-fluffy-godzilla-2-400w.jpg 400w, ../images/sdxl-fluffy-godzilla-2-800w.jpg 800w, ../images/sdxl-fluffy-godzilla-2-1200w.jpg 1200w">
+              <img src="../images/sdxl-fluffy-godzilla-2-800w.jpg" alt="Second fluffy Godzilla render with a warmer palette and smoke trails." width="512" height="512" loading="lazy" decoding="async">
+            </picture>
+            <figcaption>Seed 128 flips the palette to warmer sodium lights.</figcaption>
+          </figure>
+        </section>
+
+        <section class="figure-row" aria-label="Siamese cat lighting studies">
+          <figure>
+            <picture>
+              <source type="image/webp" srcset="../images/sdxl-siamese-cat-1-400w.webp 400w, ../images/sdxl-siamese-cat-1-800w.webp 800w, ../images/sdxl-siamese-cat-1-1200w.webp 1200w">
+              <source type="image/jpeg" srcset="../images/sdxl-siamese-cat-1-400w.jpg 400w, ../images/sdxl-siamese-cat-1-800w.jpg 800w, ../images/sdxl-siamese-cat-1-1200w.jpg 1200w">
+              <img src="../images/sdxl-siamese-cat-1-800w.jpg" alt="Portrait of a Siamese cat with blue rim lighting and shallow depth of field." width="512" height="512" loading="lazy" decoding="async">
+            </picture>
+            <figcaption>Seed 77 leans into teal rim light and cinematic grain.</figcaption>
+          </figure>
+          <figure>
+            <picture>
+              <source type="image/webp" srcset="../images/sdxl-siamese-cat-2-400w.webp 400w, ../images/sdxl-siamese-cat-2-800w.webp 800w, ../images/sdxl-siamese-cat-2-1200w.webp 1200w">
+              <source type="image/jpeg" srcset="../images/sdxl-siamese-cat-2-400w.jpg 400w, ../images/sdxl-siamese-cat-2-800w.jpg 800w, ../images/sdxl-siamese-cat-2-1200w.jpg 1200w">
+              <img src="../images/sdxl-siamese-cat-2-800w.jpg" alt="Siamese cat study with warmer studio lighting and sharp whisker detail." width="512" height="512" loading="lazy" decoding="async">
+            </picture>
+            <figcaption>Seed 93 warms things up without changing the step count.</figcaption>
+          </figure>
+        </section>
+
+        <section class="figure-row" aria-label="Hybrid creature and seasonal study">
+          <figure>
+            <picture>
+              <source type="image/webp" srcset="../images/sdxl-animorph-cat-dog-400w.webp 400w, ../images/sdxl-animorph-cat-dog-800w.webp 800w, ../images/sdxl-animorph-cat-dog-1200w.webp 1200w">
+              <source type="image/jpeg" srcset="../images/sdxl-animorph-cat-dog-400w.jpg 400w, ../images/sdxl-animorph-cat-dog-800w.jpg 800w, ../images/sdxl-animorph-cat-dog-1200w.jpg 1200w">
+              <img src="../images/sdxl-animorph-cat-dog-800w.jpg" alt="SDXL Turbo render of a half-cat, half-dog creature with studio lighting and intricate fur detail." width="512" height="512" loading="lazy" decoding="async">
+            </picture>
+            <figcaption>Animorph mash-up stayed crispy even with a single CFG tweak.</figcaption>
+          </figure>
+          <figure>
+            <picture>
+              <source type="image/webp" srcset="../images/sdxl-halloween-crab-400w.webp 400w, ../images/sdxl-halloween-crab-800w.webp 800w, ../images/sdxl-halloween-crab-1200w.webp 1200w">
+              <source type="image/jpeg" srcset="../images/sdxl-halloween-crab-400w.jpg 400w, ../images/sdxl-halloween-crab-800w.jpg 800w, ../images/sdxl-halloween-crab-1200w.jpg 1200w">
+              <img src="../images/sdxl-halloween-crab-800w.jpg" alt="Hyper-real Halloween crab with glowing lantern eyes and moody studio fog." width="512" height="512" loading="lazy" decoding="async">
+            </picture>
+            <figcaption>The crab only needed a negative prompt for blown highlights.</figcaption>
+          </figure>
+        </section>
+      </section>
+
+      <section>
+        <h2>Video capture for context</h2>
+        <p>The workflow is light enough that I can screen record concept passes while Turbo renders in the background.</p>
+        <figure>
+          <video src="../videos/sushi_game_art.mov" width="1511" height="861" controls muted loop playsinline aria-label="Screen recording of creating sushi mobile game art assets in Draw Things."></video>
+          <figcaption>Real-time capture while generating sushi mobile game tiles; rendering stayed under two seconds per frame.</figcaption>
+        </figure>
+        <figure>
+          <video src="../videos/surf_board.mov" width="1511" height="861" controls muted loop playsinline aria-label="Video walkthrough brainstorming a surf board shop landing page idea."></video>
+          <figcaption>Quick surf board shop landing page ideation—the same presets apply, just swap the prompt context.</figcaption>
+        </figure>
+      </section>
+
+      <section>
+        <h2>Why this matters</h2>
+        <p>Because everything runs on-device, I can prototype without internet, keep client prompts private, and avoid the latency of cloud inference. SDXL Turbo loves short step counts, so pairing it with a disciplined three-step recipe keeps ideation nimble. I have stopped bouncing to paid assistants unless I need help writing copy—visual ideas live entirely inside Draw Things.</p>
+      </section>
+    </article>
+  </main>
+
+  <aside>
+    <section>
+      <h2>Related Topics</h2>
+      <ul>
+        <li><a href="2025-10-16-design-prompts-references.html" rel="bookmark">Prompt pattern library</a></li>
+        <li><a href="2025-10-15-juicing-ui-with-math.html" rel="bookmark">Polishing visual motion</a></li>
+        <li><a href="2025-10-19-vibe-coding-fundamentals.html" rel="bookmark">Shipping with AI responsibly</a></li>
+      </ul>
+    </section>
+  </aside>
+
+  <footer>
+    <nav aria-label="Post navigation">
+      <a href="../index.html" rel="home">← Back to blog</a>
+    </nav>
+    <p><small>Last updated: <time datetime="2025-11-08">November 8, 2025</time></small></p>
+  </footer>
+</body>
+</html>

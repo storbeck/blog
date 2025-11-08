@@ -6,7 +6,15 @@
     <description>Technical blog by Geoff Storbeck covering frontend development, web performance, security, DevOps, and practical tooling.</description>
     <language>en</language>
     <atom:link href="https://storbeck.dev/feed.xml" rel="self" type="application/rss+xml" />
-    <lastBuildDate>Sun, 02 Nov 2025 01:10:28 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 08 Nov 2025 12:00:00 +0000</lastBuildDate>
+
+    <item>
+      <title>3-Step SDXL Turbo Workflow in Draw Things</title>
+      <link>https://storbeck.dev/posts/2025-11-08-draw-things-sdxl-turbo.html</link>
+      <guid>https://storbeck.dev/posts/2025-11-08-draw-things-sdxl-turbo.html</guid>
+      <pubDate>Sat, 08 Nov 2025 12:00:00 +0000</pubDate>
+      <description>Run SDXL Turbo locally inside Draw Things with three inference steps, the Euler A Substep sampler, and zero subscriptions for instant cats, kaiju, and crab studies.</description>
+    </item>
 
     <item>
       <title>What Is a CTA? Why We Need One</title>
