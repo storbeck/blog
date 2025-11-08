@@ -41,9 +41,9 @@
       <section>
         <h2>The three steps</h2>
         <ol>
-          <li><strong>Load SDXL Turbo</strong>: Models live under <code>~/Library/Application Support/Draw Things/models/</code>. I point the project at <em>sdxl_turbo_v1.1</em> and lock <em>CFG</em> at 1.5 to stay faithful to prompts.</li>
-          <li><strong>Set Euler A Substep</strong>: In Sampler settings choose <em>Euler A (Substep)</em>, set <em>Step Count</em> to exactly <strong>3</strong>, and toggle <em>Turbo Mode</em>. This keeps paths sharp while honoring Turbo’s speed advantage.</li>
-          <li><strong>Prompt, queue, publish</strong>: I keep three prompt presets (character, creature, prop). Drop in the reference, queue two seeds, and export straight to the blog’s <code>images/originals</code> folder so the ImageMagick script can batch-resize everything.</li>
+          <li><strong>Load SDXL Turbo</strong>: Use the Draw Things model manager to grab <em>sdxl_turbo_v1.1</em>, then keep <em>CFG</em> around 1.5 so the three steps follow the prompt closely without overshooting.</li>
+          <li><strong>Set Euler A Substep</strong>: In Sampler settings choose <em>Euler A (Substep)</em> and set <em>Step Count</em> to exactly <strong>3</strong>. Going past five steps makes Turbo get oily and over-baked, so I keep it between two and five.</li>
+          <li><strong>Prompt, queue, publish</strong>: Drop in a reference idea, spin up a couple of seeds, and export the keepers so you can post or iterate immediately.</li>
         </ol>
         <p>No loras, no ControlNet, and no extra passes—the point is to stay within three steps so ideation never stalls.</p>
       </section>
