@@ -6,7 +6,15 @@
     <description>Technical blog by Geoff Storbeck covering frontend development, web performance, security, DevOps, and practical tooling.</description>
     <language>en</language>
     <atom:link href="https://storbeck.dev/feed.xml" rel="self" type="application/rss+xml" />
-    <lastBuildDate>Sat, 08 Nov 2025 12:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 10 Nov 2025 12:00:00 +0000</lastBuildDate>
+
+    <item>
+      <title>Maze Night With The Kids</title>
+      <link>https://storbeck.dev/posts/2025-11-10-maze-family-printables.html</link>
+      <guid>https://storbeck.dev/posts/2025-11-10-maze-family-printables.html</guid>
+      <pubDate>Mon, 10 Nov 2025 12:00:00 +0000</pubDate>
+      <description>Built a tiny Go CLI for my kid’s maze obsession—Hunt-and-Kill grids on demand plus a few PNG downloads if you just want to print one.</description>
+    </item>
 
     <item>
       <title>Quick n' Dirty AI Image Generation (No Subscriptions)</title>
