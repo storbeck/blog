@@ -15,16 +15,47 @@ body {
   line-height: 1.7;
   color: #111;
   font-family: var(--serif);
-  /* Subtle center radial for depth */
-  background: radial-gradient(circle at 50% 22%, #eef2f7 0%, #f6f8fb 55%, #ffffff 85%) #ffffff;
+  background: #fff;
+  padding: 0;
 }
 
 /* Headings and chrome use sans for contrast */
 header, nav, footer, h1, h2, h3 { font-family: var(--sans); letter-spacing: 0.01em; }
 
-/* Reading width + padding on main landmarks */
-/* Scope layout container to top-level landmarks and article, not all sections */
-main, header, footer, aside, article, body > section { max-width: 95ch; margin-inline: auto; padding-inline: 1rem; }
+body > header,
+body > main,
+body > footer,
+body > section,
+body > aside {
+  max-width: 95ch;
+  margin: 0 auto;
+  padding-inline: clamp(1rem, 4vw, 2.5rem);
+  padding-block: 1.5rem;
+}
+body > header { padding-block: 1rem 0.5rem; }
+body > footer { padding-block: 1rem 2rem; }
+
+.page-shell {
+  background: #fff;
+  max-width: 1100px;
+  margin: 0 auto;
+  overflow: hidden;
+}
+.page-shell > section,
+.page-shell > main,
+.page-shell > footer {
+  max-width: 95ch;
+  margin-inline: auto;
+  padding-inline: clamp(1rem, 4vw, 2.5rem);
+  padding-block: 1.5rem;
+}
+.page-shell > section { padding-block: 1rem 1.25rem; }
+.page-shell > footer { padding-block: 1.25rem 2rem; }
+
+header.site-hero {
+  padding: 0 0 2rem;
+  margin-bottom: 0;
+}
 /* Avoid double padding for articles nested in main */
 main > article { padding-inline: 0; }
 /* Avoid double inset on headers inside articles */
@@ -86,7 +117,65 @@ a:active { color: color-mix(in oklch, var(--link-hover) 80%, black); }
 /* Focus visibility */
 :focus-visible { outline: 2px solid currentColor; outline-offset: 2px; }
 
+/* Hero */
+.cover-photo {
+  margin: 0;
+  border-radius: 0;
+  overflow: hidden;
+}
+.cover-photo picture,
+.cover-photo img { display: block; width: 100%; }
+.cover-photo img {
+  height: clamp(200px, 32vw, 320px);
+  object-fit: cover;
+  width: 100%;
+}
+.hero-body {
+  display: flex;
+  align-items: flex-end;
+  gap: 1.25rem;
+  margin-top: -2rem;
+  padding-inline: clamp(1rem, 4vw, 2.5rem);
+}
+.profile-photo {
+  margin: 0;
+  width: clamp(160px, 22vw, 260px);
+  border-radius: 0;
+  border: none;
+  box-shadow: 0 12px 24px rgba(15, 23, 42, 0.2);
+  background: #fff;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+.profile-photo picture,
+.profile-photo img { display: block; width: 100%; height: auto; }
+.profile-photo img { object-fit: cover; }
+.hero-text { padding-bottom: 0.25rem; }
+.hero-text h1 { margin-block: 0.25rem 0; }
+.hero-text p { margin-block: 0.2rem; }
+@media (max-width: 640px) {
+  .hero-body {
+    flex-direction: column;
+    align-items: flex-start;
+    margin-top: -2.5rem;
+  }
+}
+
 /* Post-specific demo tuning: keep calculators intact */
 
 /* Calculator demos: keep internal type at 16px for layout fidelity */
 article section[aria-label^="Calculator mockup"] { font-size: 16px; line-height: 1.4; }
+.about-details {
+  border: 1px solid rgba(0,0,0,0.08);
+  border-radius: 10px;
+  padding: 0.5rem 0.85rem;
+  background: #f8fafc;
+}
+.about-details summary {
+  cursor: pointer;
+  font-weight: 600;
+  font-family: var(--sans);
+  color: #111;
+}
+.about-details summary::-webkit-details-marker { display: none; }
+.about-details p:last-of-type { margin-bottom: 0.25rem; }

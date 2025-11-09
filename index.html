@@ -27,36 +27,66 @@
     <link rel="alternate" type="application/rss+xml" title="Storbeck Blog RSS" href="/feed.xml">
 </head>
 <body>
-    <header style="text-align: center;" itemscope itemtype="http://schema.org/Person">
-        <picture>
-            <source
-                type="image/webp"
-                srcset="images/profile-400w.webp">
-            <source
-                type="image/jpeg"
-                srcset="images/profile-400w.jpg">
-            <img
-                src="images/profile-400w.jpg"
-                alt="Geoff Storbeck profile photo"
-                width="100"
-                height="100"
-                loading="eager"
-                fetchpriority="high"
-                decoding="async"
-                style="border-radius: 50%; object-fit: cover;"
-                itemprop="image">
-        </picture>
-        <h1><span itemprop="name">Geoff Storbeck</span>’s Blog</h1>
-        <p><strong itemprop="jobTitle">Freelance Frontend Developer</strong></p>
-        <div itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">
-            <p><span itemprop="addressLocality">Ormond Beach</span>, <span itemprop="addressRegion">Florida</span></p>
+  <div class="page-shell">
+    <header class="site-hero" itemscope itemtype="http://schema.org/Person">
+        <figure class="cover-photo">
+            <picture>
+                <source
+                    type="image/webp"
+                    srcset="images/hero-ormond-sunrise-400w.webp 400w, images/hero-ormond-sunrise-800w.webp 800w, images/hero-ormond-sunrise-1200w.webp 1200w">
+                <source
+                    type="image/jpeg"
+                    srcset="images/hero-ormond-sunrise-400w.jpg 400w, images/hero-ormond-sunrise-800w.jpg 800w, images/hero-ormond-sunrise-1200w.jpg 1200w">
+                <img
+                    src="images/hero-ormond-sunrise-1200w.jpg"
+                    alt="Sunrise over the Halifax River in Ormond Beach"
+                    width="1200"
+                    height="700"
+                    loading="eager"
+                    fetchpriority="high"
+                    decoding="async">
+            </picture>
+        </figure>
+        <div class="hero-body">
+            <figure class="profile-photo">
+                <picture>
+                    <source
+                        type="image/webp"
+                        srcset="images/profile-400w.webp">
+                    <source
+                        type="image/jpeg"
+                        srcset="images/profile-400w.jpg">
+                    <img
+                        src="images/profile-400w.jpg"
+                        alt="Geoff Storbeck profile photo"
+                        width="220"
+                        height="220"
+                        loading="eager"
+                        decoding="async"
+                        itemprop="image">
+                </picture>
+            </figure>
+            <div class="hero-text">
+                <h1><span itemprop="name">Geoff Storbeck</span>’s Blog</h1>
+                <p><strong itemprop="jobTitle">Freelance Frontend Developer</strong></p>
+                <div itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">
+                    <p><span itemprop="addressLocality">Ormond Beach</span>, <span itemprop="addressRegion">Florida</span></p>
+                </div>
+                <p><a href="https://www.linkedin.com/in/geoff-storbeck-81a25035/" rel="external me" itemprop="sameAs">LinkedIn</a> • <a href="https://github.com/storbeck" rel="external me" itemprop="sameAs">GitHub</a> • <a href="/feed.xml" rel="alternate">Subscribe to RSS feed</a></p>
+            </div>
         </div>
-        <p><a href="https://www.linkedin.com/in/geoff-storbeck-81a25035/" rel="external me" itemprop="sameAs">LinkedIn</a> • <a href="https://github.com/storbeck" rel="external me" itemprop="sameAs">GitHub</a> • <a href="/feed.xml" rel="alternate">Subscribe to RSS feed</a></p>
         <link itemprop="url" href="https://storbeck.dev">
     </header>
 
     <section itemscope itemtype="http://schema.org/Person">
-        <p itemprop="description">I'm a frontend developer who explores technology beyond my day job. This blog documents problems I solve, tools I build, and discoveries I make. While I have professional experience in UI development and system architecture, I consider myself an amateur in the other technical areas covered here - security research, reverse engineering, DevOps, and system administration. I share what I learn in case it helps others. All opinions are my own and don't reflect those of my employer.</p>
+        <p itemprop="description">I’m a freelance frontend developer focused on modern, intuitive interfaces—tight accessibility, thoughtful interaction design, and pragmatic automation so product teams can ship faster without burning out.</p>
+        <details class="about-details">
+            <summary>About Me</summary>
+            <p>In 1996 a friend showed me that you could save any webpage, tweak it in Notepad, and make it your own. I spent nights cloning layouts, building phpBB skins, and sketching ideas in a stack of dog-eared notebooks.</p>
+            <p>I loved art just as much, so I took a scholarship to the Columbus College of Art & Design summer program and kept sneaking back to HTML whenever I could. I knew I wanted a creative career, but I couldn’t see how to make it pay—programming sounded like cubicle life and bug fixes forever. Finding out there was a “frontend developer” path that blends design and code was the breakthrough.</p>
+            <p>Later I found writers like Lea Verou and Chris Coyier, devoured every Smashing Magazine post I could find, and spent nights poking at CodePen demos to see how people engineered those effects. That mix of art, community tips, and sheer fascination with putting pixels on a page is still what drives this blog.</p>
+            <p>It wasn’t until much later that I really dug into user experience, user flows, grids, and everything else that shapes modern sites. What hooked me—and still does—is the creativity, freedom, and community. There are always new tricks people are sharing, and AI only expands the palette. Just like you can still shoot 35mm film or post an unfiltered photo, you can keep things authentic while embracing new tools. That balance keeps the craft exciting.</p>
+        </details>
         <hr>
     </section>
     
@@ -377,5 +407,6 @@
         <p><small>All opinions are my own and do not reflect those of my employer.</small></p>
         <p><small>&copy; 2025 Storbeck</small></p>
     </footer>
+</div>
 </body>
 </html>
