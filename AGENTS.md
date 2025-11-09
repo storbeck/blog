@@ -1,6 +1,6 @@
 # Agent Guidelines for This Repository
 
-These instructions apply to the entire repository. Follow them when creating or editing files. Keep changes minimal, focused, and strictly aligned with the blog’s philosophy: plain, fast, semantic HTML with no CSS or JavaScript frameworks.
+hese instructions apply to the entire repository. Follow them when creating or editing files. Keep changes minimal, focused, and strictly aligned with the blog’s philosophy: plain, fast, semantic HTML with no CSS or JavaScript frameworks.
 
 ## Project Purpose
 - Static, dependency-free blog using semantic HTML only.

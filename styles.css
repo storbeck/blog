@@ -83,30 +83,6 @@ a:visited { color: var(--link-visited); }
 a:hover { color: var(--link-hover); text-decoration-thickness: 0.12em; }
 a:active { color: color-mix(in oklch, var(--link-hover) 80%, black); }
 
-/* Sharing icons: no underline on image buttons */
-/* Share/subscribe row as compact brand-colored buttons */
-nav[aria-label="Feeds and sharing"] p { font-size: 0.85em; }
-nav[aria-label="Feeds and sharing"] .share-btn {
-  display: inline-block;
-  padding: 0.2rem 0.5rem;
-  border-radius: 6px;
-  color: #fff;
-  text-decoration: none;
-  line-height: 1.2;
-  border: 1px solid rgba(0,0,0,0.06);
-}
-nav[aria-label="Feeds and sharing"] .share-btn:hover { filter: brightness(0.92); }
-nav[aria-label="Feeds and sharing"] .share-btn:active { filter: brightness(0.85); }
-nav[aria-label="Feeds and sharing"] .share-btn + .share-btn { margin-left: 0.25rem; }
-
-/* Brand colors */
-nav[aria-label="Feeds and sharing"] .rss { background: #f26522; }
-nav[aria-label="Feeds and sharing"] .x { background: #111; }
-nav[aria-label="Feeds and sharing"] .linkedin { background: #0a66c2; }
-nav[aria-label="Feeds and sharing"] .facebook { background: #1877f2; }
-nav[aria-label="Feeds and sharing"] .hn { background: #ff6600; }
-nav[aria-label="Feeds and sharing"] .reddit { background: #ff4500; }
-
 /* Focus visibility */
 :focus-visible { outline: 2px solid currentColor; outline-offset: 2px; }
 
@@ -114,51 +90,3 @@ nav[aria-label="Feeds and sharing"] .reddit { background: #ff4500; }
 
 /* Calculator demos: keep internal type at 16px for layout fidelity */
 article section[aria-label^="Calculator mockup"] { font-size: 16px; line-height: 1.4; }
-
-/* Corner ribbon: buy ebook */
-
-/* Pull-tab bookmark (top-right, slides down on hover) */
-
-/* Price tag style CTA (top-right) */
-
-/* Marketing CTA */
-.button {
-  display: inline-block;
-  padding: 0.55rem 0.9rem;
-  border-radius: 10px;
-  background: #4338ca;
-  color: #fff;
-  text-decoration: none;
-  font-family: var(--sans);
-  font-weight: 700;
-  border: 1px solid rgba(0,0,0,0.12);
-}
-.button:visited { color: #fff; }
-.button:hover { filter: brightness(0.96); color: #fff; text-decoration: none; }
-.button:active { filter: brightness(0.9); color: #fff; text-decoration: none; }
-.button:hover { filter: brightness(0.96); }
-.button:active { filter: brightness(0.9); }
-
-/* Product hero */
-.product-hero {
-  margin: 0.75rem auto 1.25rem;
-  background: #fff;
-  border: 1px solid #e3e7ef;
-  border-radius: 14px;
-  padding: 1rem;
-  display: grid;
-  grid-template-columns: auto 1fr;
-  gap: 1rem;
-  align-items: center;
-}
-@media (max-width: 720px) { .product-hero { grid-template-columns: 1fr; text-align: left; } }
-.product-media { display:flex; justify-content:center; align-items:center; }
-/* Responsive cover size: scales between 90px and 160px based on viewport */
-.product-media img { width: clamp(90px, 14vw, 160px); height: auto; border-radius: 6px; box-shadow: 0 8px 20px rgba(67,56,202,0.2); }
-.product-copy h2 { margin:0 0 0.3rem 0; font-size:1.35rem; font-family: var(--sans); }
-.product-copy p { margin:0.35rem 0; }
-.mini-bullets { margin:0.35rem 0; padding-left:1rem; }
-.mini-bullets li { margin:0.15rem 0; }
-.product-actions { margin-top:0.4rem; display:flex; gap:0.5rem; align-items:center; flex-wrap:wrap; }
-.button.secondary { background:#eef0f7; color:#111; }
-.guarantee { color:#374151; font-size:0.9em; }
