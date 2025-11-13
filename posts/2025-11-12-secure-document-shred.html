@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="A semantic HTML shredding experiment that slices the current page into thin strips and drags them off screen in plain CSS and JavaScript.">
+  <meta name="author" content="Storbeck">
+  <title>Screen Shredder Demo - Storbeck Blog</title>
+  <link rel="preconnect" href="https://github.com">
+  <link rel="dns-prefetch" href="https://www.linkedin.com">
+  <link rel="stylesheet" href="../styles.css">
+  <meta itemprop="author" content="Geoff Storbeck">
+  <meta itemprop="headline" content="Screen Shredder Demo">
+  <meta itemprop="datePublished" content="2025-11-12">
+  <meta itemprop="description" content="A semantic HTML shredding experiment that duplicates the live page, splits it into strips, and drops them off screen with plain CSS and vanilla JS.">
+  <meta itemprop="url" content="https://storbeck.dev/posts/2025-11-12-secure-document-shred.html">
+  <meta itemprop="mainEntityOfPage" content="https://storbeck.dev/posts/2025-11-12-secure-document-shred.html">
+  <meta itemprop="inLanguage" content="en">
+  <meta itemprop="genre" content="Blog">
+  <style>
+    :root {
+      --strip-count: 26;
+    }
+
+    [data-shred-stage] {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .shred-original {
+      will-change: visibility;
+    }
+
+    .shred-strip-content {
+      background-color: #fff;
+      border: 1px solid rgba(0, 0, 0, 0.07);
+    }
+
+    .shred-lab {
+      margin-block: 2.5rem;
+      text-align: center;
+    }
+
+    .shred-lab p {
+      max-width: 40rem;
+      margin-inline: auto;
+    }
+
+    .shred-disclaimer small {
+      color: #666;
+      font-size: 0.9rem;
+      display: block;
+      max-width: 40rem;
+      margin: 0.75rem auto 0;
+    }
+
+    #shred-button {
+      margin-top: 1.25rem;
+      font-size: 1.05rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      padding: 0.85rem 2.75rem;
+      border: 2px solid currentColor;
+      border-radius: 0.75rem;
+      background: transparent;
+      cursor: pointer;
+      transition: background-color 0.2s ease, transform 0.2s ease;
+    }
+
+    #shred-button:focus-visible {
+      outline: 3px solid currentColor;
+      outline-offset: 4px;
+    }
+
+    #shred-button:hover:not(:disabled) {
+      background-color: rgba(0, 0, 0, 0.05);
+      transform: translateY(-1px);
+    }
+
+    #shred-button:disabled {
+      cursor: not-allowed;
+      opacity: 0.55;
+    }
+
+    #shred-status {
+      margin-top: 1rem;
+    }
+
+    .shred-strips {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      gap: 0;
+      transform-origin: top center;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+
+    .shred-strip {
+      position: relative;
+      overflow: hidden;
+      border-left: 1px solid rgba(255, 255, 255, 0.45);
+      border-right: 1px solid rgba(0, 0, 0, 0.18);
+      animation: strip-drop var(--drop-duration, 3s) linear forwards;
+      animation-delay: var(--drop-delay, 0s);
+      transform-origin: top center;
+    }
+
+    .shred-strip:first-child {
+      border-left-color: rgba(255, 255, 255, 0.15);
+    }
+
+    .shred-strip::after {
+      display: none;
+    }
+
+    .shred-strip-content {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      pointer-events: none;
+    }
+
+    @keyframes strip-drop {
+      0% {
+        transform: translateY(-1%);
+      }
+      15% {
+        transform: translateY(0%);
+      }
+      100% {
+        transform: translateY(115%);
+      }
+    }
+
+    [data-shred-stage] .shred-original > header,
+    [data-shred-stage] .shred-original > main,
+    [data-shred-stage] .shred-original > footer,
+    [data-shred-stage] .shred-original > aside {
+      max-width: 95ch;
+      margin: 0 auto;
+      padding-inline: clamp(1rem, 4vw, 2.5rem);
+      padding-block: 1.5rem;
+    }
+
+    [data-shred-stage] .shred-original > header {
+      padding-block: 1rem 0.5rem;
+    }
+
+    [data-shred-stage] .shred-original > footer {
+      padding-block: 1rem 2rem;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .shred-strip {
+        animation: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div data-shred-stage>
+    <div class="shred-original">
+    <header>
+      <nav aria-label="Site navigation">
+        <a href="../index.html" rel="home">← Storbeck Blog</a>
+      </nav>
+    </header>
+
+    <main>
+      <article itemscope itemtype="http://schema.org/BlogPosting">
+        <header>
+          <h1 itemprop="headline">Screen Shredder Demo</h1>
+          <p>
+            <time datetime="2025-11-12" itemprop="datePublished">Published November 12, 2025</time>
+            <span> • </span>
+            <span>Operational Safety</span>
+          </p>
+        </header>
+
+        <section>
+          <h2>What happens when you press shred?</h2>
+          <p>The button measures the current layout, clones every element, and builds twenty-six equal-width columns. Each column keeps the full DOM tree, but a negative <code>translateX</code> hides everything except the slice that lines up with that column.</p>
+        </section>
+
+        <section class="shred-lab" aria-labelledby="shred-button">
+          <p>Refresh to reset once you’re done shredding.</p>
+          <button type="button" id="shred-button">Engage shredder</button>
+          <p class="shred-disclaimer"><small>Disclaimer: this is a visual effect only — it does not delete files or wipe drives. For secure data destruction use a proper disk‑wiping tool such as <a href="https://dban.org/" rel="noopener noreferrer">DBAN</a>.</small></p>
+        </section>
+
+      </article>
+    </main>
+
+    <aside aria-hidden="true"></aside>
+
+    <footer>
+      <nav aria-label="Post navigation">
+        <a href="../index.html" rel="home">← Back to blog</a>
+      </nav>
+      <p><small>Last updated: <time datetime="2025-11-12">November 12, 2025</time></small></p>
+    </footer>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      'use strict';
+      const STRIP_COUNT = 26;
+      const button = document.getElementById('shred-button');
+      const shredStage = document.querySelector('[data-shred-stage]');
+      const reduceMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+      if (!button || !shredStage) {
+        return;
+      }
+
+      if (reduceMotionQuery.matches) {
+        button.disabled = true;
+        button.setAttribute('aria-disabled', 'true');
+        button.title = 'Disabled to respect reduced motion preference';
+        status.textContent = 'Shredder disabled because reduced motion is enabled.';
+        return;
+      }
+
+      button.addEventListener('click', () => {
+        if (document.body.classList.contains('is-shredding')) {
+          return;
+        }
+
+        document.body.classList.add('is-shredding');
+        button.disabled = true;
+        button.textContent = 'Shredding…';
+
+        const measurementTarget = shredStage.querySelector('.shred-original') || shredStage;
+        const stageRect = measurementTarget.getBoundingClientRect();
+        const stageWidth = Math.round(stageRect.width);
+        const stageHeight = Math.round(stageRect.height);
+        const stripWidth = stageWidth / STRIP_COUNT;
+
+        const stageClone = shredStage.cloneNode(true);
+        stripIds(stageClone);
+        stageClone.removeAttribute('data-shred-stage');
+        const templateHTML = stageClone.innerHTML;
+
+        const original = shredStage.querySelector('.shred-original');
+        const hideOriginal = () => {
+          if (original && original.style.visibility !== 'hidden') {
+            original.style.visibility = 'hidden';
+            original.setAttribute('aria-hidden', 'true');
+          }
+        };
+        const startStrips = () => {
+          hideOriginal();
+
+          const stripsWrapper = document.createElement('div');
+          stripsWrapper.className = 'shred-strips';
+          stripsWrapper.style.width = `${stageWidth}px`;
+          stripsWrapper.style.height = `${stageHeight}px`;
+
+          shredStage.appendChild(stripsWrapper);
+
+          let completedStrips = 0;
+          const handleStripEnd = () => {
+            completedStrips += 1;
+            if (completedStrips === STRIP_COUNT) {
+              cleanup();
+            }
+          };
+
+          for (let index = 0; index < STRIP_COUNT; index += 1) {
+            const strip = document.createElement('div');
+            strip.className = 'shred-strip';
+            strip.style.width = `${stripWidth}px`;
+            strip.style.height = `${stageHeight}px`;
+            strip.style.setProperty('--drop-duration', `${(2.6 + Math.random() * 1.2).toFixed(2)}s`);
+            strip.style.setProperty('--drop-delay', `${(index * 0.04).toFixed(2)}s`);
+
+            const stripContent = document.createElement('div');
+            stripContent.className = 'shred-strip-content';
+            stripContent.style.width = `${stageWidth}px`;
+            stripContent.style.height = `${stageHeight}px`;
+            stripContent.style.transform = `translateX(-${stripWidth * index}px)`;
+            stripContent.innerHTML = templateHTML;
+
+            strip.appendChild(stripContent);
+            stripsWrapper.appendChild(strip);
+
+            strip.addEventListener('animationend', handleStripEnd, { once: true });
+          }
+
+          status.hidden = false;
+          status.textContent = 'Shredder engaged. Strips are moving.';
+
+          const fallback = window.setTimeout(() => {
+            completedStrips = STRIP_COUNT;
+            cleanup();
+          }, 4500);
+
+          function cleanup() {
+            window.clearTimeout(fallback);
+            stripsWrapper.remove();
+            status.textContent = 'Screen cleared. Refresh to rebuild the document.';
+            status.focus();
+          }
+        };
+
+        startStrips();
+      });
+
+      function stripIds(root) {
+        if (root.nodeType === Node.ELEMENT_NODE && root.id) {
+          root.removeAttribute('id');
+        }
+        root.querySelectorAll('[id]').forEach((node) => node.removeAttribute('id'));
+      }
+    })();
+  </script>
+</body>
+</html>
