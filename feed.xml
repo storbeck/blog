@@ -6,7 +6,15 @@
     <description>Technical blog by Geoff Storbeck covering frontend development, web performance, security, DevOps, and practical tooling.</description>
     <language>en</language>
     <atom:link href="https://storbeck.dev/feed.xml" rel="self" type="application/rss+xml" />
-    <lastBuildDate>Wed, 12 Nov 2025 12:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 16 Nov 2025 12:00:00 +0000</lastBuildDate>
+
+    <item>
+      <title>PPM Wave Shader Jam</title>
+      <link>https://storbeck.dev/posts/2025-11-16-ppm-shader-wood-demo.html</link>
+      <guid>https://storbeck.dev/posts/2025-11-16-ppm-shader-wood-demo.html</guid>
+      <pubDate>Sun, 16 Nov 2025 12:00:00 +0000</pubDate>
+      <description>Inspired by Tsoding’s checkerboard video, I rewrote his PPM demo in Node, generated 600 frames, piped them through ffmpeg, and tweaked the shader into a drifting wave loop.</description>
+    </item>
 
     <item>
       <title>Screen Shredder Demo</title>

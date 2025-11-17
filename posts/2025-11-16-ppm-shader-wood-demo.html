@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Tsoding’s checkerboard stream nudged me to port his PPM trick to Node, build a wavy shader loop, and then tweak it again to keep more of the original wood grain.">
+  <meta name="author" content="Storbeck">
+  <title>PPM Wave Shader Jam - Storbeck Blog</title>
+  <link rel="preconnect" href="https://github.com">
+  <link rel="dns-prefetch" href="https://www.linkedin.com">
+  <link rel="stylesheet" href="../styles.css">
+  <meta itemprop="author" content="Geoff Storbeck">
+  <meta itemprop="headline" content="PPM Wave Shader Jam">
+  <meta itemprop="datePublished" content="2025-11-16">
+  <meta itemprop="description" content="Tsoding’s checkerboard stream nudged me to port his PPM trick to Node, build a wavy shader loop, and then tweak it again to keep more of the original wood grain.">
+  <meta itemprop="url" content="https://storbeck.dev/posts/2025-11-16-ppm-shader-wood-demo.html">
+  <meta itemprop="mainEntityOfPage" content="https://storbeck.dev/posts/2025-11-16-ppm-shader-wood-demo.html">
+  <meta itemprop="inLanguage" content="en">
+  <meta itemprop="genre" content="Blog">
+</head>
+<body>
+  <header>
+    <nav aria-label="Site navigation">
+      <a href="../index.html" rel="home">← Storbeck Blog</a>
+    </nav>
+  </header>
+
+  <main>
+    <article itemscope itemtype="http://schema.org/BlogPosting">
+      <header>
+        <h1 itemprop="headline">PPM Wave Shader Jam</h1>
+        <p>
+          <time datetime="2025-11-16" itemprop="datePublished">November 16, 2025</time>
+          <span> • </span>
+          <span>weekend experiment</span>
+        </p>
+      </header>
+
+      <section>
+        <h2>Why I did this</h2>
+        <p>Earlier this week I watched <a href="https://x.com/tsoding/status/1989446257882829223" target="_blank" rel="noopener">Tsoding run through a quick PPM demo</a>. He draws a red square, turns it into a checkerboard, feeds the frames to <code>ffmpeg</code>, and eventually swaps in a GLSL shader for the animation. It’s worth the watch. I just wanted to follow the same trail in JavaScript instead of C.</p>
+      </section>
+
+      <section>
+        <h2>PPM in a nutshell</h2>
+        <p>The format is tiny. Jef Poskanzer built PBM in the 1980s for email-friendly bitmaps, added PGM/PPM in 1988’s Pbmplus release, and the Netpbm project took over in 1993 to keep the family alive.</p>
+        <p>Keeping it this stripped-down still helps: you can stream a PPM file directly to standard output, feed it into <code>ffmpeg</code> or <code>convert</code>, and see every byte your code produced. It’s great for teaching, debugging shader math, or patching together quick render pipelines where transparency, animation, and color profiles aren’t required.</p>
+      </section>
+
+      <section>
+        <h2>Porting the steps to JavaScript</h2>
+        <p>I copied the same order:</p>
+        <ol>
+          <li><strong>Red frame test.</strong> 16×9 tiles at 60 pixels each with every pixel written as <code>0xff</code>, <code>0x00</code>, <code>0x00</code>.</li>
+          <li><strong>Checkerboard.</strong> A little integer division (<code>(x / size + y / size) % 2</code>) gets you alternating tiles.</li>
+          <li><strong>Sliding pattern.</strong> Emit a bunch of frames, move the checkerboard phase a bit each time, and drop them into a folder.</li>
+        </ol>
+        <pre><code class="language-javascript">#!/usr/bin/env node
+const fs = require("fs");
+const path = require("path");
+
+const FRAMES = 60;
+const TILE = 60;
+const WIDTH = 16 * TILE;
+const HEIGHT = 9 * TILE;
+
+function writeFrame(frameIndex) {
+  const frame = frameIndex.toString().padStart(2, "0");
+  const filename = path.resolve(`output-${frame}.ppm`);
+  const fd = fs.openSync(filename, "w");
+
+  // Write PPM header
+  fs.writeSync(fd, Buffer.from(`P6\n${WIDTH} ${HEIGHT}\n255\n`, "ascii"));
+
+  const row = Buffer.alloc(WIDTH * 3);
+  for (let y = 0; y < HEIGHT; y++) {
+    for (let x = 0; x < WIDTH; x++) {
+      const checker =
+        (Math.floor((x + frameIndex) / TILE) +
+          Math.floor((y + frameIndex) / TILE)) %
+        2;
+    
+      const offset = x * 3;
+
+      row[offset] = checker ? 0xff : 0x00;
+      row[offset + 1] = 0x00;
+      row[offset + 2] = 0x00;
+    }
+    fs.writeSync(fd, row);
+  }
+
+  fs.closeSync(fd);
+  console.log(`Generated ${filename}`);
+}
+
+function main() {
+  for (let i = 0; i < FRAMES; i++) {
+    writeFrame(i);
+  }
+}
+
+main();
+        </code></pre>
+        <p>Once the frames finish generation, <code>ffmpeg</code> will happily take them. Point it at a numbered pattern and it treats each file as a frame, so stitching an animation is a one-liner; no extra container work required because PPM files already carry width, height, and color depth in their headers:</p>
+        <pre><code>ffmpeg -framerate 30 -i frame-%03d.ppm -c:v libvpx-vp9 -pix_fmt yuv420p checker.webm</code></pre>
+      </section>
+
+      <section>
+        <h2>Swapping in a shader</h2>
+        <p>I searched for “wood shader” and settled on <a href="https://thebookofshaders.com/edit.php#11/wood.frag" rel="noopener">this fragment</a>. After pulling its noise, rotation, and line helpers into JavaScript, I started messing with the math—rotating the coords, shifting some sine inputs, adding a bit of noise—until it drifted away from clean wood rings and into the wavy look the rest of the project had going.</p>
+      </section>
+
+      <section>
+        <h2>Result</h2>
+        <p>The first pass drifts into a smooth black-and-white wave. Six hundred frames go by fast when everything is just sine curves and noise.</p>
+        <figure>
+          <video controls loop playsinline muted preload="auto" width="960">
+            <source src="../videos/wood-shader.ppm.webm" type="video/webm">
+            Sorry, your browser can&apos;t play this inline video.
+          </video>
+          <figcaption>PPM frames stitched into a drifting wave.</figcaption>
+        </figure>
+        <p>After watching it for a while I missed the circular grain, so I brought the rotation math back, eased off the wobble, and left just a little jitter on <code>x</code>. The second render keeps more of the wood streaks while still wiggling.</p>
+        <figure>
+          <video controls loop playsinline muted preload="auto" width="960">
+            <source src="../videos/wood-shader-swirly.webm" type="video/webm">
+            Sorry, your browser can&apos;t play this inline video.
+          </video>
+          <figcaption>Second pass keeps the lines bent like wood, but still dances a bit.</figcaption>
+        </figure>
+        <p>For the last pass I layered in a modern palette (lifted from the light-and-color notes) and let the domain warps push the wood lines into tighter wave interference.</p>
+        <figure>
+          <video controls loop playsinline muted preload="auto" width="960">
+            <source src="../videos/wood-shader-trippy.webm" type="video/webm">
+            Sorry, your browser can&apos;t play this inline video.
+          </video>
+          <figcaption>Final iteration keeps the wood grain but paints it with those shifting palette bands.</figcaption>
+        </figure>
+      </section>
+
+      <section>
+        <h2>What’s next</h2>
+        <p>This was just for fun, but the pipeline is ready for other shaders. I might try a CRT mask, or maybe a fake watercolor wash. Either way it’s nice to remember that a weekend project can be a single plain script and a pile of bytes.</p>
+      </section>
+    </article>
+  </main>
+
+  <aside>
+    <section>
+      <h2>Related Topics</h2>
+      <ul>
+        <li><a href="https://inconvergent.net/generative/" rel="external noopener" target="_blank">Generative art tutorials</a></li>
+        <li><a href="https://x.com/tsoding/status/1989446257882829223" rel="external noopener" target="_blank">Plain-text animation pipelines</a></li>
+        <li><a href="https://ffmpeg.org/ffmpeg.html" rel="external noopener" target="_blank">ffmpeg command recipes</a></li>
+      </ul>
+    </section>
+  </aside>
+
+  <footer>
+    <nav aria-label="Post navigation">
+      <a href="../index.html" rel="home">← Back to blog</a>
+    </nav>
+    <p><small>Last updated: <time datetime="2025-11-16">November 16, 2025</time></small></p>
+  </footer>
+</body>
+</html>
