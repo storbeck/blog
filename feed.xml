@@ -6,7 +6,15 @@
     <description>Technical blog by Geoff Storbeck covering frontend development, web performance, security, DevOps, and practical tooling.</description>
     <language>en</language>
     <atom:link href="https://storbeck.dev/feed.xml" rel="self" type="application/rss+xml" />
-    <lastBuildDate>Sun, 16 Nov 2025 12:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 18 Nov 2025 12:00:00 +0000</lastBuildDate>
+
+    <item>
+      <title>Fonts Carry Voice</title>
+      <link>https://storbeck.dev/posts/2025-11-17-font-character-guide.html</link>
+      <guid>https://storbeck.dev/posts/2025-11-17-font-character-guide.html</guid>
+      <pubDate>Mon, 17 Nov 2025 12:00:00 +0000</pubDate>
+      <description>One animated “A” auditioning for six roles, plus a playbook for choosing type on purpose—perfect if you keep defaulting to Inter and hope it sounds unique.</description>
+    </item>
 
     <item>
       <title>PPM Wave Shader Jam</title>

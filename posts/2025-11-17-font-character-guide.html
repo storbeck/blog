@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Practical typography systems from a UX/front-end perspective: scales, spacing, family pairings, and side-by-side demos that show both great and disastrous treatments of the same layout.">
+  <meta name="author" content="Storbeck">
+  <title>Fonts Carry Voice - Storbeck Blog</title>
+  <link rel="preconnect" href="https://github.com">
+  <link rel="dns-prefetch" href="https://www.linkedin.com">
+  <link rel="stylesheet" href="../styles.css">
+  <meta itemprop="author" content="Geoff Storbeck">
+  <meta itemprop="headline" content="Fonts Carry Voice">
+  <meta itemprop="datePublished" content="2025-11-17">
+  <meta itemprop="description" content="Practical typography systems from a UX/front-end perspective: scales, spacing, family pairings, and side-by-side demos that show both great and disastrous treatments of the same layout.">
+  <meta itemprop="url" content="https://storbeck.dev/posts/2025-11-17-font-character-guide.html">
+  <meta itemprop="mainEntityOfPage" content="https://storbeck.dev/posts/2025-11-17-font-character-guide.html">
+  <meta itemprop="inLanguage" content="en">
+  <meta itemprop="genre" content="Blog">
+</head>
+<body>
+  <header>
+    <nav aria-label="Site navigation">
+      <a href="../index.html" rel="home">← Storbeck Blog</a>
+    </nav>
+  </header>
+
+  <main>
+    <article itemscope itemtype="http://schema.org/BlogPosting">
+      <header>
+        <h1 itemprop="headline">Fonts Carry Voice</h1>
+        <p>
+          <time datetime="2025-11-19" itemprop="datePublished">November 19, 2025 • typography basics</time>
+        </p>
+      </header>
+
+      <section>
+        <p>Fonts set the mood long before the copy unfolds. Their curves, weight, and spacing whisper “courtroom memo,” “text from a friend,” or “skip this ad” before the reader processes the words.</p>
+        <p>Your users have spent a lifetime building lightning-fast associations:</p>
+        <ul>
+          <li>Dense Times New Roman → “official document, pay attention.”</li>
+          <li>Rounded, lowercase sans → “a friend texting me.”</li>
+          <li>Cramped 8 pt → “boilerplate, safe to ignore.”</li>
+        </ul>
+        <p>They feel these patterns in milliseconds—long before the prefrontal cortex finishes reading the sentence. That’s why a rushed font choice quietly undermines everything else you’re trying to say. The copy can be perfect, the hierarchy flawless, but if the voice is wrong the message still lands flat.</p>
+      </section>
+
+      <section id="type-lab">
+        <style>
+          .type-lab-media {
+            margin: 0;
+            padding-bottom: 1rem;
+          }
+          .type-lab-media video {
+            float: left;
+            margin-right: 1em;
+            display: block;
+          }
+          .type-lab-media figcaption {
+            margin: 0;
+          }
+          .type-lab-carousel {
+            border: 1px solid #e0e0e0;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            padding-top: 0.5rem;
+            margin-top: 1rem;
+          }
+          .type-lab-carousel .type-carousel-controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+          }
+          .type-lab-carousel .type-carousel-controls button {
+            border: 1px solid #b4b4b4;
+            background: #fff;
+            border-radius: 999px;
+            font-size: 0.85rem;
+            padding: 0.35rem 0.85rem;
+            cursor: pointer;
+          }
+          .type-lab-carousel .type-carousel-controls button[aria-pressed="true"] {
+            background: #111;
+            color: #fff;
+          }
+          .type-lab-carousel .type-carousel-panels article {
+            border-top: 1px solid #ededed;
+            padding-top: 1rem;
+          }
+          </style>
+
+        <h2>Letterforms show up as characters</h2>
+        <figure class="type-lab-media">
+          <video controls loop muted playsinline width="256" height="256" aria-describedby="letter-a-caption">
+            <source src="../videos/letter-a-loop.mp4" type="video/mp4">
+            Sorry, your browser does not support embedded videos. You can <a href="../videos/letter-a-loop.mp4">download the clip</a> instead.
+          </video>
+          <figcaption id="letter-a-caption">
+            <p>Change the shape or width of a letter and you change how the words feel. Sharp serifs feel formal, rounded sans faces feel friendly, and tall condensed lines feel urgent even when the sentence stays the same.</p>
+            <p>People notice those clues before they finish reading. That’s why type choices are not just decoration—they set the mood of the message. Use the full range on purpose so the font matches the idea you want to land.</p>
+          </figcaption>
+        </figure>
+
+        <div class="type-lab-carousel">
+          <div class="type-carousel" data-active="0">
+            <p><strong>Experiment!</strong> Same content, different fonts. Which one feels right to you?</p>
+            <div class="type-carousel-controls" role="tablist">
+              <button type="button" data-slide="0" aria-pressed="true">1</button>
+              <button type="button" data-slide="1" aria-pressed="false">2</button>
+              <button type="button" data-slide="2" aria-pressed="false">3</button>
+              <button type="button" data-slide="3" aria-pressed="false">4</button>
+              <button type="button" data-slide="4" aria-pressed="false">5</button>
+              <button type="button" data-slide="5" aria-pressed="false">6</button>
+            </div>
+            <div style="border-top: 1px solid #e0e0e0; margin-top: 1rem;"></div>
+            <div class="type-carousel-panels">
+                  <article data-panel="0">
+                    <p style="font-family: 'Times New Roman', Georgia, serif; font-size: 2.8rem; font-weight: 700; margin: 0 0 0.15rem; letter-spacing: -0.02em;">Shipping Status Update</p>
+                    <p style="font-family: 'Times New Roman', Georgia, serif; font-size: 1.05rem; margin: 0 0 0.4rem;">Orders placed before 2 p.m. ship overnight. Everything else leaves the warehouse tomorrow morning.</p>
+                    <p style="font-family: 'Source Sans 3', 'Helvetica Neue', Arial, sans-serif; font-size: 0.9rem; margin: 0;">324 pending packages • 98.2% on time</p>
+                  </article>
+
+                  <article data-panel="1" hidden>
+                    <p style="font-family: 'Nunito', 'SF Pro Rounded', system-ui, sans-serif; font-size: 1.9rem; font-weight: 600; margin: 0 0 0.2rem;">shipping status update</p>
+                    <p style="font-family: 'Nunito', 'SF Pro Rounded', system-ui, sans-serif; font-size: 1rem; line-height: 1.9; margin: 0 0 0.4rem;">orders placed before 2 p.m. ship overnight.<br>everything else leaves the warehouse tomorrow morning.</p>
+                    <p style="font-family: 'Space Mono', 'Source Code Pro', monospace; font-size: 0.9rem; margin: 0;">324 pending packages • 98.2% on time</p>
+                  </article>
+
+                  <article data-panel="2" hidden>
+                    <p style="font-family: 'Helvetica Neue Condensed', 'Arial Narrow', sans-serif; font-size: 2.3rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; margin: 0.2rem 0;">Shipping Status Update</p>
+                    <p style="font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 1rem; letter-spacing: 0.08em; margin: 0 0 0.2rem; text-transform: uppercase;">ORDERS PLACED BEFORE 2 P.M. SHIP OVERNIGHT.</p>
+                    <p style="font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 1rem; letter-spacing: 0.08em; margin: 0 0 0.4rem; text-transform: uppercase;">everything else leaves the warehouse tomorrow morning.</p>
+                    <p style="font-family: 'Consolas', 'Courier New', monospace; font-size: 0.85rem; letter-spacing: 0.2em; margin: 0;">324 pending packages • 98.2% on time</p>
+                  </article>
+
+                  <article data-panel="3" hidden>
+                    <p style="font-family: 'Cooper Hewitt', 'Avant Garde', 'Gill Sans', sans-serif; font-size: 2.4rem; font-weight: 500; margin: 0 0 0.5rem; letter-spacing: 0.03em;">Shipping Status Update</p>
+                    <p style="font-family: 'Cooper Hewitt', 'Avant Garde', 'Gill Sans', sans-serif; font-size: 1.2rem; line-height: 1.7; margin: 0 0 0.9rem;">Orders placed before 2 p.m. ship overnight. Everything else leaves the warehouse tomorrow morning.</p>
+                    <p style="font-family: 'Fira Mono', 'Source Code Pro', monospace; font-size: 0.95rem; margin: 0;">324 pending packages • 98.2% on time</p>
+                  </article>
+
+                  <article data-panel="4" hidden>
+                    <p style="font-family: 'Times New Roman', Georgia, serif; font-size: 0.8rem; line-height: 1.05; margin: 0 0 0.4rem;">Orders placed before 2 p.m. ship overnight. Everything else leaves the warehouse tomorrow morning.</p>
+                    <p style="font-size: 0.7rem; margin: 0;">324 open tickets • 98.2% on time</p>
+                  </article>
+
+                  <article data-panel="5" hidden>
+                    <p style="font-family: 'Impact', 'Arial Black', sans-serif; font-size: 2.6rem; text-transform: uppercase; margin: 0 0 0.3rem; letter-spacing: 0.05em;">Shipping Status Update</p>
+                    <p style="font-family: 'Impact', 'Arial Black', sans-serif; font-size: 1.6rem; text-transform: uppercase; margin: 0 0 0.4rem;">Orders placed before 2 p.m. ship overnight.</p>
+                    <p style="font-family: 'Impact', 'Arial Black', sans-serif; font-size: 1.4rem; text-transform: uppercase; margin: 0 0 0.4rem;">Everything else leaves tomorrow morning.</p>
+                    <p style="font-family: 'Impact', 'Arial Black', sans-serif; font-size: 1.2rem; text-transform: uppercase; margin: 0;">324 open tickets • 98.2% on time</p>
+                  </article>
+          </div>
+        </div>
+
+        <script>
+              (function() {
+                const carousel = document.querySelector('.type-carousel');
+                if (!carousel) return;
+                const buttons = carousel.querySelectorAll('[data-slide]');
+                const panels = carousel.querySelectorAll('[data-panel]');
+                function show(index) {
+                  buttons.forEach((btn) => btn.setAttribute('aria-pressed', btn.dataset.slide === index ? 'true' : 'false'));
+                  panels.forEach((panel) => {
+                    panel.hidden = panel.dataset.panel !== index;
+                  });
+                }
+                buttons.forEach((btn) => {
+                  btn.addEventListener('click', () => show(btn.dataset.slide));
+                });
+                show('0');
+              })();
+        </script>
+      </section>
+
+      <section>
+        <h2>Why most products sound identical</h2>
+        <p>Open ten SaaS dashboards in new tabs. Nine of them are Inter (or some close cousin) at the exact default weights and scales Google serves. Inter is a masterpiecene of legibility and versatility, but it’s also the default. It’s the Helvetica of the web. It’s the safe choice, and that’s why it’s everywhere.</p>
+        <p>But it’s not the only choice. It’s not even the best choice for every product. It’s just the one that’s easiest to pick without thinking.</p>
+        <p>Every font is a tool for intent. <a href="https://creativemarket.com/blog/grotesque-fonts">Grotesques</a>, <a href="https://blog.spoongraphics.co.uk/articles/my-top-30-fonts-with-the-sexiest-ampersands">flamboyant serifs</a>, <a href="https://creativemarket.com/blog/what-is-a-monospaced-font">rigid monos</a>—all of them invite you to ask, “why this one, for this sentence, in this moment?”</p>
+      </section>
+
+      <section>
+        <h2>Further Reading</h2>
+        <p>This post is barely a postcard into the world of typography. <a href="https://www.hustwit.com/helvetica">Helvetica</a> (the documentary) is a great 80-minute crash course on why type matters. If you want a deep dive into Typography, Matthew Butterick’s <a href="https://practicaltypography.com/">Practical Typography</a> covers pretty much every rule and principle you'd need, from page layout to detailed typesetting techniques. </p>
+        <p>Play with type. Break it intentionally to see what happens. Pay attention to how it feels. Your users will feel the difference even when they can’t explain why.</p>
+      </section>
+
+    </article>
+  </main>
+
+  <footer>
+    <nav aria-label="Post navigation">
+      <a href="../index.html" rel="home">← Back to blog</a>
+    </nav>
+    <p><small>Last updated: <time datetime="2025-11-19">November 19, 2025</time></small></p>
+  </footer>
+</body>
+</html>
