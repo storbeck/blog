@@ -17,14 +17,6 @@
     </item>
 
     <item>
-      <title>Menu Bar Roku Remote</title>
-      <link>https://storbeck.dev/posts/2025-11-29-roku-menu-bar-remote.html</link>
-      <guid>https://storbeck.dev/posts/2025-11-29-roku-menu-bar-remote.html</guid>
-      <pubDate>Sat, 29 Nov 2025 12:00:00 +0000</pubDate>
-      <description>Built a tiny AppKit menu bar Roku remote for myself: quick LAN discovery, cached devices, wake-on-LAN power, keyboard typing, and why it stays closed for now.</description>
-    </item>
-
-    <item>
       <title>Fonts Carry Voice</title>
       <link>https://storbeck.dev/posts/2025-11-17-font-character-guide.html</link>
       <guid>https://storbeck.dev/posts/2025-11-17-font-character-guide.html</guid>
