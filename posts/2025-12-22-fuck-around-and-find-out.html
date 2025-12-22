@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="An argument for deliberate experimentation in code: turn the knobs to extremes, break things on purpose, and learn the system’s real shape beyond what docs and tutorials show.">
+  <meta name="author" content="Storbeck">
+  <title>Fuck Around and Find Out - Storbeck Blog</title>
+  <link rel="preconnect" href="https://github.com">
+  <link rel="dns-prefetch" href="https://www.linkedin.com">
+  <link rel="stylesheet" href="../styles.css">
+  <meta itemprop="author" content="Geoff Storbeck">
+  <meta itemprop="headline" content="Fuck Around and Find Out">
+  <meta itemprop="datePublished" content="2025-12-22">
+  <meta itemprop="description" content="An argument for deliberate experimentation in code: turn the knobs to extremes, break things on purpose, and learn the system’s real shape beyond what docs and tutorials show.">
+  <meta itemprop="url" content="https://storbeck.dev/posts/2025-12-22-fuck-around-and-find-out.html">
+  <meta itemprop="mainEntityOfPage" content="https://storbeck.dev/posts/2025-12-22-fuck-around-and-find-out.html">
+  <meta itemprop="inLanguage" content="en">
+  <meta itemprop="genre" content="Blog">
+</head>
+<body>
+  <header>
+    <nav aria-label="Site navigation">
+      <a href="../index.html" rel="home">← Storbeck Blog</a>
+    </nav>
+  </header>
+
+  <main>
+    <article itemscope itemtype="http://schema.org/BlogPosting">
+      <header>
+        <h1 itemprop="headline">Fuck Around and Find Out</h1>
+        <p>
+          <time datetime="2025-12-22" itemprop="datePublished">Published December 22, 2025</time>
+          <span> • </span>
+          <span>Learning / Programming</span>
+        </p>
+      </header>
+
+      <section>
+        <p>There's a style of software engineering that's all about efficiency: grab the ticket, skim the docs, follow the recommended patterns, ship it fast. It gets things done. But it often leaves you with only a surface-level grasp of the system—like knowing how to drive a car without ever popping the hood.</p>
+        <p>The real depth comes from something messier: deliberate experimentation. Turn the dials to absurd extremes. Feed it bad data on purpose. Chain things in ways that feel wrong. No agenda, no deadline—just curiosity. Fuck around and find out what actually happens.</p>
+      </section>
+
+      <section>
+        <h2>The Trap of Efficiency</h2>
+        <p>As adults, we're obsessed with optimization. Eyes on the prize, straight line to the goal. Anything off-path? Waste of time. Distraction. Inefficiency.</p>
+        <p>But that's the trap. The "wasted" time—the detours, the dead ends—is where intuition forms. It's where you see the system's true shape: the hidden failure modes, the quirky behaviors, the edges no tutorial mentions.</p>
+        <p>Intentionally breaking things in a safe sandbox is like putting the code under a microscope. You watch it buckle in unexpected ways and learn <em>why</em>.</p>
+        <figure>
+          <picture>
+            <source type="image/webp" srcset="../images/explore-vs-goal-400w.webp 400w, ../images/explore-vs-goal-800w.webp 800w, ../images/explore-vs-goal-1200w.webp 1200w">
+            <source type="image/jpeg" srcset="../images/explore-vs-goal-400w.jpg 400w, ../images/explore-vs-goal-800w.jpg 800w, ../images/explore-vs-goal-1200w.jpg 1200w">
+            <img src="../images/explore-vs-goal-800w.jpg" alt="Two paths: a straight shot to the goal and a winding route full of stops." width="800" height="533" loading="lazy" decoding="async">
+          </picture>
+          <figcaption>Sometimes the scenic route teaches you more than the fastest path.</figcaption>
+        </figure>
+      </section>
+
+      <section>
+        <h2>Kids Get It Right</h2>
+        <p>My four- and five-year-olds live in permanent exploration mode. Sure, they watch YouTube tutorials sometimes. But their best discoveries? Pure trial and error. Button mashing. Random combinations. Poking every corner.</p>
+        <p>Take my son in <em>Steal a Brainrot</em> on Roblox—a wild PvP tycoon full of meme characters that generate cash. The big loop is "rebirth": grind money and brainrots, reset your progress, and unlock permanent perks.</p>
+        <figure>
+          <picture>
+            <source type="image/webp" srcset="../images/steal-a-brainrot-400w.webp 400w, ../images/steal-a-brainrot-800w.webp 800w, ../images/steal-a-brainrot-1200w.webp 1200w">
+            <source type="image/jpeg" srcset="../images/steal-a-brainrot-400w.jpg 400w, ../images/steal-a-brainrot-800w.jpg 800w, ../images/steal-a-brainrot-1200w.jpg 1200w">
+            <img src="../images/steal-a-brainrot-800w.jpg" alt="In-game screenshot from Steal a Brainrot on Roblox." width="800" height="443" loading="lazy" decoding="async">
+          </picture>
+          <figcaption>Steal a Brainrot, where rebirth resets everything for a new run.</figcaption>
+        </figure>
+        <p>Grinding solo is slow, especially with server hopping. So he roped in his sister: she'd steal his top money-makers right before rebirth, then steal them back after for a head start.</p>
+        <p>One day, she quit early. He didn't want to lose those valuable brainrots to the reset. So he tried something simple: grab one (mid-steal) and rebirth while holding it.</p>
+        <p>It worked. The held brainrot carried over straight into his new inventory. Solo exploit discovered—no duo required. Probably an unintended glitch, but game-changing. Now instead of starting with $0 he can start with a $1m head start into the next round.</p>
+        <p>He wasn't hunting for glitches. No grand plan. Just: "What if?" He fucked around, found out, and unlocked a new way to play.</p>
+        <p>He does this in every game. Endless glitches, shortcuts, weird interactions. Not because he's some mini-hacker—he's five. He just has time, no pressure to "win right," and boundless curiosity.</p>
+      </section>
+
+      <section>
+        <h2>Bring That Energy to Code</h2>
+        <p>This is the mindset I crave when programming. Not just "What's the best practice?" but "What breaks if I push this?"</p>
+        <p>Try it:</p>
+        <ul>
+          <li>Crank a number to infinity (or close enough).</li>
+          <li>Throw complete garbage at your function.</li>
+          <li>Rip out the guards and watch the cascade.</li>
+          <li>Do the forbidden combo, just to see.</li>
+        </ul>
+        <p>It might explode spectacularly. Or quietly succeed in a bizarre way. Either outcome teaches you something docs never will.</p>
+        <p>Next time production throws a weird error, you'll recognize it—because you've seen its cousin in your playground experiments.</p>
+      </section>
+
+      <section>
+        <p>So when you're stuck, bored, or too focused on the "right" way: pause. Detour. Play. Explore the scenic route.</p>
+        <p>That's where the real learning hides. That's where it stays fun.</p>
+        <p>There's a rotating cube UI concept floating around on UX StackExchange that I still think about years later. I honestly can't tell if it's a troll or serious design proposal, but someone clearly fucked around with form inputs and now that weird cube lives rent-free in my brain. That's the point: most experiments won't ship, but a few spark ideas you carry forward.</p>
+        <figure>
+          <img src="../images/rotating-form-cube.gif" alt="Animated rotating cube interface concept for form inputs." width="582" height="540" loading="lazy" decoding="async">
+          <figcaption>A memorable experiment that might not be practical, but it keeps the creative gears turning.</figcaption>
+        </figure>
+      </section>
+    </article>
+  </main>
+
+  <aside>
+    <section>
+      <h2>Related Topics</h2>
+      <ul>
+        <li>Learning by doing</li>
+        <li>Debugging instincts</li>
+        <li>Playful experimentation</li>
+      </ul>
+    </section>
+  </aside>
+
+  <footer>
+    <nav aria-label="Post navigation">
+      <a href="../index.html" rel="home">← Back to blog</a>
+    </nav>
+    <p><small>Last updated: <time datetime="2025-12-22">December 22, 2025</time></small></p>
+  </footer>
+</body>
+</html>

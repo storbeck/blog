@@ -6,7 +6,15 @@
     <description>Technical blog by Geoff Storbeck covering frontend development, web performance, security, DevOps, and practical tooling.</description>
     <language>en</language>
     <atom:link href="https://storbeck.dev/feed.xml" rel="self" type="application/rss+xml" />
-    <lastBuildDate>Sat, 06 Dec 2025 12:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 22 Dec 2025 12:00:00 +0000</lastBuildDate>
+
+    <item>
+      <title>Fuck Around and Find Out</title>
+      <link>https://storbeck.dev/posts/2025-12-22-fuck-around-and-find-out.html</link>
+      <guid>https://storbeck.dev/posts/2025-12-22-fuck-around-and-find-out.html</guid>
+      <pubDate>Mon, 22 Dec 2025 12:00:00 +0000</pubDate>
+      <description>An argument for deliberate experimentation in code: turn the knobs to extremes, break things on purpose, and learn the system’s real shape beyond what docs and tutorials show.</description>
+    </item>
 
     <item>
       <title>Rediscovering My Craft: Layoffs, Mental Health, and Frontend UI</title>
