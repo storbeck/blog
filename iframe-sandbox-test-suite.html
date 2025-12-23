@@ -158,6 +158,19 @@
       font-family: var(--mono);
     }
 
+    .remediation {
+      display: none;
+      padding: 0.6rem 0.9rem;
+      border-radius: 12px;
+      border: 1px solid #e7d6c2;
+      background: #fff6e8;
+      color: #6a3f2d;
+    }
+
+    .remediation.active {
+      display: block;
+    }
+
     dl {
       margin: 0;
       display: grid;
@@ -238,8 +251,33 @@
       </dl>
     </section>
 
+    <section aria-labelledby="usage-title">
+      <h2 id="usage-title">How to Use This Page</h2>
+      <p class="mono">Run the tests in a normal tab, then in sandboxed iframes to see which capabilities flip between success and blocked.</p>
+      <ol>
+        <li>Open this page directly to capture baseline results.</li>
+        <li>Embed it in an iframe with sandbox flags and compare the results log.</li>
+        <li>Adjust the sandbox flags to see which APIs become available or blocked.</li>
+      </ol>
+      <p class="mono">If a test turns green, a remediation note appears under that section to show how to block it.</p>
+      <p class="mono">Example iframe variants:</p>
+      <pre class="mono"><code>&lt;iframe src=&quot;iframe-sandbox-test-suite.html&quot;&gt;&lt;/iframe&gt;</code></pre>
+      <pre class="mono"><code>&lt;iframe src=&quot;iframe-sandbox-test-suite.html&quot; sandbox&gt;&lt;/iframe&gt;</code></pre>
+      <pre class="mono"><code>&lt;iframe src=&quot;iframe-sandbox-test-suite.html&quot; sandbox=&quot;allow-scripts allow-forms&quot;&gt;&lt;/iframe&gt;</code></pre>
+      <pre class="mono"><code>&lt;iframe src=&quot;iframe-sandbox-test-suite.html&quot; sandbox=&quot;allow-scripts allow-same-origin&quot;&gt;&lt;/iframe&gt;</code></pre>
+      <p>Common toggles:</p>
+      <ul>
+        <li><span class="mono">allow-scripts</span> enables inline and dynamic scripts.</li>
+        <li><span class="mono">allow-forms</span> enables form submissions.</li>
+        <li><span class="mono">allow-popups</span> affects <span class="mono">window.open</span>.</li>
+        <li><span class="mono">allow-top-navigation</span> affects top-frame navigation attempts.</li>
+        <li><span class="mono">allow-same-origin</span> controls access to storage and top-frame reads.</li>
+      </ul>
+    </section>
+
     <section aria-labelledby="nav-title">
       <h2 id="nav-title">Navigation Escape</h2>
+      <p class="mono remediation" data-remediation-for="link-top,link-parent,link-self,link-blank,loc-top,loc-parent,loc-self,history-push,history-replace">If blocked and you expect navigation to work, add <span class="mono">allow-top-navigation-by-user-activation</span> (or <span class="mono">allow-top-navigation</span>) and <span class="mono">allow-scripts</span> for scripted redirects.</p>
       <article>
         <h3>Anchor targets</h3>
         <p class="mono">Links are prewired to attempt navigation. Results log updates on click.</p>
@@ -284,6 +322,7 @@
 
     <section aria-labelledby="window-title">
       <h2 id="window-title">Window Creation &amp; Popups</h2>
+      <p class="mono remediation" data-remediation-for="open-blank,open-top,open-named,open-noopener,open-noreferrer">If blocked and you expect popups, add <span class="mono">allow-popups</span> (and <span class="mono">allow-popups-to-escape-sandbox</span> if needed).</p>
       <article>
         <h3>window.open targets</h3>
         <p class="row">
@@ -312,6 +351,7 @@
 
     <section aria-labelledby="form-title">
       <h2 id="form-title">Form Submission</h2>
+      <p class="mono remediation" data-remediation-for="form-top,form-parent,form-self">If blocked and you expect form submissions, add <span class="mono">allow-forms</span>.</p>
       <p class="mono">Submitting with target _top/_parent/_self may navigate away from this page.</p>
       <article>
         <h3>POST to example.com (dummy)</h3>
@@ -345,6 +385,7 @@
 
     <section aria-labelledby="storage-title">
       <h2 id="storage-title">Storage &amp; Origin Access</h2>
+      <p class="mono remediation" data-remediation-for="cookie-read,cookie-write,localstorage,sessionstorage,indexeddb">If blocked and you expect storage, add <span class="mono">allow-same-origin</span> and keep the frame on the same origin as the host.</p>
       <article>
         <h3>document.cookie read/write</h3>
         <p class="row">
@@ -378,6 +419,7 @@
 
     <section aria-labelledby="js-title">
       <h2 id="js-title">JavaScript Capabilities</h2>
+      <p class="mono remediation" data-remediation-for="inline-script,data-script,eval,new-function,alert,confirm,prompt">If blocked and you expect scripts, add <span class="mono">allow-scripts</span> and relax CSP for inline, <span class="mono">data:</span>, or <span class="mono">'unsafe-eval'</span> as needed.</p>
       <article>
         <h3>Inline script check</h3>
         <p class="row">
@@ -420,6 +462,7 @@
 
     <section aria-labelledby="topframe-title">
       <h2 id="topframe-title">Top-frame Access Checks</h2>
+      <p class="mono remediation" data-remediation-for="top-location,top-postmessage">If blocked and you expect top-frame access, keep the frame same-origin and add <span class="mono">allow-same-origin</span>. Otherwise use <span class="mono">postMessage</span> with origin checks.</p>
       <article>
         <h3>Read top.location.href</h3>
         <p class="row">
@@ -435,6 +478,7 @@
 
     <section aria-labelledby="pointer-title">
       <h2 id="pointer-title">Pointer &amp; Focus</h2>
+      <p class="mono remediation" data-remediation-for="focus,pointer-lock">If blocked and you expect pointer lock, add <span class="mono">allow-pointer-lock</span> and ensure a user gesture.</p>
       <article>
         <h3>Focus / Pointer Lock</h3>
         <p class="row">
@@ -450,6 +494,7 @@
 
     <section aria-labelledby="download-title">
       <h2 id="download-title">Downloads</h2>
+      <p class="mono remediation" data-remediation-for="download-link">If blocked and you expect downloads, add <span class="mono">allow-downloads</span> (or <span class="mono">allow-downloads-without-user-activation</span>).</p>
       <article>
         <h3>Trigger download link</h3>
         <p class="row">
@@ -463,6 +508,7 @@
 
     <section aria-labelledby="clipboard-title">
       <h2 id="clipboard-title">Clipboard</h2>
+      <p class="mono remediation" data-remediation-for="clipboard-write,clipboard-read">If blocked and you expect clipboard access, add <span class="mono">allow=&quot;clipboard-read; clipboard-write&quot;</span> on the iframe and require a user gesture.</p>
       <article>
         <h3>Read / write</h3>
         <p class="row">
@@ -478,6 +524,7 @@
 
     <section aria-labelledby="fullscreen-title">
       <h2 id="fullscreen-title">Fullscreen</h2>
+      <p class="mono remediation" data-remediation-for="fullscreen">If blocked and you expect fullscreen, add <span class="mono">allow-fullscreen</span> and require a user gesture.</p>
       <article>
         <h3>documentElement.requestFullscreen</h3>
         <p class="row">
@@ -489,6 +536,7 @@
 
     <section aria-labelledby="permissions-title">
       <h2 id="permissions-title">Permissions &amp; APIs</h2>
+      <p class="mono remediation" data-remediation-for="geolocation,notifications,media-devices">If blocked and you expect access, add iframe <span class="mono">allow</span> permissions (for example: <span class="mono">geolocation; microphone; camera</span>) and configure Permissions-Policy.</p>
       <article>
         <h3>Geolocation</h3>
         <p class="row">
@@ -529,6 +577,7 @@
 
       var logList = document.getElementById("results-log");
       var statusMap = new Map();
+      var testState = new Map();
 
       function setStatus(testId, state, detail) {
         var status = statusMap.get(testId);
@@ -542,6 +591,8 @@
           status.className = "status " + state;
           status.textContent = detail ? state + ": " + detail : state;
         }
+        testState.set(testId, state);
+        updateRemediations();
       }
 
       function appendLog(testId, state, detail) {
@@ -550,6 +601,27 @@
         item.textContent = "[" + time + "] " + testId + " -> " + state + (detail ? " | " + detail : "");
         logList.prepend(item);
         setStatus(testId, state, detail);
+      }
+
+      function updateRemediations() {
+        document.querySelectorAll(".remediation").forEach(function (el) {
+          var list = el.getAttribute("data-remediation-for");
+          if (!list) {
+            return;
+          }
+          var ids = list.split(",").map(function (id) {
+            return id.trim();
+          });
+          var active = ids.some(function (id) {
+            var state = testState.get(id);
+            return state === "success";
+          });
+          if (active) {
+            el.classList.add("active");
+          } else {
+            el.classList.remove("active");
+          }
+        });
       }
 
       function classifyError(err) {

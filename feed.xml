@@ -6,7 +6,15 @@
     <description>Technical blog by Geoff Storbeck covering frontend development, web performance, security, DevOps, and practical tooling.</description>
     <language>en</language>
     <atom:link href="https://storbeck.dev/feed.xml" rel="self" type="application/rss+xml" />
-    <lastBuildDate>Mon, 22 Dec 2025 12:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 23 Dec 2025 12:00:00 +0000</lastBuildDate>
+
+    <item>
+      <title>Iframe Sandbox Breakout Test Suite</title>
+      <link>https://storbeck.dev/posts/2025-12-23-iframe-sandbox-test-suite.html</link>
+      <guid>https://storbeck.dev/posts/2025-12-23-iframe-sandbox-test-suite.html</guid>
+      <pubDate>Tue, 23 Dec 2025 12:00:00 +0000</pubDate>
+      <description>A plain HTML test page for probing iframe sandbox security without the dashboard, covering navigation, storage, JS APIs, and permissions.</description>
+    </item>
 
     <item>
       <title>Fuck Around and Find Out</title>
