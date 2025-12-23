@@ -114,10 +114,10 @@
         "./content/database.compressed"
       ],
       "#content/adapter": [
-        "./db0/connectors/better-sqlite3"
+        "../node_modules/@nuxt/content/dist/runtime/internal/connectors/node-sqlite"
       ],
       "#content/local-adapter": [
-        "./db0/connectors/better-sqlite3"
+        "../node_modules/@nuxt/content/dist/runtime/internal/connectors/node-sqlite"
       ]
     },
     "lib": [
