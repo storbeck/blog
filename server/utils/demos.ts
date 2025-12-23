@@ -1,5 +1,4 @@
-import { readFileSync } from 'node:fs'
-import path from 'node:path'
+import demosJson from '../../data/demos.json'
 
 export type DemoSummary = {
   slug: string
@@ -11,8 +10,7 @@ export type DemoSummary = {
   legacyFile: string
 }
 
-const demosPath = path.join(process.cwd(), 'data', 'demos.json')
-const demos = JSON.parse(readFileSync(demosPath, 'utf8')) as DemoSummary[]
+const demos = demosJson as DemoSummary[]
 
 export const getDemos = () => demos
 
