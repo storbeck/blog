@@ -1,7 +1,7 @@
-import { readFileSync } from 'node:fs'
-import path from 'node:path'
 import { createError, getRouterParam, setHeader } from 'h3'
 import { getDemoBySlug } from '../../utils/demos'
+
+const demoHtmlFiles = import.meta.glob('/legacy/posts/*.html', { as: 'raw', eager: true })
 
 export default defineEventHandler((event) => {
   const slug = getRouterParam(event, 'slug')
@@ -14,8 +14,11 @@ export default defineEventHandler((event) => {
     throw createError({ statusCode: 404, statusMessage: 'Demo not found.' })
   }
 
-  const filePath = path.join(process.cwd(), 'legacy', 'posts', demo.legacyFile)
-  const html = readFileSync(filePath, 'utf8')
+  const filePath = `/legacy/posts/${demo.legacyFile}`
+  const html = demoHtmlFiles[filePath]
+  if (!html) {
+    throw createError({ statusCode: 404, statusMessage: 'Demo file not found.' })
+  }
   setHeader(event, 'content-type', 'text/html; charset=utf-8')
   return html
 })
