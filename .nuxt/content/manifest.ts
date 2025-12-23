@@ -1,5 +1,9 @@
-export const checksums = {}
-export const checksumsStructure = {}
+export const checksums = {
+  "posts": "v3.5.0--iba7yOLHHVlPlIdxq-iskCEihNSqCX8A-OwYMLgguMA"
+}
+export const checksumsStructure = {
+  "posts": "GP0tQNgxSPeGcOZIx0YOWgrafH49RDoag5x2YthFyLE"
+}
 
 export const tables = {
   "posts": "_content_posts",
