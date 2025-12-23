@@ -113,7 +113,7 @@
         "./mdc-imports"
       ],
       "#app-manifest": [
-        "./manifest/meta/dev"
+        "./manifest/meta/69b9431a-3db1-426c-b2bc-c544a12db66c"
       ],
       "#build": [
         "."

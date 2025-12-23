@@ -29,6 +29,7 @@ export default defineNuxtConfig({
   nitro: { preset: 'vercel' },
   modules: ['@nuxt/content'],
   content: {
+    sqliteConnector: 'native',
     renderer: {
       anchorLinks: false
     }
