@@ -28,7 +28,7 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   nitro: {
     preset: 'vercel',
-    serverAssets: [{ baseName: 'legacy', dir: 'legacy' }]
+    serverAssets: [{ baseName: 'legacy', dir: path.resolve(process.cwd(), 'legacy') }]
   },
   modules: ['@nuxt/content'],
   content: {
