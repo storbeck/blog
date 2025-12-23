@@ -1,0 +1,99 @@
+---
+title: "Remove Dead Code with Knip (Streamline Before Upgrades)"
+description: "Use Knip to find and remove dead code, shrink context for AI and humans, and declutter before big upgrades. Includes quick start and iterative cleanup tips."
+date: "2025-10-15"
+category: "Tooling"
+legacyUrl: "/posts/2025-10-15-remove-dead-code-with-knip.html"
+---
+
+<section aria-labelledby="why">
+<h2 id="why">Why Dead Code Hurts</h2>
+<p>Leftover code confuses AI assistants and teammates, increases maintenance surface, hides bugs, and inflates context windows. Before big upgrades, decluttering avoids fixing things that should just be removed.</p>
+</section>
+
+<section aria-labelledby="what">
+<h2 id="what">What Knip Does</h2>
+<p><a href="https://knip.dev/" rel="external noopener noreferrer">Knip</a> statically analyzes your project to find unused files, exports, and dependencies. It understands many frameworks and build tools, and produces actionable reports you can iterate on until you reach an acceptable level of cleanliness.</p>
+</section>
+
+<section aria-labelledby="quickstart">
+<h2 id="quickstart">Quick Start</h2>
+        
+```
+# Add temporarily (or install locally)
+npx knip
+
+# Or install as a dev dependency
+npm i -D knip
+npx knip
+
+# CI-friendly (non-interactive) output
+npx knip --ci
+
+# Machine-readable report (review in your editor)
+npx knip --json > knip-report.json
+```
+
+<p>Start by running Knip without changing anything. Review the report and remove obvious dead code first (unused files/exports and known-dead packages).</p>
+</section>
+
+<section aria-labelledby="iterate">
+<h2 id="iterate">Iterate Until Clean</h2>
+<p>Dead code can be layered. An unused function might call another function that <em>appears</em> used—until you remove the first one. Run Knip multiple times during cleanup:</p>
+        
+```
+# Pass 1: identify and remove the obvious
+npx knip
+
+# Remove dead files/exports/packages
+# ... commit small safe changes ...
+
+# Pass 2+: re-run until results plateau
+npx knip
+```
+
+<p>Small, frequent passes keep risk low and make reviews easy. Stop when the remaining findings are intentional (e.g., dynamic imports, codegen stubs) or out of scope.</p>
+</section>
+
+<section aria-labelledby="package">
+<h2 id="package">Package Scripts and Baseline</h2>
+<p>Add convenience scripts so the whole team runs it the same way:</p>
+        
+```
+{
+"scripts": {
+"knip": "knip",
+"knip:ci": "knip --ci",
+"knip:json": "knip --json > knip-report.json"
+},
+"devDependencies": {
+"knip": "^5"
+}
+}
+```
+
+<p>You can also create a <code>knip.json</code> to ignore known false positives or mark files as entry points. See the docs for patterns and framework presets.</p>
+</section>
+
+<section aria-labelledby="when">
+<h2 id="when">When to Run Knip</h2>
+<ul>
+<li><strong>Before upgrades:</strong> shrink the codebase so you only migrate what matters.</li>
+<li><strong>Before enabling AI tools:</strong> reduce noise so suggestions focus on real code.</li>
+<li><strong>On a schedule:</strong> add a periodic job or a manual checklist item each release.</li>
+</ul>
+</section>
+
+<section aria-labelledby="caveats">
+<h2 id="caveats">Caveats</h2>
+<ul>
+<li>Dynamic usage (reflection, string-based imports) may require explicit <em>include</em> or <em>ignore</em> entries.</li>
+<li>Generated code and plugin systems can look unused—baseline or exclude where appropriate.</li>
+<li>Prefer small PRs; remove code in steps rather than giant diffs.</li>
+</ul>
+</section>
+
+<section aria-labelledby="summary">
+<h2 id="summary">Summary</h2>
+<p>Knip is an effective decluttering tool: run it, remove safe dead code, and repeat until clean. You’ll reduce cognitive load, shrink context for AI and humans, and avoid wasting time upgrading code you don’t need.</p>
+</section>

@@ -1,0 +1,119 @@
+---
+title: "Preventing Secrets from Leaking in Git Repos (Pre‑commit Hook)"
+description: "AI can slip secrets into commits. Offensive security teams use Nosey Parker to find credentials; you can use it pre-commit to stop leaks before they land."
+date: "2025-10-15"
+category: "Security"
+legacyUrl: "/posts/2025-10-15-git-precommit-noseyparker.html"
+---
+
+<section aria-labelledby="why">
+<h2 id="why">Why</h2>
+<p>AI‑assisted coding accelerates delivery—and increases the odds of accidentally staging API keys or passwords. Offensive security teams already use tools like <strong>Nosey Parker</strong> to find leaked credentials in repos. As developers, we can shift left and use the same engine <em>before</em> commit: a tiny pre‑commit hook scans staged files and blocks risky changes automatically.</p>
+</section>
+
+<section aria-labelledby="setup">
+<h2 id="setup">Setup</h2>
+<ol>
+<li>Install Nosey Parker: <a href="https://github.com/praetorian-inc/noseyparker" rel="external noopener noreferrer">github.com/praetorian-inc/noseyparker</a></li>
+<li>Create a hooks folder and add the hook:
+            
+```
+mkdir -p .githooks
+cat > .githooks/pre-commit << 'HOOK'
+#!/usr/bin/env bash
+set -euo pipefail
+if ! command -v noseyparker >/dev/null 2>&1; then
+echo "[noseyparker] Not installed. Install: https://github.com/praetorian-inc/noseyparker"
+echo "[noseyparker] Proceeding without scan."
+exit 0
+fi
+mapfile -t FILES < <(git diff --cached --name-only --diff-filter=ACMR)
+[[ ${#FILES[@]} -eq 0 ]] && exit 0
+TMPDIR=$(mktemp -d 2>/dev/null || mktemp -d -t np)
+trap 'rm -rf "$TMPDIR"' EXIT INT TERM
+for f in "${FILES[@]}"; do
+if git cat-file -e ":$f" 2>/dev/null; then
+mkdir -p "$TMPDIR/$(dirname "$f")"
+git show ":$f" > "$TMPDIR/$f" || true
+fi
+done
+DATASTORE="$TMPDIR/datastore"
+noseyparker scan --datastore "$DATASTORE" "$TMPDIR" >/dev/null 2>&1 || { echo "[noseyparker] scan failed"; exit 1; }
+REPORT=$(noseyparker report --datastore "$DATASTORE" 2>/dev/null || true)
+if [[ -n "$(echo "$REPORT" | sed 's/[[:space:]]//g')" ]]; then
+echo "[noseyparker] Potential secrets detected in staged changes."; echo "---"; echo "$REPORT" | sed -n '1,200p'; echo "---"; exit 1; fi
+exit 0
+HOOK
+chmod +x .githooks/pre-commit
+```
+
+</li>
+<li>Tell Git to use the hooks folder for this repo:
+            
+```
+git config core.hooksPath .githooks
+```
+
+</li>
+</ol>
+<p>The hook scans only <em>staged</em> changes and blocks the commit if it finds likely secrets.</p>
+</section>
+
+<section aria-labelledby="test">
+<h2 id="test">Quick Test</h2>
+<p>Create a throwaway file that looks like a secret and try to commit it. The hook should block and print a short report.</p>
+        
+```
+printf "AWS_ACCESS_KEY_ID=AKIAIOSFODNN7EXAMPLE\nAWS_SECRET_ACCESS_KEY=wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY\n" > tmp-secret.env
+git add tmp-secret.env
+GIT_TRACE=1 GIT_TRACE_SETUP=1 git commit -m "test: should be blocked by noseyparker"
+```
+
+<p>Example output (truncated):</p>
+        
+```
+[noseyparker] Potential secrets detected in staged changes.
+---
+Finding 1: AWS Access Key ID
+File: tmp-secret.env:1
+Match: AKIAIOSFODNN7EXAMPLE
+Finding 2: AWS Secret Access Key
+File: tmp-secret.env:2
+Match: wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
+---
+Aborting commit.
+```
+
+<p>Clean up and confirm a clean commit:</p>
+        
+```
+git reset HEAD tmp-secret.env
+rm tmp-secret.env
+git commit -m "clean commit"
+```
+
+</section>
+
+<section aria-labelledby="how">
+<h2 id="how">What the Hook Does</h2>
+<ul>
+<li>Materializes staged files into a temp directory</li>
+<li>Runs <code>noseyparker scan</code> on that temp directory</li>
+<li>Prints a brief <code>noseyparker report</code> and blocks on findings</li>
+</ul>
+<p>Hook path in this repo: <code>.githooks/pre-commit</code>.</p>
+</section>
+
+<section aria-labelledby="credit">
+<h2 id="credit">Credit</h2>
+<p>Nosey Parker is an open‑source project by <a href="https://github.com/praetorian-inc/noseyparker" rel="external noopener noreferrer">Praetorian</a>. A shout‑out to my former coworker <a href="https://github.com/bradlarsen" rel="external noopener noreferrer">Brad Larsen</a>, a machine learning expert, whose work and advocacy for practical guardrails inspired adding this minimal hook to keep AI‑era coding safer.</p>
+</section>
+
+<section aria-labelledby="notes">
+<h2 id="notes">Notes</h2>
+<ul>
+<li>This is a minimal example to keep friction low; improve as needed for your workflow.</li>
+<li>Rotate any credential that was ever committed—even briefly.</li>
+<li>For CI coverage, run Nosey Parker in your PR pipeline as well.</li>
+</ul>
+</section>

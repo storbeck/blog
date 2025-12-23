@@ -1,0 +1,185 @@
+---
+title: "Gooey SVG (No CSS/JS)"
+description: "Create a gooey, blobby merge effect using pure SVG filters — no external CSS or JavaScript. Includes a minimal filter and two copy/paste examples."
+date: "2025-10-16"
+category: "SVG, UI"
+legacyUrl: "/posts/2025-10-16-gooey-svg.html"
+---
+
+<section aria-labelledby="what">
+<h2 id="what">What is the “gooey” effect?</h2>
+<p>It’s a visual trick that makes nearby shapes blend into a single blobby mass. The core recipe is simple: blur the scene, then apply a high‑contrast threshold on alpha so softly overlapping edges snap together. In SVG, this is a <code>&lt;filter&gt;</code> made from <code>&lt;feGaussianBlur&gt;</code> + <code>&lt;feColorMatrix&gt;</code>.</p>
+<p>If you prefer a primer, see <cite>Lucas Bebber</cite>’s article on CSS‑Tricks (<time datetime="2019-02-22">Feb 22, 2019</time>): <a href="https://css-tricks.com/gooey-effect/" rel="external noopener noreferrer">The Gooey Effect</a>.</p>
+</section>
+
+<section aria-labelledby="filter">
+<h2 id="filter">Minimal SVG filter</h2>
+<figure>
+<figcaption>Copy/paste this <code>&lt;filter&gt;</code> into an <code>&lt;svg&gt;&lt;defs&gt;</code>. Apply with <code>filter="url(#goo)"</code> on a group.</figcaption>
+          
+```
+<svg width="0" height="0" aria-hidden="true" focusable="false">
+<defs>
+<filter id="goo" color-interpolation-filters="sRGB">
+<feGaussianBlur in="SourceGraphic" stdDeviation="8" result="blur" />
+<feColorMatrix in="blur" mode="matrix" values="
+1 0 0 0 0
+0 1 0 0 0
+0 0 1 0 0
+0 0 0 18 -8" result="thresh" />
+<feComposite in="SourceGraphic" in2="thresh" operator="atop" />
+</filter>
+</defs>
+</svg>
+```
+
+</figure>
+<p><strong>Tweak tips:</strong> Increase <code>stdDeviation</code> to blend from farther away. The last row of the matrix (<code>0 0 0 18 -8</code>) boosts and thresholds alpha; higher <code>18</code> makes edges crisper, and shifting <code>-8</code> changes the merge threshold.</p>
+</section>
+
+<section aria-labelledby="merge">
+<h2 id="merge">Example 1 — Merging circles</h2>
+<p>This inline SVG animates two circles so they touch and merge. Everything is self‑contained; no CSS or JavaScript is required.</p>
+<figure>
+<svg width="320" height="160" viewBox="0 0 320 160" role="img" aria-labelledby="merge-title merge-desc">
+<title id="merge-title">Two circles merge into a gooey blob</title>
+<desc id="merge-desc">The circles move toward each other, overlap, and appear as a single shape via a thresholded blur.</desc>
+<defs>
+<filter id="goo-merge" color-interpolation-filters="sRGB">
+<feGaussianBlur in="SourceGraphic" stdDeviation="8" result="b"/>
+<feColorMatrix in="b" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -8" result="t"/>
+<feComposite in="SourceGraphic" in2="t" operator="atop"/>
+</filter>
+</defs>
+<rect width="100%" height="100%" fill="#f4f4f4"/>
+<g filter="url(#goo-merge)">
+<circle cx="100" cy="80" r="28" fill="#4e8cff">
+<animate attributeName="cx" values="100;160;100" dur="3s" repeatCount="indefinite"/>
+</circle>
+<circle cx="220" cy="80" r="28" fill="#4e8cff">
+<animate attributeName="cx" values="220;160;220" dur="3s" repeatCount="indefinite"/>
+</circle>
+</g>
+</svg>
+<figcaption>Two animated circles blend into one when they overlap.</figcaption>
+</figure>
+</section>
+
+<section aria-labelledby="slime">
+<h2 id="slime">Example 2 — Nickelodeon‑style slime</h2>
+<p>Bright green slime pools at the top and drips in blobs. The goo filter fuses the lip and droplets so they feel elastic and sticky — no CSS or JavaScript required.</p>
+<figure>
+<svg width="320" height="200" viewBox="0 0 320 200" role="img" aria-labelledby="slime-title slime-desc">
+<title id="slime-title">Nickelodeon‑like slime drips from a gooey lip</title>
+<desc id="slime-desc">A bumpy slime lip spans the top; staggered droplets fall, stretch, and reattach using an SVG gooey filter.</desc>
+<defs>
+<filter id="goo-slime" color-interpolation-filters="sRGB">
+<feGaussianBlur in="SourceGraphic" stdDeviation="10" result="b"/>
+<feColorMatrix in="b" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 28 -14" result="t"/>
+<feComposite in="SourceGraphic" in2="t" operator="atop"/>
+</filter>
+</defs>
+<rect width="100%" height="100%" fill="#f4f4f4"/>
+<g filter="url(#goo-slime)" fill="#7CFC00">
+<!-- Slime reservoir (bar + scalloped lip) -->
+<rect x="0" y="0" width="320" height="70"/>
+<!-- Scallops along the lip: overlapping circles create a wavy edge -->
+<g>
+<circle cx="20"  cy="70" r="18"/>
+<circle cx="55"  cy="72" r="22"/>
+<circle cx="95"  cy="69" r="20"/>
+<circle cx="135" cy="73" r="24"/>
+<circle cx="180" cy="71" r="19"/>
+<circle cx="220" cy="74" r="23"/>
+<circle cx="265" cy="70" r="20"/>
+<circle cx="300" cy="73" r="18"/>
+</g>
+
+<!-- Big drip A (teardrop + thick stem) -->
+<g>
+<!-- Stem grows downward (rounded rect) -->
+<rect x="76" y="70" width="18" height="18" rx="9" ry="9">
+<animate attributeName="height" dur="2.8s" repeatCount="indefinite"
+values="18;80;122;24" keyTimes="0;0.42;0.74;1"
+calcMode="spline" keySplines=".25 .1 .25 1; .1 .9 .2 1; .2 .8 .2 1" />
+</rect>
+<!-- Side globs add irregular edges -->
+<circle cx="76" cy="110" r="6">
+<animate attributeName="cy" dur="2.8s" repeatCount="indefinite" values="110;170;196" keyTimes="0;0.6;1" />
+</circle>
+<circle cx="94" cy="132" r="5">
+<animate attributeName="cy" dur="2.8s" repeatCount="indefinite" values="132;172;196" keyTimes="0;0.6;1" />
+</circle>
+<!-- Bulb grows and falls -->
+<ellipse cx="85" cy="96" rx="10" ry="8">
+<animate attributeName="cy" dur="2.8s" repeatCount="indefinite"
+values="96;140;196" keyTimes="0;0.46;1"
+calcMode="spline" keySplines=".25 .1 .25 1; .1 .9 .2 1" />
+<animate attributeName="rx" dur="2.8s" repeatCount="indefinite" values="10;24;28" keyTimes="0;0.46;1" />
+<animate attributeName="ry" dur="2.8s" repeatCount="indefinite" values="8;20;24" keyTimes="0;0.46;1" />
+</ellipse>
+<!-- Bottom splash -->
+<ellipse cx="85" cy="196" rx="0" ry="0">
+<animate attributeName="rx" dur="2.8s" repeatCount="indefinite" values="0;0;18;0" keyTimes="0;0.80;0.86;1" />
+<animate attributeName="ry" dur="2.8s" repeatCount="indefinite" values="0;0;7;0" keyTimes="0;0.80;0.86;1" />
+</ellipse>
+</g>
+
+<!-- Big drip B (staggered teardrop) -->
+<g>
+<rect x="156" y="70" width="20" height="18" rx="10" ry="10">
+<animate attributeName="height" dur="3.0s" begin="0.5s" repeatCount="indefinite"
+values="18;90;124;24" keyTimes="0;0.44;0.76;1"
+calcMode="spline" keySplines=".25 .1 .25 1; .1 .9 .2 1; .2 .8 .2 1" />
+</rect>
+<circle cx="156" cy="120" r="6">
+<animate attributeName="cy" dur="3.0s" begin="0.5s" repeatCount="indefinite" values="120;176;196" keyTimes="0;0.6;1" />
+</circle>
+<ellipse cx="166" cy="98" rx="10" ry="8">
+<animate attributeName="cy" dur="3.0s" begin="0.5s" repeatCount="indefinite"
+values="98;146;196" keyTimes="0;0.48;1"
+calcMode="spline" keySplines=".25 .1 .25 1; .1 .9 .2 1" />
+<animate attributeName="rx" dur="3.0s" begin="0.5s" repeatCount="indefinite" values="10;26;30" keyTimes="0;0.48;1" />
+<animate attributeName="ry" dur="3.0s" begin="0.5s" repeatCount="indefinite" values="8;20;26" keyTimes="0;0.48;1" />
+</ellipse>
+<ellipse cx="166" cy="196" rx="0" ry="0">
+<animate attributeName="rx" dur="3.0s" begin="0.5s" repeatCount="indefinite" values="0;0;20;0" keyTimes="0;0.84;0.90;1" />
+<animate attributeName="ry" dur="3.0s" begin="0.5s" repeatCount="indefinite" values="0;0;7;0" keyTimes="0;0.84;0.90;1" />
+</ellipse>
+</g>
+
+<!-- Smaller drip C (asymmetric) -->
+<g>
+<rect x="228" y="70" width="16" height="16" rx="8" ry="8">
+<animate attributeName="height" dur="2.6s" begin="1.0s" repeatCount="indefinite"
+values="16;72;120;22" keyTimes="0;0.46;0.78;1"
+calcMode="spline" keySplines=".25 .1 .25 1; .1 .9 .2 1; .2 .8 .2 1" />
+</rect>
+<circle cx="244" cy="120" r="5">
+<animate attributeName="cy" dur="2.6s" begin="1.0s" repeatCount="indefinite" values="120;178;196" keyTimes="0;0.60;1" />
+</circle>
+<ellipse cx="236" cy="96" rx="9" ry="7">
+<animate attributeName="cy" dur="2.6s" begin="1.0s" repeatCount="indefinite" values="96;144;196" keyTimes="0;0.50;1" />
+<animate attributeName="rx" dur="2.6s" begin="1.0s" repeatCount="indefinite" values="9;22;26" keyTimes="0;0.50;1" />
+<animate attributeName="ry" dur="2.6s" begin="1.0s" repeatCount="indefinite" values="7;18;22" keyTimes="0;0.50;1" />
+</ellipse>
+<ellipse cx="236" cy="196" rx="0" ry="0">
+<animate attributeName="rx" dur="2.6s" begin="1.0s" repeatCount="indefinite" values="0;0;16;0" keyTimes="0;0.82;0.90;1" />
+<animate attributeName="ry" dur="2.6s" begin="1.0s" repeatCount="indefinite" values="0;0;5;0" keyTimes="0;0.82;0.90;1" />
+</ellipse>
+</g>
+</g>
+</svg>
+<figcaption>Slime lip with staggered drips — bulbs grow, fall to the bottom, then detach from the stem; goo filter keeps the stems elastic until break‑off.</figcaption>
+</figure>
+</section>
+
+<section aria-labelledby="html">
+<h2 id="html">Apply to HTML elements?</h2>
+<p>You can apply the same filter to HTML content with CSS (<code>filter: url(#goo)</code>) when styling is allowed.</p>
+</section>
+
+<section aria-labelledby="summary">
+<h2 id="summary">Summary</h2>
+<p>Gooey visuals are just blur + threshold. SVG makes it copy‑pasteable, fast, and dependency‑free. Tune blur radius and the matrix’s final row to control how quickly shapes merge and how sharp the combined edge looks.</p>
+</section>

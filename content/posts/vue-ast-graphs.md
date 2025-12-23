@@ -1,0 +1,93 @@
+---
+title: "Graphing Frontend ASTs in Neo4j"
+description: "Turn frontend ASTs into a Neo4j graph to see components, handlers, and events as connected behavior instead of scattered files."
+date: "2025-11-06"
+category: "Frontend, Neo4j"
+legacyUrl: "/posts/2025-11-06-vue-ast-graphs.html"
+---
+
+<p>Frontend code is full of relationships—components render others, handlers emit events, stores pass along state. Those links are obvious when you are deep in the code, but hard to see across the project as a whole. Turning the source into a graph helps make those connections visible.</p>
+
+<section>
+<h2>Why bother</h2>
+<p>Tracing a single behavior across files—like how a click becomes an API call—often means opening half a dozen files and mentally reconstructing the flow. That process does not scale. Representing the project as a graph makes it easier to reason about interactions, dependencies, and event flows without losing context.</p>
+</section>
+
+<section>
+<h2>Parsing and export</h2>
+<p>I started with a small <a href="https://tree-sitter.github.io/" rel="external noopener">tree-sitter</a> script that walks each file's AST and emits a few basic facts:</p>
+<ul>
+<li>rendered components</li>
+<li>emitted and listened events</li>
+<li>composable calls</li>
+<li>store reads and writes</li>
+<li>import edges</li>
+</ul>
+<p>The script writes Cypher that can be imported into Neo4j. It is quick to rerun and updates existing nodes using <code>MERGE</code>, so the data stays current as the repo evolves.</p>
+<p>The parser is far from perfect. It misses deeper call chains and sometimes flattens context it should not. In hindsight, using ANTLR or a more complete parser would have been the right move—but this version was enough to explore the idea and learn what questions a better pass should answer.</p>
+</section>
+
+<section>
+<h2>The data model</h2>
+<p>The current schema uses a few node types—<code>File</code>, <code>Component</code>, <code>Composable</code>, <code>Store</code>, <code>Handler</code>, and <code>Symbol</code>—and relationships like <code>IMPORTS</code>, <code>RENDERS</code>, <code>USES</code>, <code>READS_FROM</code>, <code>WRITES_TO</code>, <code>EMITS</code>, and <code>LISTENS_TO</code>.</p>
+<p>It is not comprehensive or elegant, just what the parser happens to extract. But even this limited snapshot captures useful structure: how components depend on one another, which events remain active, and where coupling accumulates.</p>
+<figure>
+<picture>
+<source type="image/webp" srcset="/images/vue-data-model-400w.webp 400w, /images/vue-data-model-800w.webp 800w, /images/vue-data-model-1200w.webp 1200w">
+<source type="image/jpeg" srcset="/images/vue-data-model-400w.jpg 400w, /images/vue-data-model-800w.jpg 800w, /images/vue-data-model-1200w.jpg 1200w">
+<img src="/images/vue-data-model-800w.jpg" alt="Screenshot of the G.V() data model showing File, AstGrepSfc, AstGrepComponent, Handler, Composable, Component, and Symbol nodes connected by relationships." width="800" height="494" loading="lazy" decoding="async">
+</picture>
+<figcaption>The data model is lean because the parser is lean; richer parsers will simply slot in additional relationships.</figcaption>
+</figure>
+</section>
+
+<section>
+<h2>Querying behavior</h2>
+<p>Once the data is loaded, Cypher queries surface insights quickly:</p>
+<ul>
+<li>Which handlers still listen for deprecated events?</li>
+<li>Which components wrap a network helper instead of calling it directly?</li>
+<li>Which files have the most imports?</li>
+</ul>
+<p>Even basic questions like these highlight problem areas faster than text search or IDE navigation. You start seeing the system as interconnected behavior instead of scattered files.</p>
+<figure>
+<picture>
+<source type="image/webp" srcset="/images/vue-listens-to-400w.webp 400w, /images/vue-listens-to-800w.webp 800w, /images/vue-listens-to-1200w.webp 1200w">
+<source type="image/jpeg" srcset="/images/vue-listens-to-400w.jpg 400w, /images/vue-listens-to-800w.jpg 800w, /images/vue-listens-to-1200w.jpg 1200w">
+<img src="/images/vue-listens-to-800w.jpg" alt="G.V() view of a LISTENS_TO query showing a click event connected to MiscTableActions handlers like onClickDelete and onClickReset." width="800" height="494" loading="lazy" decoding="async">
+</picture>
+<figcaption>A quick <code>MATCH p=()-[:LISTENS_TO]->() RETURN p</code> highlights how many handlers still reference older event names.</figcaption>
+</figure>
+<p>Because each node carries metadata (file paths, composable names, or hints from the AST), the answers come back in plain language instead of raw syntax trees.</p>
+</section>
+
+<section>
+<h2>Lessons so far</h2>
+<p>The experiment proved the value of visualizing code relationships, even with an incomplete parser. The graph helps spot stale event names, redundant handlers, and overly complex dependencies. It is not production tooling, but it makes architectural reasoning more concrete.</p>
+<figure>
+<picture>
+<source type="image/webp" srcset="/images/vue-component-connections-400w.webp 400w, /images/vue-component-connections-800w.webp 800w, /images/vue-component-connections-1200w.webp 1200w">
+<source type="image/jpeg" srcset="/images/vue-component-connections-400w.jpg 400w, /images/vue-component-connections-800w.jpg 800w, /images/vue-component-connections-1200w.jpg 1200w">
+<img src="/images/vue-component-connections-800w.jpg" alt="G.V() graph view showing components like PropModel and MiscVuelidate connected to the symbols and slots they touch." width="800" height="494" loading="lazy" decoding="async">
+</picture>
+<figcaption>Component graphs highlight which symbols and slots each UI surface still touches, so stale hookups stand out immediately.</figcaption>
+</figure>
+<p>Neo4j Desktop shows the same structure, but its default labels slow me down because I cannot rename nodes without extra scripting. G.V() keeps the data identical while letting me reword nodes on the fly, so I can skim behavior instead of raw symbol names.</p>
+<figure>
+<picture>
+<source type="image/webp" srcset="/images/neo4j-desktop-clicks-400w.webp 400w, /images/neo4j-desktop-clicks-800w.webp 800w, /images/neo4j-desktop-clicks-1200w.webp 1200w">
+<source type="image/jpeg" srcset="/images/neo4j-desktop-clicks-400w.jpg 400w, /images/neo4j-desktop-clicks-800w.jpg 800w, /images/neo4j-desktop-clicks-1200w.jpg 1200w">
+<img src="/images/neo4j-desktop-clicks-800w.jpg" alt="Neo4j Desktop view of EventClick surrounded by handlers and view states using the default component labels." width="800" height="494" loading="lazy" decoding="async">
+</picture>
+<figcaption>In Neo4j Desktop the click graph still works, but deciphering each node takes longer because the labels stay generic.</figcaption>
+</figure>
+<figure>
+<picture>
+<source type="image/webp" srcset="/images/neo4j-desktop-components-400w.webp 400w, /images/neo4j-desktop-components-800w.webp 800w, /images/neo4j-desktop-components-1200w.webp 1200w">
+<source type="image/jpeg" srcset="/images/neo4j-desktop-components-400w.jpg 400w, /images/neo4j-desktop-components-800w.jpg 800w, /images/neo4j-desktop-components-1200w.jpg 1200w">
+<img src="/images/neo4j-desktop-components-800w.jpg" alt="Neo4j Desktop graph showing PropModel, MiscVuelidate, and SlotError components linked to their symbols without friendly labels." width="800" height="494" loading="lazy" decoding="async">
+</picture>
+<figcaption>Another Desktop snapshot shows the same component web, but I still need to cross-reference legend names manually.</figcaption>
+</figure>
+<p>The next version will likely switch to ANTLR, capture function calls, and enrich relationships with source positions and line context. Each improvement should make the graph less about syntax and more about actual behavior.</p>
+</section>

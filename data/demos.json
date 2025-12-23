@@ -1,0 +1,73 @@
+[
+  {
+    "slug": "font-character-guide",
+    "title": "Fonts Carry Voice",
+    "description": "Practical typography systems from a UX/front-end perspective: scales, spacing, family pairings, and side-by-side demos that show both great and disastrous treatments of the same layout.",
+    "date": "2025-11-17",
+    "legacyUrl": "/posts/2025-11-17-font-character-guide.html",
+    "legacyFile": "2025-11-17-font-character-guide.html"
+  },
+  {
+    "slug": "secure-document-shred",
+    "title": "Screen Shredder Demo",
+    "description": "A semantic HTML shredding experiment that slices the current page into thin strips and drags them off screen in plain CSS and JavaScript.",
+    "date": "2025-11-12",
+    "category": "Operational Safety",
+    "legacyUrl": "/posts/2025-11-12-secure-document-shred.html",
+    "legacyFile": "2025-11-12-secure-document-shred.html"
+  },
+  {
+    "slug": "react-state-updates-visual-guide",
+    "title": "React Context vs Zustand vs Jotai — A Visual Guide",
+    "description": "A clear, dependency‑free visual guide to why React Context updates rerender every consumer — and how Zustand selectors and Jotai atoms keep updates narrow. Includes simple simulated demos.",
+    "date": "2025-10-26",
+    "category": "React, State Management",
+    "legacyUrl": "/posts/2025-10-26-react-state-updates-visual-guide.html",
+    "legacyFile": "2025-10-26-react-state-updates-visual-guide.html"
+  },
+  {
+    "slug": "card-deck-lerp",
+    "title": "Hand‑Held Card Fan (Lerped)",
+    "description": "A tiny HTML/CSS/JS demo that fans, opens, and rotates a deck of cards with smooth lerped transforms — no frameworks.",
+    "date": "2025-10-16",
+    "category": "UI, Animation",
+    "legacyUrl": "/posts/2025-10-16-card-deck-lerp.html",
+    "legacyFile": "2025-10-16-card-deck-lerp.html"
+  },
+  {
+    "slug": "light-and-color-principles-frontend",
+    "title": "Light & Color Ideas for Modern Frontend",
+    "description": "Practical UI patterns: modular rhythm, natural motion, OKLCH palettes, hierarchy, tiny charts, and accessible status—with an interactive palette and copy‑paste code.",
+    "date": "2025-10-16",
+    "category": "Design, Frontend",
+    "legacyUrl": "/posts/2025-10-16-light-and-color-principles-frontend.html",
+    "legacyFile": "2025-10-16-light-and-color-principles-frontend.html"
+  },
+  {
+    "slug": "juicing-ui-with-math",
+    "title": "Simple Math for Better UI Motion",
+    "description": "Use noise, nonlinear intensity, and smoothing to make UI motion feel deliberate and calm, not jittery.",
+    "date": "2025-10-15",
+    "category": "UI/UX, Interaction Design",
+    "legacyUrl": "/posts/2025-10-15-juicing-ui-with-math.html",
+    "legacyFile": "2025-10-15-juicing-ui-with-math.html"
+  },
+  {
+    "slug": "modern-rainbow-border-css",
+    "title": "Rainbow Border with Modern CSS (One Rule)",
+    "description": "Minimal, copy‑paste CSS to make a rainbow border using layered backgrounds and conic‑gradient. One rule. No extra markup.",
+    "date": "2025-10-15",
+    "category": "CSS",
+    "legacyUrl": "/posts/2025-10-15-modern-rainbow-border-css.html",
+    "legacyFile": "2025-10-15-modern-rainbow-border-css.html"
+  },
+  {
+    "slug": "html-native-elements",
+    "title": "Lesser-Known Native HTML Elements",
+    "description": "Exploring powerful HTML elements you probably haven't used: dialog, details, ruby, meter, and output for interactive content without JavaScript",
+    "date": "2025-10-12",
+    "category": "Web Development, HTML",
+    "legacyUrl": "/posts/2025-10-12-html-native-elements.html",
+    "legacyFile": "2025-10-12-html-native-elements.html"
+  }
+]

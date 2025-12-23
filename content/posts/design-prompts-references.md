@@ -1,0 +1,497 @@
+---
+title: "Don’t Say “Build a Beautiful UI” — Use References"
+description: "Don’t prompt agents to ‘build a beautiful UI’. Beauty is undefined. Give concrete visual references and style guides instead. Includes before/after prompts and a calculator mini‑demo with multiple reference styles."
+date: "2025-10-16"
+category: "Design, Prompting"
+legacyUrl: "/posts/2025-10-16-design-prompts-references.html"
+---
+
+<section aria-labelledby="why">
+<h2 id="why">“Beautiful” is undefined</h2>
+<p>When you ask an agent to “build a beautiful UI,” you’ve given it two hard problems: decide what
+<em>beautiful</em> means to you, then build it. The first step usually fails because beauty is subjective.
+Without anchors, the model will invent a style you didn’t intend.</p>
+</section>
+
+<section aria-labelledby="references">
+<h2 id="references">Anchor with references</h2>
+<p>Give the agent specific visual anchors so it doesn’t have to guess. References shrink the search space and
+align expectations.</p>
+<ul>
+<li><strong>Artists</strong>: cite real people or movements (e.g., <em>Dieter Rams</em>, <em>Memphis</em>,
+<em>Skeuomorphism</em>, <em>Susan Kare</em>, <em>Syd Mead</em>).</li>
+<li><strong>Style guides</strong>: <a href="https://m3.material.io/"
+rel="external noopener noreferrer">Material Design 3</a>, <a
+href="https://developer.apple.com/design/human-interface-guidelines/"
+rel="external noopener noreferrer">Apple HIG</a>, <a href="https://carbondesignsystem.com/"
+rel="external noopener noreferrer">IBM Carbon</a>, <a href="https://fluent2.microsoft.design/"
+rel="external noopener noreferrer">Microsoft Fluent</a>.</li>
+<li><strong>App references</strong>: “like the Braun ET66 calculator,” “like Apple Clock,” “like Notion
+tables.”</li>
+<li><strong>Constraints</strong>: color palette, typography, spacing scale, motion tone, device targets.</li>
+<li><strong>Deliverables</strong>: ask for a <em>wireframe first</em>, list of components, then a styled pass.
+</li>
+</ul>
+</section>
+
+<section aria-labelledby="demos">
+<h2 id="demos">Prompt demos</h2>
+<h3>Demo A — Vague vs. referenced</h3>
+<figure>
+<figcaption>Vague prompt (likely miss):</figcaption>
+          
+```
+Build a beautiful dashboard for a finance app.
+```
+
+</figure>
+<figure>
+<figcaption>Referenced prompt (clearer):</figcaption>
+          
+```
+Design a finance dashboard inspired by Material Design 3 and Bloomberg terminals.
+- Deliver a wireframe first: navigation, positions, and data density.
+- Then apply styles: MD3 color roles (primary/secondary/tertiary), elevation tokens, and compact density.
+- Charts should resemble Bloomberg: dark background, high contrast, mono type for tickers.
+- Outputs: component list, wireframe description, then styled HTML/CSS (separate steps).
+```
+
+</figure>
+
+<h3>Demo B — “Act as a design expert” vs. concrete scope</h3>
+<figure>
+<figcaption>Unscoped persona (likely to wander):</figcaption>
+          
+```
+Act as a design expert and make a beautiful landing page.
+```
+
+</figure>
+<figure>
+<figcaption>Concrete scope with references:</figcaption>
+          
+```
+Design a SaaS landing page in the style of Apple HIG typography and IBM Carbon spacing.
+- References: apple.com/mac (hero rhythm), slack.com (section scannability).
+- Constraints: two-column grid, 8px spacing scale, max width 1200px, no stock photos.
+- Deliver wireframe → copy draft → styled pass. Include alt text for all imagery.
+```
+
+</figure>
+
+<h3>Demo C — “Modern and sleek” vs. movement + palette</h3>
+<figure>
+<figcaption>Vibes only:</figcaption>
+          
+```
+Make a modern, sleek, minimal settings page.
+```
+
+</figure>
+<figure>
+<figcaption>Movement + palette:</figcaption>
+          
+```
+Create a settings page in a skeuomorphic style (soft gradients, bevels, tactile shadows).
+Palette: #111 background, #fff text, #0ff accent. Typography: monospace only. Use subtle shadows and gradients.
+Deliver: IA outline → wireframe → styled markup.
+```
+
+</figure>
+</section>
+
+<section aria-labelledby="calc">
+<h2 id="calc">Mini‑demo: the same calculator, different references</h2>
+<p>Ask for one object — a simple calculator — then swap references. The agent shouldn’t invent “beauty”; it
+should <em>map</em> your references to UI choices.</p>
+
+<h3>1) Braun/Rams minimalism</h3>
+        
+```
+Design a four‑function calculator like the Braun ET66 (Dieter Rams):
+- Low‑contrast plastic body, circular buttons, yellow = key.
+- Typeface: DIN‑like grotesk. No shadows. Tight tolerances.
+Deliver: wireframe → styled markup. Note which details map to the ET66.
+```
+
+<figure>
+<figcaption>1) Braun ET66 / Dieter Rams</figcaption>
+<section aria-label="Calculator mockup — Braun ET66 style"
+style="display:inline-block; padding:12px; background:#e6e6e6; border-radius:12px; width:300px; font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;">
+<output
+style="display:block; height:42px; background:#f7f7f7; border:0; border-radius:8px; margin:0 0 10px; padding:8px; text-align:right; font-variant-numeric: tabular-nums;">12345</output>
+<table role="grid" aria-label="keys" style="width:100%; border-collapse:separate; border-spacing:6px;">
+<tbody>
+<tr>
+<td><button type="button"
+style="width:44px; height:44px; background:#3b3b3b; color:#fff; border:0; border-radius:22px;">7</button>
+</td>
+<td><button type="button"
+style="width:44px; height:44px; background:#3b3b3b; color:#fff; border:0; border-radius:22px;">8</button>
+</td>
+<td><button type="button"
+style="width:44px; height:44px; background:#3b3b3b; color:#fff; border:0; border-radius:22px;">9</button>
+</td>
+<td><button type="button"
+style="width:44px; height:44px; background:#3b3b3b; color:#fff; border:0; border-radius:22px;">÷</button>
+</td>
+</tr>
+<tr>
+<td><button type="button"
+style="width:44px; height:44px; background:#3b3b3b; color:#fff; border:0; border-radius:22px;">4</button>
+</td>
+<td><button type="button"
+style="width:44px; height:44px; background:#3b3b3b; color:#fff; border:0; border-radius:22px;">5</button>
+</td>
+<td><button type="button"
+style="width:44px; height:44px; background:#3b3b3b; color:#fff; border:0; border-radius:22px;">6</button>
+</td>
+<td><button type="button"
+style="width:44px; height:44px; background:#3b3b3b; color:#fff; border:0; border-radius:22px;">×</button>
+</td>
+</tr>
+<tr>
+<td><button type="button"
+style="width:44px; height:44px; background:#3b3b3b; color:#fff; border:0; border-radius:22px;">1</button>
+</td>
+<td><button type="button"
+style="width:44px; height:44px; background:#3b3b3b; color:#fff; border:0; border-radius:22px;">2</button>
+</td>
+<td><button type="button"
+style="width:44px; height:44px; background:#3b3b3b; color:#fff; border:0; border-radius:22px;">3</button>
+</td>
+<td><button type="button"
+style="width:44px; height:44px; background:#3b3b3b; color:#fff; border:0; border-radius:22px;">−</button>
+</td>
+</tr>
+<tr>
+<td colspan="2"><button type="button"
+style="width:100%; height:44px; background:#3b3b3b; color:#fff; border:0; border-radius:22px;">0</button>
+</td>
+<td><button type="button"
+style="width:44px; height:44px; background:#3b3b3b; color:#fff; border:0; border-radius:22px;">.</button>
+</td>
+<td><button type="button"
+style="width:44px; height:44px; background:#ffd400; color:#000; border:0; border-radius:22px;">=</button>
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+</figure>
+
+
+<h3>2) Apple HIG (iOS)</h3>
+        
+```
+Design an iOS calculator per Apple HIG:
+- Large tappable targets, San Francisco, dynamic type sizes.
+- Clear button roles: numeric (neutral), ops (accent), = (prominent).
+- Motion: subtle spring on press.
+Deliver: wireframe → styled markup. Include accessibility notes.
+```
+
+<figure>
+<figcaption>2) Apple HIG</figcaption>
+<section aria-label="Calculator mockup — Apple HIG"
+style="display:inline-block; padding:14px; background:#ffffff; border-radius:18px; width:300px; font-family: -apple-system, system-ui, Segoe UI, Roboto, sans-serif; box-shadow: 0 1px 2px rgba(0,0,0,.08);">
+<output
+style="display:block; height:50px; background:#f2f2f7; border:0; border-radius:12px; margin:0 0 12px; padding:10px; text-align:right; font-size:20px; font-variant-numeric:tabular-nums;">9,876</output>
+<table role="grid" aria-label="keys" style="width:100%; border-collapse:separate; border-spacing:8px;">
+<tbody>
+<tr>
+<td><button type="button"
+style="width:48px; height:48px; background:#e5e5ea; color:#000; border:0; border-radius:14px;">7</button>
+</td>
+<td><button type="button"
+style="width:48px; height:48px; background:#e5e5ea; color:#000; border:0; border-radius:14px;">8</button>
+</td>
+<td><button type="button"
+style="width:48px; height:48px; background:#e5e5ea; color:#000; border:0; border-radius:14px;">9</button>
+</td>
+<td><button type="button"
+style="width:48px; height:48px; background:#ff9f0a; color:#fff; border:0; border-radius:14px;">÷</button>
+</td>
+</tr>
+<tr>
+<td><button type="button"
+style="width:48px; height:48px; background:#e5e5ea; color:#000; border:0; border-radius:14px;">4</button>
+</td>
+<td><button type="button"
+style="width:48px; height:48px; background:#e5e5ea; color:#000; border:0; border-radius:14px;">5</button>
+</td>
+<td><button type="button"
+style="width:48px; height:48px; background:#e5e5ea; color:#000; border:0; border-radius:14px;">6</button>
+</td>
+<td><button type="button"
+style="width:48px; height:48px; background:#ff9f0a; color:#fff; border:0; border-radius:14px;">×</button>
+</td>
+</tr>
+<tr>
+<td><button type="button"
+style="width:48px; height:48px; background:#e5e5ea; color:#000; border:0; border-radius:14px;">1</button>
+</td>
+<td><button type="button"
+style="width:48px; height:48px; background:#e5e5ea; color:#000; border:0; border-radius:14px;">2</button>
+</td>
+<td><button type="button"
+style="width:48px; height:48px; background:#e5e5ea; color:#000; border:0; border-radius:14px;">3</button>
+</td>
+<td><button type="button"
+style="width:48px; height:48px; background:#ff9f0a; color:#fff; border:0; border-radius:14px;">−</button>
+</td>
+</tr>
+<tr>
+<td colspan="2"><button type="button"
+style="width:100%; height:48px; background:#e5e5ea; color:#000; border:0; border-radius:14px;">0</button>
+</td>
+<td><button type="button"
+style="width:48px; height:48px; background:#e5e5ea; color:#000; border:0; border-radius:14px;">.</button>
+</td>
+<td><button type="button"
+style="width:48px; height:48px; background:#0a84ff; color:#fff; border:0; border-radius:14px;">=</button>
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+</figure>
+
+<h3>3) Bento style</h3>
+        
+```
+Design the calculator in a Bento style:
+- Use tile-like cards with generous gaps; rounded corners and playful color blocks.
+- Pastel gradients and soft shadows; emphasize the = tile.
+Deliver: explain tile grouping choices, then styled markup.
+```
+
+<figure>
+<figcaption>3) Bento style</figcaption>
+<section aria-label="Calculator mockup — Bento style"
+style="display:inline-block; padding:16px; background:#f7f9fc; border-radius:20px; width:300px; font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; box-shadow: 0 2px 8px rgba(0,0,0,.08), inset 0 1px 0 rgba(255,255,255,.7); border:1px solid #e8ecf3;">
+<output
+style="display:block; height:52px; background:linear-gradient(180deg,#ffffff,#f3f7ff); border:1px solid #e1e6f2; border-radius:16px; margin:0 0 12px; padding:12px; text-align:right; font-variant-numeric:tabular-nums; box-shadow: 0 1px 3px rgba(0,0,0,.06), inset 0 1px 0 rgba(255,255,255,.8);">42</output>
+<table role="grid" aria-label="keys" style="width:100%; border-collapse:separate; border-spacing:10px;">
+<tbody>
+<tr>
+<td><button type="button"
+style="width:48px; height:46px; background:linear-gradient(180deg,#ffffff,#eef3f8); color:#0c1a2a; border:1px solid #dbe3ee; border-radius:16px; box-shadow: 0 2px 6px rgba(12,26,42,.08), inset 0 1px 0 rgba(255,255,255,.9);">7</button>
+</td>
+<td><button type="button"
+style="width:48px; height:46px; background:linear-gradient(180deg,#ffffff,#eef3f8); color:#0c1a2a; border:1px solid #dbe3ee; border-radius:16px; box-shadow: 0 2px 6px rgba(12,26,42,.08), inset 0 1px 0 rgba(255,255,255,.9);">8</button>
+</td>
+<td><button type="button"
+style="width:48px; height:46px; background:linear-gradient(180deg,#ffffff,#eef3f8); color:#0c1a2a; border:1px solid #dbe3ee; border-radius:16px; box-shadow: 0 2px 6px rgba(12,26,42,.08), inset 0 1px 0 rgba(255,255,255,.9);">9</button>
+</td>
+<td><button type="button"
+style="width:48px; height:46px; background:linear-gradient(180deg,#ffe1f0,#f7add3); color:#531b36; border:1px solid #f3bcd9; border-radius:16px; box-shadow: 0 2px 6px rgba(83,27,54,.12), inset 0 1px 0 rgba(255,255,255,.6);">÷</button>
+</td>
+</tr>
+<tr>
+<td><button type="button"
+style="width:48px; height:46px; background:linear-gradient(180deg,#ffffff,#eef3f8); color:#0c1a2a; border:1px solid #dbe3ee; border-radius:16px; box-shadow: 0 2px 6px rgba(12,26,42,.08), inset 0 1px 0 rgba(255,255,255,.9);">4</button>
+</td>
+<td><button type="button"
+style="width:48px; height:46px; background:linear-gradient(180deg,#ffffff,#eef3f8); color:#0c1a2a; border:1px solid #dbe3ee; border-radius:16px; box-shadow: 0 2px 6px rgba(12,26,42,.08), inset 0 1px 0 rgba(255,255,255,.9);">5</button>
+</td>
+<td><button type="button"
+style="width:48px; height:46px; background:linear-gradient(180deg,#ffffff,#eef3f8); color:#0c1a2a; border:1px solid #dbe3ee; border-radius:16px; box-shadow: 0 2px 6px rgba(12,26,42,.08), inset 0 1px 0 rgba(255,255,255,.9);">6</button>
+</td>
+<td><button type="button"
+style="width:48px; height:46px; background:linear-gradient(180deg,#cff6e5,#83e6b9); color:#0f3b2a; border:1px solid #b6eed9; border-radius:16px; box-shadow: 0 2px 6px rgba(15,59,42,.12), inset 0 1px 0 rgba(255,255,255,.6);">×</button>
+</td>
+</tr>
+<tr>
+<td><button type="button"
+style="width:48px; height:46px; background:linear-gradient(180deg,#ffffff,#eef3f8); color:#0c1a2a; border:1px solid #dbe3ee; border-radius:16px; box-shadow: 0 2px 6px rgba(12,26,42,.08), inset 0 1px 0 rgba(255,255,255,.9);">1</button>
+</td>
+<td><button type="button"
+style="width:48px; height:46px; background:linear-gradient(180deg,#ffffff,#eef3f8); color:#0c1a2a; border:1px solid #dbe3ee; border-radius:16px; box-shadow: 0 2px 6px rgba(12,26,42,.08), inset 0 1px 0 rgba(255,255,255,.9);">2</button>
+</td>
+<td><button type="button"
+style="width:48px; height:46px; background:linear-gradient(180deg,#ffffff,#eef3f8); color:#0c1a2a; border:1px solid #dbe3ee; border-radius:16px; box-shadow: 0 2px 6px rgba(12,26,42,.08), inset 0 1px 0 rgba(255,255,255,.9);">3</button>
+</td>
+<td><button type="button"
+style="width:48px; height:46px; background:linear-gradient(180deg,#d6e6ff,#9cc3ff); color:#0a2a5e; border:1px solid #c4d8ff; border-radius:16px; box-shadow: 0 2px 6px rgba(10,42,94,.12), inset 0 1px 0 rgba(255,255,255,.6);">−</button>
+</td>
+</tr>
+<tr>
+<td colspan="2"><button type="button"
+style="width:100%; height:46px; background:linear-gradient(180deg,#ffffff,#eef3f8); color:#0c1a2a; border:1px solid #dbe3ee; border-radius:16px; box-shadow: 0 2px 6px rgba(12,26,42,.08), inset 0 1px 0 rgba(255,255,255,.9);">0</button>
+</td>
+<td><button type="button"
+style="width:48px; height:46px; background:linear-gradient(180deg,#ffffff,#eef3f8); color:#0c1a2a; border:1px solid #dbe3ee; border-radius:16px; box-shadow: 0 2px 6px rgba(12,26,42,.08), inset 0 1px 0 rgba(255,255,255,.9);">.</button>
+</td>
+<td><button type="button"
+style="width:48px; height:46px; background:linear-gradient(180deg,#ffd78a,#ffab2e); color:#3a2000; border:1px solid #ffd174; border-radius:16px; box-shadow: 0 2px 6px rgba(58,32,0,.15), inset 0 1px 0 rgba(255,255,255,.6);">=</button>
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+</figure>
+
+<h3>4) Memphis design (’80s)</h3>
+        
+```
+Design a playful Memphis‑style calculator:
+- Bold shapes, high‑contrast patterns, asymmetry. Bright primaries with black outlines.
+- Typography: geometric sans. Exaggerate the = key.
+Deliver: wireframe → styled markup. Explain how each choice maps to Memphis.
+```
+
+<figure>
+<figcaption>4) Memphis (’80s)</figcaption>
+<section aria-label="Calculator mockup — Memphis style"
+style="display:inline-block; padding:10px; background:#fff; border:4px solid #000; width:300px; font-family: system-ui, Segoe UI, Roboto, sans-serif;">
+<output
+style="display:block; height:44px; background:#ffe95a; border:4px solid #000; margin:0 0 8px; padding:6px; text-align:right; font-weight:700;">123</output>
+<table role="grid" aria-label="keys" style="width:100%; border-collapse:separate; border-spacing:6px;">
+<tbody>
+<tr>
+<td><button type="button"
+style="width:48px; height:40px; background:#ff6ec7; color:#000; border:4px solid #000;">7</button>
+</td>
+<td><button type="button"
+style="width:48px; height:40px; background:#7df9ff; color:#000; border:4px solid #000;">8</button>
+</td>
+<td><button type="button"
+style="width:48px; height:40px; background:#a0ff72; color:#000; border:4px solid #000;">9</button>
+</td>
+<td><button type="button"
+style="width:48px; height:40px; background:#ffffff; color:#000; border:4px solid #000;">÷</button>
+</td>
+</tr>
+<tr>
+<td><button type="button"
+style="width:48px; height:40px; background:#7df9ff; color:#000; border:4px solid #000;">4</button>
+</td>
+<td><button type="button"
+style="width:48px; height:40px; background:#a0ff72; color:#000; border:4px solid #000;">5</button>
+</td>
+<td><button type="button"
+style="width:48px; height:40px; background:#ff6ec7; color:#000; border:4px solid #000;">6</button>
+</td>
+<td><button type="button"
+style="width:48px; height:40px; background:#ffffff; color:#000; border:4px solid #000;">×</button>
+</td>
+</tr>
+<tr>
+<td><button type="button"
+style="width:48px; height:40px; background:#a0ff72; color:#000; border:4px solid #000;">1</button>
+</td>
+<td><button type="button"
+style="width:48px; height:40px; background:#ff6ec7; color:#000; border:4px solid #000;">2</button>
+</td>
+<td><button type="button"
+style="width:48px; height:40px; background:#7df9ff; color:#000; border:4px solid #000;">3</button>
+</td>
+<td><button type="button"
+style="width:48px; height:40px; background:#ffffff; color:#000; border:4px solid #000;">−</button>
+</td>
+</tr>
+<tr>
+<td colspan="2"><button type="button"
+style="width:100%; height:40px; background:#ffffff; color:#000; border:4px solid #000;">0</button>
+</td>
+<td><button type="button"
+style="width:48px; height:40px; background:#ffffff; color:#000; border:4px solid #000;">.</button>
+</td>
+<td><button type="button"
+style="width:48px; height:40px; background:#00ff90; color:#000; border:4px solid #000;">=</button>
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+</figure>
+
+<h3>5) Skeuomorphism</h3>
+        
+```
+Design a skeuomorphic calculator:
+- Subtle gradients and layered shadows to suggest depth.
+- Rounded corners, glossy highlights, tactile affordances on keys.
+Deliver: semantic HTML → minimal CSS. Accessibility first.
+```
+
+<figure>
+<figcaption>5) Skeuomorphism</figcaption>
+<section aria-label="Calculator mockup — Skeuomorphism"
+style="display:inline-block; padding:16px; background:linear-gradient(180deg,#f7f7f7,#e6e6e6); border-radius:16px; width:300px; font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; box-shadow: 0 2px 6px rgba(0,0,0,.15), inset 0 1px 0 rgba(255,255,255,.6); border:1px solid #d0d0d0;">
+<output
+style="display:block; height:48px; background:linear-gradient(180deg,#ffffff,#f0f0f0); border:1px solid #cfcfcf; border-radius:10px; margin:0 0 10px; padding:10px; text-align:right; font-variant-numeric: tabular-nums; box-shadow: inset 0 2px 4px rgba(0,0,0,.12), inset 0 1px 0 rgba(255,255,255,.7);">0000</output>
+<table role="grid" aria-label="keys" style="width:100%; border-collapse:separate; border-spacing:8px;">
+<tbody>
+<tr>
+<td><button type="button"
+style="width:48px; height:40px; background:linear-gradient(180deg,#fbfbfb,#e9e9e9); color:#111; border:1px solid #bdbdbd; border-radius:10px; box-shadow: 0 1px 0 rgba(255,255,255,.9) inset, 0 2px 4px rgba(0,0,0,.15);">7</button>
+</td>
+<td><button type="button"
+style="width:48px; height:40px; background:linear-gradient(180deg,#fbfbfb,#e9e9e9); color:#111; border:1px solid #bdbdbd; border-radius:10px; box-shadow: 0 1px 0 rgba(255,255,255,.9) inset, 0 2px 4px rgba(0,0,0,.15);">8</button>
+</td>
+<td><button type="button"
+style="width:48px; height:40px; background:linear-gradient(180deg,#fbfbfb,#e9e9e9); color:#111; border:1px solid #bdbdbd; border-radius:10px; box-shadow: 0 1px 0 rgba(255,255,255,.9) inset, 0 2px 4px rgba(0,0,0,.15);">9</button>
+</td>
+<td><button type="button"
+style="width:48px; height:40px; background:linear-gradient(180deg,#ffd37a,#ff9900); color:#fff; border:1px solid #cc7a00; border-radius:10px; text-shadow: 0 1px 0 rgba(0,0,0,.2); box-shadow: 0 1px 0 rgba(255,255,255,.5) inset, 0 2px 4px rgba(0,0,0,.2);">÷</button>
+</td>
+</tr>
+<tr>
+<td><button type="button"
+style="width:48px; height:40px; background:linear-gradient(180deg,#fbfbfb,#e9e9e9); color:#111; border:1px solid #bdbdbd; border-radius:10px; box-shadow: 0 1px 0 rgba(255,255,255,.9) inset, 0 2px 4px rgba(0,0,0,.15);">4</button>
+</td>
+<td><button type="button"
+style="width:48px; height:40px; background:linear-gradient(180deg,#fbfbfb,#e9e9e9); color:#111; border:1px solid #bdbdbd; border-radius:10px; box-shadow: 0 1px 0 rgba(255,255,255,.9) inset, 0 2px 4px rgba(0,0,0,.15);">5</button>
+</td>
+<td><button type="button"
+style="width:48px; height:40px; background:linear-gradient(180deg,#fbfbfb,#e9e9e9); color:#111; border:1px solid #bdbdbd; border-radius:10px; box-shadow: 0 1px 0 rgba(255,255,255,.9) inset, 0 2px 4px rgba(0,0,0,.15);">6</button>
+</td>
+<td><button type="button"
+style="width:48px; height:40px; background:linear-gradient(180deg,#ffd37a,#ff9900); color:#fff; border:1px solid #cc7a00; border-radius:10px; text-shadow: 0 1px 0 rgba(0,0,0,.2); box-shadow: 0 1px 0 rgba(255,255,255,.5) inset, 0 2px 4px rgba(0,0,0,.2);">×</button>
+</td>
+</tr>
+<tr>
+<td><button type="button"
+style="width:48px; height:40px; background:linear-gradient(180deg,#fbfbfb,#e9e9e9); color:#111; border:1px solid #bdbdbd; border-radius:10px; box-shadow: 0 1px 0 rgba(255,255,255,.9) inset, 0 2px 4px rgba(0,0,0,.15);">1</button>
+</td>
+<td><button type="button"
+style="width:48px; height:40px; background:linear-gradient(180deg,#fbfbfb,#e9e9e9); color:#111; border:1px solid #bdbdbd; border-radius:10px; box-shadow: 0 1px 0 rgba(255,255,255,.9) inset, 0 2px 4px rgba(0,0,0,.15);">2</button>
+</td>
+<td><button type="button"
+style="width:48px; height:40px; background:linear-gradient(180deg,#fbfbfb,#e9e9e9); color:#111; border:1px solid #bdbdbd; border-radius:10px; box-shadow: 0 1px 0 rgba(255,255,255,.9) inset, 0 2px 4px rgba(0,0,0,.15);">3</button>
+</td>
+<td><button type="button"
+style="width:48px; height:40px; background:linear-gradient(180deg,#ffd37a,#ff9900); color:#fff; border:1px solid #cc7a00; border-radius:10px; text-shadow: 0 1px 0 rgba(0,0,0,.2); box-shadow: 0 1px 0 rgba(255,255,255,.5) inset, 0 2px 4px rgba(0,0,0,.2);">−</button>
+</td>
+</tr>
+<tr>
+<td colspan="2"><button type="button"
+style="width:100%; height:40px; background:linear-gradient(180deg,#fbfbfb,#e9e9e9); color:#111; border:1px solid #bdbdbd; border-radius:10px; box-shadow: 0 1px 0 rgba(255,255,255,.9) inset, 0 2px 4px rgba(0,0,0,.15);">0</button>
+</td>
+<td><button type="button"
+style="width:48px; height:40px; background:linear-gradient(180deg,#fbfbfb,#e9e9e9); color:#111; border:1px solid #bdbdbd; border-radius:10px; box-shadow: 0 1px 0 rgba(255,255,255,.9) inset, 0 2px 4px rgba(0,0,0,.15);">.</button>
+</td>
+<td><button type="button"
+style="width:48px; height:40px; background:linear-gradient(180deg,#a8d1ff,#0a84ff); color:#fff; border:1px solid #0a6fd9; border-radius:10px; text-shadow: 0 1px 0 rgba(0,0,0,.25); box-shadow: 0 1px 0 rgba(255,255,255,.6) inset, 0 2px 5px rgba(0,0,0,.25);">=</button>
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+</figure>
+</section>
+
+
+
+
+<section aria-labelledby="summary">
+<h2 id="summary">Takeaways</h2>
+<ul>
+<li>“Beautiful” is subjective; don’t make the model guess.</li>
+<li>Use concrete references and style guides to set the target.</li>
+<li>Ask for wireframes first; style later.</li>
+<li>Be explicit about constraints and non‑goals.</li>
+</ul>
+</section>

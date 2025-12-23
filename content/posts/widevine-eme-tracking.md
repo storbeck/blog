@@ -1,0 +1,114 @@
+---
+title: "How Streaming Sites Track You Even with VPNs and Private Browsing"
+description: "How DRM technology in browsers creates persistent cross-site tracking that survives privacy tools"
+date: "2025-10-12"
+category: "Privacy, Security"
+legacyUrl: "/posts/2025-10-12-widevine-eme-tracking.html"
+---
+
+<p><strong>Research findings on how DRM implementations expose hardware-level identifiers for potential cross-site tracking.</strong></p>
+            
+<section>
+<h2>How This Was Discovered</h2>
+<p>Security researchers <a href="https://hal.science/hal-04179324v1" rel="external">recently found</a> that the copy protection software built into browsers (called Widevine) secretly collects information about your computer's hardware. This creates a unique "fingerprint" that can identify your specific device.</p>
+                
+<p>The key problem: unlike cookies or browsing history that you can delete, this fingerprint is collected by closed software that runs deeper in your system. Your VPN, private browsing, and clearing your data won't stop it because it bypasses all the normal browser privacy tools.</p>
+                
+<p>Here's what happens behind the scenes when you watch Netflix or YouTube:</p>
+                
+```
+navigator.requestMediaKeySystemAccess('com.widevine.alpha', config)
+.then(keySystemAccess => {
+// Exposes hardware security module details
+// GPU info, firmware versions, crypto certificates
+return keySystemAccess.createMediaKeys();
+});
+```
+
+</section>
+            
+<section>
+<h2>What Gets Tracked</h2>
+<p>The EME fingerprint includes hardware details that survive privacy measures:</p>
+<ul>
+<li>Hardware Security Module (HSM) identifiers</li>
+<li>DRM certificate chains (device-specific)</li>
+<li>GPU model and driver versions</li>
+<li>Secure processor firmware signatures</li>
+<li>Codec support matrix</li>
+</ul>
+                
+<p>This creates a persistent identifier stored in secure hardware that regular browser data clearing can't touch.</p>
+</section>
+            
+<section>
+<h2>Privacy Implications</h2>
+<p>The same hardware fingerprint appears across different contexts:</p>
+<ol>
+<li>Netflix streaming session</li>
+<li>YouTube in incognito mode</li> 
+<li>Spotify in different browser</li>
+</ol>
+                
+<p>This creates potential for cross-site correlation since the identifier persists regardless of privacy settings or browser choice.</p>
+</section>
+            
+<section>
+<h2>Checking EME Status</h2>
+<p>See if EME is enabled in your browser:</p>
+                
+```
+# Firefox
+about:config → media.eme.enabled
+
+# Chrome  
+chrome://settings → Privacy and security → Site Settings → Additional content settings
+```
+
+                
+<p>Test if EME triggers hardware fingerprinting:</p>
+                
+```
+// Simple test - hardware fingerprinting happens inside CDM, not visible here
+navigator.requestMediaKeySystemAccess('com.widevine.alpha', [{
+initDataTypes: ['cenc'],
+audioCapabilities: [{contentType: 'audio/mp4;codecs="mp4a.40.2"'}]
+}]).then(access => {
+console.log('EME available - CDM collects hardware fingerprint internally');
+return access.createMediaKeys();
+}).then(keys => {
+console.log('MediaKeys created - device fingerprinted by CDM');
+}).catch(e => console.log('Error:', e.name, '- EME may not be fully available'));
+```
+
+                
+<p>Run this script on Netflix or YouTube to see actual DRM fingerprinting in action.</p>
+</section>
+            
+<section>
+<h2>Mitigation Options</h2>
+<p>Limited options, all with trade-offs:</p>
+                
+<p><strong>Disable EME completely:</strong></p>
+                
+```
+# Firefox: Set media.eme.enabled = false
+# Chrome: Not possible to fully disable
+```
+
+<p>Breaks all streaming services (Netflix, Spotify, YouTube Premium).</p>
+                
+<p><strong>Separate devices:</strong></p>
+<ul>
+<li>Dedicated streaming device (Roku, Apple TV)</li>
+<li>Different laptop for entertainment vs work</li>
+<li>Virtual machines (may not support EME)</li>
+</ul>
+</section>
+            
+<section>
+<h2>Technical Considerations</h2>
+<p>EME requires device attestation for content protection, which inherently exposes hardware characteristics. This is a fundamental tension between DRM functionality and privacy.</p>
+                
+<p>Privacy-conscious users should understand this trade-off when using DRM-enabled services.</p>
+</section>

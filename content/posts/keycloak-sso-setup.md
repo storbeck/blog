@@ -1,0 +1,225 @@
+---
+title: "Self-Hosted SSO with Keycloak and Docker"
+description: "Complete guide to setting up Keycloak as a self-hosted OpenID Connect SSO provider with Docker, Caddy, and secure credential management"
+date: "2025-10-07"
+category: "DevOps, Security, Authentication"
+legacyUrl: "/posts/2025-10-07-keycloak-sso-setup.html"
+---
+
+<p><strong>Self-hosted OpenID Connect provider using Keycloak for SSO testing and development.</strong></p>
+
+<section>
+<h2>Requirements</h2>
+<ul>
+<li>Docker and Docker Compose</li>
+<li>1Password CLI for secure credential storage</li>
+<li>Reverse proxy (Caddy) for SSL termination</li>
+<li>Domain with DNS management access</li>
+</ul>
+</section>
+
+<section>
+<h2>Architecture</h2>
+<ul>
+<li><strong>Keycloak:</strong> Identity provider container with persistent storage</li>
+<li><strong>Caddy:</strong> Reverse proxy handling SSL and external access</li>
+<li><strong>1Password CLI:</strong> Secure credential retrieval</li>
+</ul>
+</section>
+
+<section>
+<h2>Docker Compose Configuration</h2>
+                
+                
+```
+version: '3.8'
+
+services:
+keycloak:
+image: quay.io/keycloak/keycloak:latest
+container_name: keycloak-sso
+command: start-dev
+environment:
+KEYCLOAK_ADMIN: admin
+KEYCLOAK_ADMIN_PASSWORD: ${ADMIN_PASSWORD}
+KC_HTTP_PORT: 9090
+KC_HOSTNAME: auth.yourdomain.com
+KC_HOSTNAME_STRICT: false
+KC_HTTP_ENABLED: true
+KC_PROXY: edge
+ports:
+- "9090:9090"
+volumes:
+- keycloak_data:/opt/keycloak/data
+restart: unless-stopped
+
+volumes:
+keycloak_data:
+driver: local
+```
+
+
+<p><strong>Key settings:</strong> <code>KC_PROXY: edge</code> for reverse proxy, <code>start-dev</code> for development mode, persistent volume for data retention.</p>
+</section>
+
+<section>
+<h2>Secure Credential Management with 1Password</h2>
+<p>Store the Keycloak admin password in 1Password and retrieve it programmatically. Create an item called "keycloak-admin" with a strong generated password.</p>
+
+
+<h3>Startup Script</h3>
+
+                
+```
+#!/bin/bash
+# start-keycloak.sh
+
+set -e  # Exit on any error
+
+echo "Starting Keycloak with secure credentials..."
+
+# Retrieve admin password from 1Password
+echo "Retrieving admin credentials from 1Password..."
+ADMIN_PASSWORD=$(op item get "keycloak-admin" --vault dev --reveal --field password)
+
+if [ -z "$ADMIN_PASSWORD" ]; then
+echo "Error: Failed to retrieve admin password from 1Password"
+exit 1
+fi
+
+# Export password as environment variable for docker-compose
+export ADMIN_PASSWORD
+
+# Verify Keycloak container isn't already running
+if docker ps | grep -q "keycloak-sso"; then
+echo "Stopping existing Keycloak container..."
+docker-compose down
+fi
+
+# Start the containers with password in environment
+echo "Starting Keycloak container..."
+docker-compose up -d
+
+# Clear password from environment immediately
+unset ADMIN_PASSWORD
+
+# Wait for container to start
+echo "Waiting for Keycloak to initialize..."
+sleep 5
+
+# Verify container is running
+if docker ps | grep -q "keycloak-sso"; then
+echo "✅ Keycloak started successfully"
+echo "Admin console: http://localhost:9090/admin/"
+echo "External URL: https://auth.yourdomain.dev/admin/"
+else
+echo "❌ Failed to start Keycloak"
+docker-compose logs keycloak
+exit 1
+fi
+```
+
+
+<p>This approach ensures passwords never appear in configuration files and provides secure credential retrieval through the 1Password CLI.</p>
+</section>
+
+<section>
+<h2>Initial Setup</h2>
+                
+<h3>Create OIDC Client</h3>
+<p>Access the admin console at <code>http://localhost:9090/admin/</code> and login with <code>admin</code> and your 1Password-generated password.</p>
+                
+<ol>
+<li>Navigate to <strong>Clients</strong> → <strong>Create client</strong></li>
+<li>Set <strong>Client type</strong> to "OpenID Connect"</li>
+<li>Enter <strong>Client ID</strong> (e.g., "test-app")</li>
+<li>Click <strong>Next</strong>, then <strong>Save</strong></li>
+</ol>
+
+<h3>Configure Client Settings</h3>
+<p>In the client's <strong>Settings</strong> tab:</p>
+<ul>
+<li><strong>Valid redirect URIs:</strong> Add your application's callback URL</li>
+<li><strong>Web origins:</strong> Add your application's domain</li>
+<li><strong>Client authentication:</strong> Enable if you need a client secret</li>
+</ul>
+
+<h3>Get Client Credentials</h3>
+<p>In the <strong>Credentials</strong> tab, copy the Client Secret for your application configuration.</p>
+
+<h3>Create Test User</h3>
+<ol>
+<li>Navigate to <strong>Users</strong> → <strong>Add user</strong></li>
+<li>Set <strong>Username</strong> and <strong>Email</strong></li>
+<li>Click <strong>Create</strong></li>
+<li>Go to <strong>Credentials</strong> tab</li>
+<li>Click <strong>Set password</strong></li>
+<li>Enter password and set <strong>Temporary</strong> to "Off"</li>
+</ol>
+
+<h3>OIDC Endpoints</h3>
+<p>Your application will need these URLs:</p>
+<ul>
+<li><strong>Authorization:</strong> <code>https://auth.yourdomain.dev/realms/master/protocol/openid-connect/auth</code></li>
+<li><strong>Token:</strong> <code>https://auth.yourdomain.dev/realms/master/protocol/openid-connect/token</code></li>
+<li><strong>UserInfo:</strong> <code>https://auth.yourdomain.dev/realms/master/protocol/openid-connect/userinfo</code></li>
+</ul>
+</section>
+
+<section>
+<h2>Reverse Proxy with Caddy</h2>
+<p>Configure Caddy to provide SSL termination and external access:</p>
+                
+                
+```
+auth.yourdomain.com {
+encode zstd gzip
+    
+tls {
+issuer acme {
+disable_http_challenge
+}
+}
+    
+reverse_proxy 127.0.0.1:9090
+}
+```
+
+
+<p>Caddy automatically handles:</p>
+<ul>
+<li>Let's Encrypt certificate provisioning</li>
+<li>HTTPS redirects</li>
+<li>HTTP/2 support</li>
+<li>Automatic certificate renewal</li>
+</ul>
+</section>
+
+<section>
+<h2>Client Configuration Gotchas</h2>
+<p>When integrating with applications, the redirect URI configuration is critical and often misunderstood:</p>
+
+<h3>Understanding OAuth2 Flow</h3>
+<p>Many applications use a three-party flow:</p>
+<ol>
+<li>Application redirects user to your Keycloak</li>
+<li>After authentication, Keycloak redirects to an intermediary (like AWS Cognito)</li>
+<li>Intermediary processes the response and redirects to final application</li>
+</ol>
+
+<h3>Redirect URI Configuration</h3>
+<p>The redirect URI in your Keycloak client must point to where the application expects the callback, not necessarily the application itself:</p>
+                
+                
+```
+# Example: Application using AWS Cognito as intermediary
+Valid Redirect URI: https://company-app.auth.us-east-2.amazoncognito.com/oauth2/idpresponse
+
+# Not the application URL:
+# Valid Redirect URI: https://app.company.com/callback
+```
+
+
+<h3>Domain Matching is Critical</h3>
+<p>SSO providers often route based on email domain. If your test email is <code>user@company.com</code>, configure the SSO domain as <code>company.com</code>, not your auth server hostname.</p>
+</section>

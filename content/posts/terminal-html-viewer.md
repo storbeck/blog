@@ -1,0 +1,74 @@
+---
+title: "Terminal Blog Reader with Fish Shell"
+description: "Fish shell functions to browse this blog from the terminal with formatted post viewing using pandoc and glow."
+date: "2025-10-06"
+category: "Development, Terminal"
+legacyUrl: "/posts/2025-10-06-terminal-html-viewer.html"
+---
+
+<section>
+<p>Because this blog uses semantic HTML, it converts cleanly to Markdown. Here's a Fish shell function that lists recent posts and opens them formatted with glow.</p>
+</section>
+
+<section>
+<h2>The Reader Function</h2>
+
+<p>Add this to <code>~/.config/fish/config.fish</code>:</p>
+
+                
+```
+function blog
+curl -s https://storbeck.dev | pandoc -f html -t markdown | glow -w 0
+end
+
+function blog-list
+echo "Recent Posts:"
+echo ""
+
+# Fetch and parse the blog index
+curl -s https://storbeck.dev | pandoc -f html -t markdown | \
+grep -A2 "^### " | \
+while read -l line
+if string match -q "### *" "$line"
+echo "$line"
+else if string match -q "http*" "$line"
+# Extract URL and create clickable link
+set url (string match -r 'https?://[^)]+' "$line")
+printf '\e]8;;%s\e\\%s\e]8;;\e\\\n' "$url" "$url"
+else if test -n "$line"
+echo "$line"
+end
+end
+end
+
+function blogpost
+if test (count $argv) -eq 0
+echo "Usage: blogpost <slug>"
+echo "Example: blogpost 2025-10-09-slack-dev-tools"
+return 1
+end
+
+curl -s "https://storbeck.dev/posts/$argv[1].html" | \
+pandoc -f html -t markdown | \
+glow -p -w 0
+end
+```
+
+</section>
+
+<section>
+<h2>Usage</h2>
+
+<dl>
+<dt><code>blog</code></dt>
+<dd>View the full blog index formatted in your terminal</dd>
+
+<dt><code>blog-list</code></dt>
+<dd>Show recent posts with URLs</dd>
+
+<dt><code>blogpost 2025-10-09-slack-dev-tools</code></dt>
+<dd>Read a specific post in pager mode</dd>
+</dl>
+
+<p>The <code>-p</code> flag in <code>glow -p</code> enables pager mode so you can scroll through longer posts.</p>
+</section>

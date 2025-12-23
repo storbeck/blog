@@ -1,0 +1,74 @@
+---
+title: "Iframe Sandbox Breakout Test Suite"
+description: "A plain HTML test page for probing iframe sandbox security without the dashboard, covering navigation, storage, JS APIs, and permissions."
+date: "2025-12-23"
+legacyUrl: "/posts/2025-12-23-iframe-sandbox-test-suite.html"
+---
+
+<section>
+<p>I needed a plain, single-file test page to probe iframe sandbox behavior without dragging our whole dashboard along for the ride. So I built the <a href="../iframe-sandbox-test-suite.html">Iframe Sandbox Breakout Test Suite</a>. It is self-contained, easy to drop into any environment, and focused on common browser escape and abuse paths.</p>
+<p>Run the page standalone, then load it inside an iframe (with and without a sandbox attribute), and compare the results log. Every test reports attempted/success/blocked/error so you can see exactly which capabilities are available.</p>
+</section>
+
+<section>
+<h2>Navigation Escape Attempts</h2>
+<p>These tests check whether an embedded page can navigate outside its frame. That is the classic breakout vector: forcing the top-level page to navigate to a phishing site, or replacing the current URL to hide what is really loaded.</p>
+<ul>
+<li>Anchor targets: <code>_top</code>, <code>_parent</code>, <code>_self</code>, <code>_blank</code>.</li>
+<li>Scripted redirects using <code>top.location</code>, <code>parent.location</code>, and <code>location</code>.</li>
+<li>History API changes with <code>pushState</code> and <code>replaceState</code> for URL spoofing.</li>
+</ul>
+<p>If the sandbox is configured correctly, top/parent navigation should be blocked, and history changes should not let a framed page impersonate the host page.</p>
+</section>
+
+<section>
+<h2>Window Creation and Popups</h2>
+<p>Popup creation can bypass sandbox expectations or enable reverse tabnabbing. The suite calls <code>window.open</code> with standard targets and then with <code>noopener</code>/<code>noreferrer</code> flags.</p>
+<p>Why it matters: if the new window has an <code>opener</code> reference, a hostile page can redirect the original tab to a login prompt or malware page. A tight sandbox should either block popups or ensure the new window cannot control its opener.</p>
+</section>
+
+<section>
+<h2>Form Submission</h2>
+<p>Forms can be auto-submitted to navigate the top frame or to exfiltrate data. The suite includes POST submissions targeted at <code>_top</code>, <code>_parent</code>, and <code>_self</code> with a dummy payload.</p>
+<p>Real-world abuse: a hidden iframe auto-submits a form that navigates the parent to a fake login page, or submits data to a third-party endpoint. A locked sandbox should prevent cross-frame form navigation.</p>
+</section>
+
+<section>
+<h2>Storage and Origin Access</h2>
+<p>This section checks whether the iframe can read/write cookies, use <code>localStorage</code> and <code>sessionStorage</code>, and open <code>indexedDB</code>.</p>
+<p>Storage is a persistence layer. If a framed page can access the host origin or reuse storage across sites, it can track users, steal session data, or plant state for later abuse. In many sandbox setups, the frame gets an opaque origin and storage calls should fail with a security exception.</p>
+</section>
+
+<section>
+<h2>JavaScript Capabilities</h2>
+<p>Sandboxing and CSP can restrict script execution. The suite checks inline scripts, a data URL script tag, <code>eval</code>, and the <code>Function</code> constructor. It also calls <code>alert</code>, <code>confirm</code>, and <code>prompt</code>.</p>
+<p>Why it matters: blocking dynamic code execution reduces XSS impact, and blocking modal dialogs limits UI abuse (e.g., repeated prompts to force user interaction). A strict policy should surface clear failures here.</p>
+</section>
+
+<section>
+<h2>Top-Frame Access</h2>
+<p>The suite detects whether <code>top !== window</code>, tries to read <code>top.location.href</code>, and sends a <code>postMessage</code> to the top frame.</p>
+<p>Direct reads of <code>top.location</code> should throw a security error across origins. <code>postMessage</code> is allowed, but the host page must validate <code>origin</code> and <code>source</code> to avoid message spoofing.</p>
+</section>
+
+<section>
+<h2>Pointer, Focus, and Downloads</h2>
+<p>These tests cover <code>window.focus</code>, pointer lock, and <code>a[download]</code>. Each one can change user focus or trigger a download without obvious intent.</p>
+<p>Abuse cases include focus stealing to capture keystrokes, pointer lock to trap cursor movement, and drive-by downloads. A strict sandbox should require a user gesture and may block the API entirely.</p>
+</section>
+
+<section>
+<h2>Clipboard and Fullscreen</h2>
+<p>Clipboard read/write and fullscreen requests are both sensitive. A hostile iframe could read secrets or replace clipboard contents with a malicious command. Fullscreen can be used for UI spoofing. The suite checks <code>navigator.clipboard</code> and <code>requestFullscreen</code> and logs whether the browser allows them.</p>
+</section>
+
+<section>
+<h2>Permissions and Device APIs</h2>
+<p>Geolocation, Notifications, and MediaDevices are permission-gated APIs. The suite calls each one and logs whether the browser prompts, blocks, or grants. In iframes, these often require both a user gesture and explicit <code>allow</code> attributes on the iframe.</p>
+<p>These are high-value permissions: location data, persistent notification prompts, and microphone access are all common abuse targets.</p>
+</section>
+
+<section>
+<h2>CSP and Sandbox Introspection</h2>
+<p>The page shows <code>document.referrer</code>, <code>document.domain</code>, <code>document.origin</code>, and the iframe <code>sandbox</code> attribute if present. This helps confirm whether the frame is treated as an opaque origin and whether you are actually running under the restrictions you think you are.</p>
+</section>
