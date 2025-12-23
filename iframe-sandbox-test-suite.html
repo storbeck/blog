@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Self-contained iframe sandbox breakout test suite for navigation, storage, JS APIs, and permissions.">
+  <meta name="author" content="Storbeck">
+  <title>Iframe Sandbox Breakout Test Suite</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f6f1e9;
+      --ink: #191818;
+      --muted: #5b5146;
+      --accent: #0f6d64;
+      --accent-2: #9a3e2f;
+      --card: #fffdf7;
+      --border: #d8cfc3;
+      --mono: "SFMono-Regular", "Menlo", "Consolas", monospace;
+      --serif: "Iowan Old Style", "Palatino", "Book Antiqua", "Georgia", serif;
+      --sans: "Avenir Next", "Gill Sans", "Trebuchet MS", sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: radial-gradient(circle at 20% 20%, #fffaf2 0%, #f1e7d9 45%, #e6ddcf 100%);
+      color: var(--ink);
+      font-family: var(--sans);
+      line-height: 1.5;
+    }
+
+    header {
+      padding: 2.5rem 1.5rem 1rem;
+      border-bottom: 1px solid var(--border);
+      background: linear-gradient(120deg, #fef7ec, #f4e6d2);
+    }
+
+    header h1 {
+      font-family: var(--serif);
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      margin: 0 0 0.5rem;
+      letter-spacing: 0.02em;
+    }
+
+    header p {
+      margin: 0;
+      color: var(--muted);
+      max-width: 60ch;
+    }
+
+    main {
+      padding: 1.5rem;
+    }
+
+    section {
+      margin-bottom: 2rem;
+      padding: 1.5rem;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      box-shadow: 0 8px 18px rgba(25, 24, 24, 0.08);
+    }
+
+    section h2 {
+      margin-top: 0;
+      font-family: var(--serif);
+      font-size: 1.6rem;
+    }
+
+    article {
+      padding: 1rem 0;
+      border-top: 1px dashed var(--border);
+    }
+
+    article:first-of-type {
+      border-top: none;
+      padding-top: 0;
+    }
+
+    article h3 {
+      margin: 0 0 0.5rem;
+      font-family: var(--serif);
+      font-size: 1.1rem;
+    }
+
+    button,
+    a.action-link,
+    input[type="submit"] {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.5rem 0.9rem;
+      border-radius: 999px;
+      border: 1px solid var(--accent);
+      background: var(--accent);
+      color: #fff;
+      font-family: var(--sans);
+      font-size: 0.95rem;
+      text-decoration: none;
+      cursor: pointer;
+      transition: transform 0.12s ease, box-shadow 0.12s ease;
+    }
+
+    button:hover,
+    a.action-link:hover,
+    input[type="submit"]:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 10px rgba(15, 109, 100, 0.3);
+    }
+
+    button.secondary {
+      background: transparent;
+      color: var(--accent);
+    }
+
+    .row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      align-items: center;
+    }
+
+    .status {
+      display: inline-block;
+      padding: 0.2rem 0.6rem;
+      border-radius: 999px;
+      background: #eee3d3;
+      font-family: var(--mono);
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+
+    .status.success {
+      background: #d2efe9;
+      color: #0f5c53;
+    }
+
+    .status.blocked {
+      background: #f7e2d4;
+      color: #8b3f2e;
+    }
+
+    .status.error {
+      background: #f2d2d2;
+      color: #7f1d1d;
+    }
+
+    .status.attempted {
+      background: #e5e7eb;
+      color: #374151;
+    }
+
+    .mono {
+      font-family: var(--mono);
+    }
+
+    dl {
+      margin: 0;
+      display: grid;
+      grid-template-columns: minmax(140px, 220px) 1fr;
+      gap: 0.4rem 1rem;
+    }
+
+    dt {
+      font-weight: 600;
+    }
+
+    dd {
+      margin: 0;
+      color: var(--muted);
+      word-break: break-word;
+    }
+
+    aside {
+      padding: 1.5rem;
+      background: #fdf8ef;
+      border-top: 1px solid var(--border);
+    }
+
+    aside h2 {
+      margin-top: 0;
+      font-family: var(--serif);
+    }
+
+    ol#results-log {
+      margin: 1rem 0 0;
+      padding-left: 1.2rem;
+      font-family: var(--mono);
+      font-size: 0.9rem;
+      color: var(--muted);
+      max-height: 240px;
+      overflow-y: auto;
+      border-left: 3px solid var(--border);
+    }
+
+    footer {
+      padding: 1.5rem;
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 720px) {
+      dl {
+        grid-template-columns: 1fr;
+      }
+
+      section {
+        padding: 1.1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Iframe Sandbox Breakout Test Suite</h1>
+    <p>Self-contained HTML for probing navigation, storage, JS, and permissions behavior inside sandboxed or cross-origin frames.</p>
+  </header>
+
+  <main>
+    <section aria-labelledby="meta-title">
+      <h2 id="meta-title">Environment &amp; Sandbox Introspection</h2>
+      <dl>
+        <dt>document.referrer</dt>
+        <dd id="meta-referrer">&nbsp;</dd>
+        <dt>document.domain</dt>
+        <dd id="meta-domain">&nbsp;</dd>
+        <dt>document.origin</dt>
+        <dd id="meta-origin">&nbsp;</dd>
+        <dt>frameElement sandbox</dt>
+        <dd id="meta-sandbox">&nbsp;</dd>
+        <dt>top !== window</dt>
+        <dd id="meta-top">&nbsp;</dd>
+      </dl>
+    </section>
+
+    <section aria-labelledby="nav-title">
+      <h2 id="nav-title">Navigation Escape</h2>
+      <article>
+        <h3>Anchor targets</h3>
+        <p class="mono">Links are prewired to attempt navigation. Results log updates on click.</p>
+        <p class="row">
+          <a class="action-link" href="https://example.com" target="_top" data-test="link-top" rel="external">Open _top</a>
+          <a class="action-link" href="https://example.com" target="_parent" data-test="link-parent" rel="external">Open _parent</a>
+          <a class="action-link" href="https://example.com" target="_self" data-test="link-self" rel="external">Open _self</a>
+          <a class="action-link" href="https://example.com" target="_blank" data-test="link-blank" rel="external noopener noreferrer">Open _blank</a>
+        </p>
+        <p class="row">
+          <span class="status" data-status-for="link-top">idle</span>
+          <span class="status" data-status-for="link-parent">idle</span>
+          <span class="status" data-status-for="link-self">idle</span>
+          <span class="status" data-status-for="link-blank">idle</span>
+        </p>
+      </article>
+      <article>
+        <h3>Location assignments</h3>
+        <p class="row">
+          <button type="button" data-test="loc-top">top.location = example.com</button>
+          <button type="button" data-test="loc-parent" class="secondary">parent.location = example.com</button>
+          <button type="button" data-test="loc-self" class="secondary">location = example.com</button>
+        </p>
+        <p class="row">
+          <span class="status" data-status-for="loc-top">idle</span>
+          <span class="status" data-status-for="loc-parent">idle</span>
+          <span class="status" data-status-for="loc-self">idle</span>
+        </p>
+      </article>
+      <article>
+        <h3>History API</h3>
+        <p class="row">
+          <button type="button" data-test="history-push">history.pushState</button>
+          <button type="button" data-test="history-replace" class="secondary">history.replaceState</button>
+        </p>
+        <p class="row">
+          <span class="status" data-status-for="history-push">idle</span>
+          <span class="status" data-status-for="history-replace">idle</span>
+        </p>
+      </article>
+    </section>
+
+    <section aria-labelledby="window-title">
+      <h2 id="window-title">Window Creation &amp; Popups</h2>
+      <article>
+        <h3>window.open targets</h3>
+        <p class="row">
+          <button type="button" data-test="open-blank">window.open _blank</button>
+          <button type="button" data-test="open-top" class="secondary">window.open _top</button>
+          <button type="button" data-test="open-named" class="secondary">window.open named</button>
+        </p>
+        <p class="row">
+          <span class="status" data-status-for="open-blank">idle</span>
+          <span class="status" data-status-for="open-top">idle</span>
+          <span class="status" data-status-for="open-named">idle</span>
+        </p>
+      </article>
+      <article>
+        <h3>noopener / noreferrer</h3>
+        <p class="row">
+          <button type="button" data-test="open-noopener">window.open noopener</button>
+          <button type="button" data-test="open-noreferrer" class="secondary">window.open noreferrer</button>
+        </p>
+        <p class="row">
+          <span class="status" data-status-for="open-noopener">idle</span>
+          <span class="status" data-status-for="open-noreferrer">idle</span>
+        </p>
+      </article>
+    </section>
+
+    <section aria-labelledby="form-title">
+      <h2 id="form-title">Form Submission</h2>
+      <p class="mono">Submitting with target _top/_parent/_self may navigate away from this page.</p>
+      <article>
+        <h3>POST to example.com (dummy)</h3>
+        <form id="form-top" action="https://example.com" method="post" target="_top" data-test="form-top">
+          <input type="hidden" name="probe" value="sandbox-test">
+          <p class="row">
+            <input type="submit" value="Submit _top">
+            <span class="status" data-status-for="form-top">idle</span>
+          </p>
+        </form>
+      </article>
+      <article>
+        <form id="form-parent" action="https://example.com" method="post" target="_parent" data-test="form-parent">
+          <input type="hidden" name="probe" value="sandbox-test">
+          <p class="row">
+            <input type="submit" value="Submit _parent">
+            <span class="status" data-status-for="form-parent">idle</span>
+          </p>
+        </form>
+      </article>
+      <article>
+        <form id="form-self" action="https://example.com" method="post" target="_self" data-test="form-self">
+          <input type="hidden" name="probe" value="sandbox-test">
+          <p class="row">
+            <input type="submit" value="Submit _self">
+            <span class="status" data-status-for="form-self">idle</span>
+          </p>
+        </form>
+      </article>
+    </section>
+
+    <section aria-labelledby="storage-title">
+      <h2 id="storage-title">Storage &amp; Origin Access</h2>
+      <article>
+        <h3>document.cookie read/write</h3>
+        <p class="row">
+          <button type="button" data-test="cookie-read">Read cookie</button>
+          <button type="button" data-test="cookie-write" class="secondary">Write cookie</button>
+        </p>
+        <p class="row">
+          <span class="status" data-status-for="cookie-read">idle</span>
+          <span class="status" data-status-for="cookie-write">idle</span>
+        </p>
+      </article>
+      <article>
+        <h3>localStorage / sessionStorage</h3>
+        <p class="row">
+          <button type="button" data-test="localstorage">localStorage</button>
+          <button type="button" data-test="sessionstorage" class="secondary">sessionStorage</button>
+        </p>
+        <p class="row">
+          <span class="status" data-status-for="localstorage">idle</span>
+          <span class="status" data-status-for="sessionstorage">idle</span>
+        </p>
+      </article>
+      <article>
+        <h3>indexedDB open</h3>
+        <p class="row">
+          <button type="button" data-test="indexeddb">indexedDB.open</button>
+        </p>
+        <p><span class="status" data-status-for="indexeddb">idle</span></p>
+      </article>
+    </section>
+
+    <section aria-labelledby="js-title">
+      <h2 id="js-title">JavaScript Capabilities</h2>
+      <article>
+        <h3>Inline script check</h3>
+        <p class="row">
+          <button type="button" data-test="inline-script">Check inline script ran</button>
+        </p>
+        <p><span class="status" data-status-for="inline-script">idle</span></p>
+      </article>
+      <article>
+        <h3>External script via data URL</h3>
+        <p class="row">
+          <button type="button" data-test="data-script">Load data URL script</button>
+        </p>
+        <p><span class="status" data-status-for="data-script">idle</span></p>
+      </article>
+      <article>
+        <h3>eval and Function constructor</h3>
+        <p class="row">
+          <button type="button" data-test="eval">eval('2+2')</button>
+          <button type="button" data-test="new-function" class="secondary">new Function</button>
+        </p>
+        <p class="row">
+          <span class="status" data-status-for="eval">idle</span>
+          <span class="status" data-status-for="new-function">idle</span>
+        </p>
+      </article>
+      <article>
+        <h3>alert / confirm / prompt</h3>
+        <p class="row">
+          <button type="button" data-test="alert">alert</button>
+          <button type="button" data-test="confirm" class="secondary">confirm</button>
+          <button type="button" data-test="prompt" class="secondary">prompt</button>
+        </p>
+        <p class="row">
+          <span class="status" data-status-for="alert">idle</span>
+          <span class="status" data-status-for="confirm">idle</span>
+          <span class="status" data-status-for="prompt">idle</span>
+        </p>
+      </article>
+    </section>
+
+    <section aria-labelledby="topframe-title">
+      <h2 id="topframe-title">Top-frame Access Checks</h2>
+      <article>
+        <h3>Read top.location.href</h3>
+        <p class="row">
+          <button type="button" data-test="top-location">Try read top.location.href</button>
+          <button type="button" data-test="top-postmessage" class="secondary">top.postMessage</button>
+        </p>
+        <p class="row">
+          <span class="status" data-status-for="top-location">idle</span>
+          <span class="status" data-status-for="top-postmessage">idle</span>
+        </p>
+      </article>
+    </section>
+
+    <section aria-labelledby="pointer-title">
+      <h2 id="pointer-title">Pointer &amp; Focus</h2>
+      <article>
+        <h3>Focus / Pointer Lock</h3>
+        <p class="row">
+          <button type="button" data-test="focus">window.focus()</button>
+          <button type="button" data-test="pointer-lock" class="secondary">requestPointerLock()</button>
+        </p>
+        <p class="row">
+          <span class="status" data-status-for="focus">idle</span>
+          <span class="status" data-status-for="pointer-lock">idle</span>
+        </p>
+      </article>
+    </section>
+
+    <section aria-labelledby="download-title">
+      <h2 id="download-title">Downloads</h2>
+      <article>
+        <h3>Trigger download link</h3>
+        <p class="row">
+          <a class="action-link" href="data:text/plain;charset=utf-8,Sandbox%20download%20test" download="sandbox-test.txt" data-test="download-link">Download file</a>
+        </p>
+        <p class="row">
+          <span class="status" data-status-for="download-link">idle</span>
+        </p>
+      </article>
+    </section>
+
+    <section aria-labelledby="clipboard-title">
+      <h2 id="clipboard-title">Clipboard</h2>
+      <article>
+        <h3>Read / write</h3>
+        <p class="row">
+          <button type="button" data-test="clipboard-write">clipboard.writeText</button>
+          <button type="button" data-test="clipboard-read" class="secondary">clipboard.readText</button>
+        </p>
+        <p class="row">
+          <span class="status" data-status-for="clipboard-write">idle</span>
+          <span class="status" data-status-for="clipboard-read">idle</span>
+        </p>
+      </article>
+    </section>
+
+    <section aria-labelledby="fullscreen-title">
+      <h2 id="fullscreen-title">Fullscreen</h2>
+      <article>
+        <h3>documentElement.requestFullscreen</h3>
+        <p class="row">
+          <button type="button" data-test="fullscreen">Request fullscreen</button>
+        </p>
+        <p><span class="status" data-status-for="fullscreen">idle</span></p>
+      </article>
+    </section>
+
+    <section aria-labelledby="permissions-title">
+      <h2 id="permissions-title">Permissions &amp; APIs</h2>
+      <article>
+        <h3>Geolocation</h3>
+        <p class="row">
+          <button type="button" data-test="geolocation">navigator.geolocation.getCurrentPosition</button>
+        </p>
+        <p><span class="status" data-status-for="geolocation">idle</span></p>
+      </article>
+      <article>
+        <h3>Notifications</h3>
+        <p class="row">
+          <button type="button" data-test="notifications">Notification.requestPermission</button>
+        </p>
+        <p><span class="status" data-status-for="notifications">idle</span></p>
+      </article>
+      <article>
+        <h3>MediaDevices</h3>
+        <p class="row">
+          <button type="button" data-test="media-devices">navigator.mediaDevices.getUserMedia</button>
+        </p>
+        <p><span class="status" data-status-for="media-devices">idle</span></p>
+      </article>
+    </section>
+  </main>
+
+  <aside>
+    <h2>Results Log</h2>
+    <p class="mono">Each action logs attempted/success/blocked/error with any exception details.</p>
+    <ol id="results-log" aria-live="polite"></ol>
+  </aside>
+
+  <footer>
+    <p>Use in or out of an iframe to compare sandbox behavior.</p>
+  </footer>
+
+  <script>
+    (function () {
+      "use strict";
+
+      var logList = document.getElementById("results-log");
+      var statusMap = new Map();
+
+      function setStatus(testId, state, detail) {
+        var status = statusMap.get(testId);
+        if (!status) {
+          status = document.querySelector('[data-status-for="' + testId + '"]');
+          if (status) {
+            statusMap.set(testId, status);
+          }
+        }
+        if (status) {
+          status.className = "status " + state;
+          status.textContent = detail ? state + ": " + detail : state;
+        }
+      }
+
+      function appendLog(testId, state, detail) {
+        var item = document.createElement("li");
+        var time = new Date().toLocaleTimeString();
+        item.textContent = "[" + time + "] " + testId + " -> " + state + (detail ? " | " + detail : "");
+        logList.prepend(item);
+        setStatus(testId, state, detail);
+      }
+
+      function classifyError(err) {
+        if (!err) {
+          return { state: "error", detail: "error" };
+        }
+        var name = err.name || "";
+        if (name === "SecurityError" || name === "NotAllowedError" || name === "NotSupportedError") {
+          return { state: "blocked", detail: err.message || name };
+        }
+        return { state: "error", detail: err.message || String(err) };
+      }
+
+      function normalizeResult(value) {
+        if (value && typeof value === "object" && value.state) {
+          return value;
+        }
+        return { state: "success", detail: value ? String(value) : "ok" };
+      }
+
+      function runTest(testId, fn) {
+        appendLog(testId, "attempted");
+        try {
+          var result = fn();
+          if (result && typeof result.then === "function") {
+            result
+              .then(function (value) {
+                var normalized = normalizeResult(value);
+                appendLog(testId, normalized.state, normalized.detail);
+              })
+              .catch(function (err) {
+                var classified = classifyError(err);
+                appendLog(testId, classified.state, classified.detail);
+              });
+            return;
+          }
+          var normalizedResult = normalizeResult(result);
+          appendLog(testId, normalizedResult.state, normalizedResult.detail);
+        } catch (err) {
+          var classifiedError = classifyError(err);
+          appendLog(testId, classifiedError.state, classifiedError.detail);
+        }
+      }
+
+      function attachClick(testId, handler) {
+        var el = document.querySelector('[data-test="' + testId + '"]');
+        if (!el) {
+          return;
+        }
+        el.addEventListener("click", function (event) {
+          if (el.tagName === "A") {
+            var detail = el.hasAttribute("download") ? "download triggered" : "link click";
+            appendLog(testId, "attempted", detail);
+            appendLog(testId, "success", el.hasAttribute("download") ? "download dispatched" : "navigation dispatched");
+            return;
+          }
+          event.preventDefault();
+          runTest(testId, handler);
+        });
+      }
+
+      function attachSubmit(testId) {
+        var form = document.querySelector('[data-test="' + testId + '"]');
+        if (!form) {
+          return;
+        }
+        form.addEventListener("submit", function () {
+          appendLog(testId, "attempted", "form submit");
+          setStatus(testId, "attempted", "form submit");
+        });
+      }
+
+      function blockedMessage(err) {
+        if (!err) {
+          return "blocked";
+        }
+        if (err.name) {
+          return err.name + ": " + err.message;
+        }
+        return err.message || String(err);
+      }
+
+      function initMeta() {
+        var referrer = document.getElementById("meta-referrer");
+        var domain = document.getElementById("meta-domain");
+        var origin = document.getElementById("meta-origin");
+        var sandbox = document.getElementById("meta-sandbox");
+        var topFlag = document.getElementById("meta-top");
+
+        referrer.textContent = document.referrer || "(empty)";
+        domain.textContent = document.domain || "(unset)";
+        origin.textContent = document.origin || "(unknown)";
+        var frame = window.frameElement;
+        sandbox.textContent = frame && frame.getAttribute("sandbox") ? frame.getAttribute("sandbox") : "(none)";
+        topFlag.textContent = window.top !== window ? "true" : "false";
+      }
+
+      window.__inlineScriptRan = true;
+
+      attachClick("loc-top", function () {
+        top.location = "https://example.com";
+      });
+
+      attachClick("loc-parent", function () {
+        parent.location = "https://example.com";
+      });
+
+      attachClick("loc-self", function () {
+        location = "https://example.com";
+      });
+
+      attachClick("history-push", function () {
+        history.pushState({ test: "push" }, "", "#pushstate");
+        return "state pushed";
+      });
+
+      attachClick("history-replace", function () {
+        history.replaceState({ test: "replace" }, "", "#replacestate");
+        return "state replaced";
+      });
+
+      attachClick("open-blank", function () {
+        var win = window.open("https://example.com", "_blank");
+        return win ? "window opened" : { state: "blocked", detail: "popup blocked" };
+      });
+
+      attachClick("open-top", function () {
+        var win = window.open("https://example.com", "_top");
+        return win ? "window opened" : { state: "blocked", detail: "popup blocked" };
+      });
+
+      attachClick("open-named", function () {
+        var win = window.open("https://example.com", "sandboxProbe");
+        return win ? "window opened" : { state: "blocked", detail: "popup blocked" };
+      });
+
+      attachClick("open-noopener", function () {
+        var win = window.open("https://example.com", "_blank", "noopener");
+        return win ? "window opened" : { state: "blocked", detail: "popup blocked" };
+      });
+
+      attachClick("open-noreferrer", function () {
+        var win = window.open("https://example.com", "_blank", "noreferrer");
+        return win ? "window opened" : { state: "blocked", detail: "popup blocked" };
+      });
+
+      attachSubmit("form-top");
+      attachSubmit("form-parent");
+      attachSubmit("form-self");
+
+      attachClick("cookie-read", function () {
+        return document.cookie || "(empty)";
+      });
+
+      attachClick("cookie-write", function () {
+        document.cookie = "sandboxTest=1; path=/";
+        return document.cookie || "cookie set";
+      });
+
+      attachClick("localstorage", function () {
+        localStorage.setItem("sandboxTest", new Date().toISOString());
+        return localStorage.getItem("sandboxTest");
+      });
+
+      attachClick("sessionstorage", function () {
+        sessionStorage.setItem("sandboxTest", new Date().toISOString());
+        return sessionStorage.getItem("sandboxTest");
+      });
+
+      attachClick("indexeddb", function () {
+        return new Promise(function (resolve, reject) {
+          if (!("indexedDB" in window)) {
+            reject(new Error("indexedDB not available"));
+            return;
+          }
+          var request = indexedDB.open("sandboxTest", 1);
+          request.onsuccess = function () {
+            resolve("opened");
+          };
+          request.onerror = function () {
+            reject(request.error || new Error("indexedDB error"));
+          };
+          request.onupgradeneeded = function () {
+            resolve("upgrade needed");
+          };
+        });
+      });
+
+      attachClick("inline-script", function () {
+        return window.__inlineScriptRan ? "inline script flag present" : "missing flag";
+      });
+
+      attachClick("data-script", function () {
+        return new Promise(function (resolve, reject) {
+          var script = document.createElement("script");
+          script.src = "data:text/javascript,window.__dataUrlLoaded=true;";
+          script.onload = function () {
+            resolve(window.__dataUrlLoaded ? "data script loaded" : "flag missing");
+          };
+          script.onerror = function () {
+            reject(new Error("data script blocked"));
+          };
+          document.head.appendChild(script);
+        });
+      });
+
+      attachClick("eval", function () {
+        /* eslint-disable no-eval */
+        return eval("2 + 2") === 4 ? "eval ok" : "eval unexpected";
+        /* eslint-enable no-eval */
+      });
+
+      attachClick("new-function", function () {
+        var fn = new Function("return 3 + 3;");
+        return fn() === 6 ? "Function ok" : "Function unexpected";
+      });
+
+      attachClick("alert", function () {
+        alert("Sandbox alert test");
+        return "alert shown";
+      });
+
+      attachClick("confirm", function () {
+        var result = confirm("Sandbox confirm test");
+        return result ? "confirmed" : "dismissed";
+      });
+
+      attachClick("prompt", function () {
+        var result = prompt("Sandbox prompt test", "hello");
+        return result === null ? "cancelled" : "input: " + result;
+      });
+
+      attachClick("top-location", function () {
+        return top.location.href;
+      });
+
+      attachClick("top-postmessage", function () {
+        top.postMessage({ type: "sandbox-test", from: window.location.href }, "*");
+        return "postMessage sent";
+      });
+
+      attachClick("focus", function () {
+        window.focus();
+        return "focus called";
+      });
+
+      attachClick("pointer-lock", function () {
+        if (!document.body.requestPointerLock) {
+          throw new Error("Pointer Lock API not available");
+        }
+        document.body.requestPointerLock();
+        return "pointer lock requested";
+      });
+
+      attachClick("clipboard-write", function () {
+        if (!navigator.clipboard || !navigator.clipboard.writeText) {
+          throw new Error("Clipboard API not available");
+        }
+        return navigator.clipboard.writeText("Sandbox clipboard test");
+      });
+
+      attachClick("clipboard-read", function () {
+        if (!navigator.clipboard || !navigator.clipboard.readText) {
+          throw new Error("Clipboard API not available");
+        }
+        return navigator.clipboard.readText();
+      });
+
+      attachClick("fullscreen", function () {
+        if (!document.documentElement.requestFullscreen) {
+          throw new Error("Fullscreen API not available");
+        }
+        return document.documentElement.requestFullscreen();
+      });
+
+      attachClick("geolocation", function () {
+        if (!navigator.geolocation) {
+          throw new Error("Geolocation not available");
+        }
+        return new Promise(function (resolve, reject) {
+          navigator.geolocation.getCurrentPosition(
+            function (pos) {
+              resolve("lat " + pos.coords.latitude.toFixed(4) + ", lon " + pos.coords.longitude.toFixed(4));
+            },
+            function (err) {
+              var error = new Error(blockedMessage(err));
+              error.name = "NotAllowedError";
+              reject(error);
+            }
+          );
+        });
+      });
+
+      attachClick("notifications", function () {
+        if (!("Notification" in window)) {
+          throw new Error("Notifications not available");
+        }
+        return Notification.requestPermission().then(function (permission) {
+          if (permission === "granted") {
+            return "permission: granted";
+          }
+          return { state: "blocked", detail: "permission: " + permission };
+        });
+      });
+
+      attachClick("media-devices", function () {
+        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+          throw new Error("mediaDevices not available");
+        }
+        return navigator.mediaDevices
+          .getUserMedia({ audio: true, video: false })
+          .then(function (stream) {
+            stream.getTracks().forEach(function (track) {
+              track.stop();
+            });
+            return "audio granted";
+          });
+      });
+
+      attachClick("download-link", function () {
+        return "download clicked";
+      });
+
+      initMeta();
+    })();
+  </script>
+</body>
+</html>
