@@ -1,5 +1,3 @@
-import { promises as fs } from 'node:fs'
-import path from 'node:path'
 import { getQuery } from 'h3'
 import { queryCollection } from '@nuxt/content/server'
 import { getDemos } from '../utils/demos'
@@ -12,27 +10,6 @@ type PostSummary = {
   date: string
   category?: string
   excerpt?: string
-}
-
-const CONTENT_DIR = path.join(process.cwd(), 'content', 'posts')
-const excerptCache = new Map<string, string>()
-
-const getExcerpt = async (slug: string, description: string) => {
-  if (excerptCache.has(slug)) return excerptCache.get(slug) || ''
-  try {
-    const filePath = path.join(CONTENT_DIR, `${slug}.md`)
-    const source = await fs.readFile(filePath, 'utf8')
-    const match = source.match(/<p[^>]*>[\s\S]*?<\/p>/i)
-    if (match?.[0]) {
-      excerptCache.set(slug, match[0])
-      return match[0]
-    }
-  } catch {
-    // Fall back to description.
-  }
-  const fallback = `<p>${description}</p>`
-  excerptCache.set(slug, fallback)
-  return fallback
 }
 
 export default defineEventHandler(async (event) => {
@@ -63,12 +40,10 @@ export default defineEventHandler(async (event) => {
   const totalPages = Math.max(1, Math.ceil(total / pageSize))
   const start = (page - 1) * pageSize
   const paged = posts.slice(start, start + pageSize)
-  const pagedWithExcerpt = await Promise.all(
-    paged.map(async (post) => ({
-      ...post,
-      excerpt: await getExcerpt(post.slug, post.description)
-    }))
-  )
+  const pagedWithExcerpt = paged.map((post) => ({
+    ...post,
+    excerpt: `<p>${post.description}</p>`
+  }))
 
   return {
     page,
