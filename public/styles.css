@@ -164,7 +164,7 @@ a:active { color: color-mix(in oklch, var(--link-hover) 80%, black); }
 .nyt-topbar__left,
 .nyt-topbar__right {
   display: flex;
-  gap: 1rem;
+  gap: 0.6rem;
   align-items: baseline;
 }
 .nyt-date,
@@ -173,10 +173,149 @@ a:active { color: color-mix(in oklch, var(--link-hover) 80%, black); }
   text-transform: uppercase;
   letter-spacing: 0.12em;
 }
+.nyt-separator {
+  opacity: 0.5;
+}
 .nyt-topbar__right a {
   text-decoration: none;
   border-bottom: 1px solid currentColor;
   font-weight: 600;
+}
+.weather-chip {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  background: transparent;
+  color: #222;
+  cursor: help;
+  padding: 0;
+}
+.weather-chip:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+}
+.weather-temp {
+  font: inherit;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  border-bottom: 1px dashed currentColor;
+  padding-bottom: 0.05rem;
+}
+.weather-tooltip {
+  position: absolute;
+  top: 130%;
+  left: 50%;
+  transform: translateX(-50%);
+  min-width: 420px;
+  padding: 1.1rem 1.2rem 1.2rem;
+  border: 1px solid rgba(17, 17, 17, 0.18);
+  border-radius: 0.75rem;
+  background: #fff;
+  color: #222;
+  font-size: 0.85rem;
+  line-height: 1.35;
+  box-shadow: 0 18px 40px rgba(17, 17, 17, 0.12);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.15s ease;
+  z-index: 10;
+  white-space: normal;
+}
+.weather-tooltip__header {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  font-family: var(--sans);
+  margin-bottom: 0.4rem;
+  flex-wrap: wrap;
+}
+.weather-tooltip__temp {
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.weather-tooltip__condition {
+  font-size: 1rem;
+  color: #333;
+}
+.weather-tooltip__wind {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: #555;
+  margin-left: auto;
+}
+.weather-tooltip__meta {
+  display: block;
+  color: #555;
+  font-size: 0.8rem;
+  text-align: center;
+  margin-top: 0.35rem;
+}
+.weather-tooltip__tides {
+  display: block;
+  margin-top: 0.25rem;
+  text-align: center;
+  font-size: 0.78rem;
+  color: #555;
+}
+.weather-tooltip__label {
+  display: block;
+  margin-top: 0.85rem;
+  font-family: var(--sans);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: #666;
+  text-align: center;
+}
+.weather-tooltip__list {
+  list-style: none;
+  padding: 0;
+  margin: 0.6rem 0 0;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(110px, 1fr);
+  gap: 0.65rem;
+}
+.weather-tooltip__list li {
+  margin: 0;
+  border: 1px solid rgba(17, 17, 17, 0.16);
+  border-radius: 0.7rem;
+  padding: 0.6rem 0.55rem;
+  background: #fbfbfb;
+  display: grid;
+  grid-template-rows: auto auto 1fr;
+  gap: 0.25rem;
+  text-align: center;
+}
+.weather-card__label {
+  font-family: var(--sans);
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #555;
+  min-height: 1.8em;
+}
+.weather-card__temp {
+  font-family: var(--sans);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #222;
+  display: grid;
+  gap: 0.2rem;
+}
+.weather-card__condition {
+  font-size: 0.75rem;
+  color: #555;
+  min-height: 2.4em;
+}
+.weather-chip:hover .weather-tooltip,
+.weather-chip:focus-visible .weather-tooltip {
+  opacity: 1;
+  visibility: visible;
 }
 .nyt-logo {
   text-align: center;

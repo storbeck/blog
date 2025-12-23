@@ -15,6 +15,8 @@ const demos = ref<Array<Record<string, unknown>>>([])
 const totalPages = ref(1)
 const isLoadingMore = ref(false)
 
+const { data: weatherData } = await useAsyncData('weather', () => $fetch('/api/weather'))
+
 const { data, pending, error } = await useAsyncData(`posts-page-${currentPage.value}`, () =>
   $fetch('/api/posts', { query: { page: currentPage.value, pageSize } })
 )
@@ -33,6 +35,51 @@ const formatDate = (value: string) => {
   if (Number.isNaN(date.getTime())) return value
   return new Intl.DateTimeFormat('en-US', { dateStyle: 'long' }).format(date)
 }
+
+const weather = computed(() => weatherData.value ?? null)
+const weatherMeta = computed(() => {
+  if (!weather.value) return ''
+  const parts = []
+  if (typeof weather.value.humidity === 'number') {
+    parts.push(`Humidity ${Math.round(weather.value.humidity)}%`)
+  }
+  return parts.join(' | ')
+})
+const forecastCards = computed(() => {
+  if (!weather.value?.forecast?.length) return []
+  return weather.value.forecast.map((entry) => ({
+    label: entry.label,
+    highF: entry.highF,
+    lowF: entry.lowF,
+    condition: entry.condition
+  }))
+})
+const weatherAriaLabel = computed(() => {
+  if (!weather.value) return ''
+  const baseParts = [`${weather.value.condition}`, `${weather.value.tempF}F`]
+  if (typeof weather.value.humidity === 'number') {
+    baseParts.push(`Humidity ${Math.round(weather.value.humidity)}%`)
+  }
+  if (typeof weather.value.windMph === 'number') {
+    baseParts.push(`Wind ${weather.value.windMph} mph`)
+  }
+  if (!forecastCards.value.length) return baseParts.join(' | ')
+  const forecastText = forecastCards.value
+    .map((entry) => {
+      const temps = [entry.highF, entry.lowF].filter((value) => typeof value === 'number')
+      const tempText = temps.length ? `${temps.join('/')}F` : ''
+      return `${entry.label}: ${tempText} ${entry.condition}`.trim()
+    })
+    .join(' | ')
+  return `${baseParts.join(' | ')}. Forecast: ${forecastText}`
+})
+const tideSummary = computed(() => {
+  const tides = weather.value?.tides
+  if (!tides) return ''
+  const high = tides.high.length ? `High ${tides.high.join(', ')}` : ''
+  const low = tides.low.length ? `Low ${tides.low.join(', ')}` : ''
+  return [high, low].filter(Boolean).join(' · ')
+})
 
 const leadPost = computed(() => posts.value[0])
 const secondaryPosts = computed(() => posts.value.slice(1))
@@ -76,7 +123,32 @@ const archiveGroups = computed(() => {
       <div class="nyt-topbar">
         <div class="nyt-topbar__left">
           <p class="nyt-date">{{ formatDate(new Date().toISOString().slice(0, 10)) }}</p>
+          <span class="nyt-separator" aria-hidden="true">|</span>
           <p class="nyt-paper">Ormond Beach, Florida</p>
+          <button v-if="weather" class="weather-chip" type="button" :aria-label="weatherAriaLabel">
+            <span class="weather-temp">{{ weather.tempF }}F</span>
+            <span class="weather-tooltip">
+              <span class="weather-tooltip__header">
+                <span class="weather-tooltip__temp">{{ weather.tempF }}F</span>
+                <span class="weather-tooltip__condition">{{ weather.condition }}</span>
+                <span v-if="weather.windMph !== undefined" class="weather-tooltip__wind">Wind {{ weather.windMph }} mph</span>
+              </span>
+              <span v-if="weatherMeta" class="weather-tooltip__meta">{{ weatherMeta }}</span>
+              <span v-if="tideSummary" class="weather-tooltip__tides">Tides (Daytona Beach): {{ tideSummary }}</span>
+              <span class="weather-tooltip__label">5‑Day Outlook</span>
+              <ul class="weather-tooltip__list">
+                <li v-for="entry in forecastCards" :key="`${entry.label}-${entry.highF}-${entry.lowF}`">
+                  <span class="weather-card__label">{{ entry.label }}</span>
+                  <span class="weather-card__temp">
+                    <span v-if="entry.highF !== undefined && entry.lowF !== undefined">{{ entry.highF }}/{{ entry.lowF }}F</span>
+                    <span v-else-if="entry.highF !== undefined">{{ entry.highF }}F</span>
+                    <span v-else-if="entry.lowF !== undefined">{{ entry.lowF }}F</span>
+                  </span>
+                  <span class="weather-card__condition">{{ entry.condition }}</span>
+                </li>
+              </ul>
+            </span>
+          </button>
         </div>
         <div class="nyt-topbar__right">
           <a href="/feed.xml" rel="alternate">Subscribe</a>
