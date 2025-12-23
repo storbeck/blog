@@ -1,9 +1,12 @@
+import { readFileSync } from 'node:fs'
+import path from 'node:path'
+import { useStorage } from 'nitropack/runtime'
 import { createError, getRouterParam, setHeader } from 'h3'
 import { getDemoBySlug } from '../../utils/demos'
 
-const demoHtmlFiles = import.meta.glob('/legacy/posts/*.html', { as: 'raw', eager: true })
+const storage = useStorage('assets:server')
 
-export default defineEventHandler((event) => {
+export default defineEventHandler(async (event) => {
   const slug = getRouterParam(event, 'slug')
   if (!slug) {
     throw createError({ statusCode: 400, statusMessage: 'Missing demo slug.' })
@@ -14,8 +17,12 @@ export default defineEventHandler((event) => {
     throw createError({ statusCode: 404, statusMessage: 'Demo not found.' })
   }
 
-  const filePath = `/legacy/posts/${demo.legacyFile}`
-  const html = demoHtmlFiles[filePath]
+  const assetPath = `legacy/posts/${demo.legacyFile}`
+  let html = await storage.getItem<string>(assetPath)
+  if (!html && process.env.NODE_ENV !== 'production') {
+    const diskPath = path.join(process.cwd(), 'legacy', 'posts', demo.legacyFile)
+    html = readFileSync(diskPath, 'utf8')
+  }
   if (!html) {
     throw createError({ statusCode: 404, statusMessage: 'Demo file not found.' })
   }

@@ -26,7 +26,10 @@ const legacyRedirects = legacyFiles
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
-  nitro: { preset: 'vercel' },
+  nitro: {
+    preset: 'vercel',
+    serverAssets: [{ baseName: 'legacy', dir: 'legacy' }]
+  },
   modules: ['@nuxt/content'],
   content: {
     experimental: {
