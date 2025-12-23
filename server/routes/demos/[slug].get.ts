@@ -4,7 +4,7 @@ import { useStorage } from 'nitropack/runtime'
 import { createError, getRouterParam, setHeader } from 'h3'
 import { getDemoBySlug } from '../../utils/demos'
 
-const storage = useStorage('assets:server')
+const storage = useStorage('assets')
 
 export default defineEventHandler(async (event) => {
   const slug = getRouterParam(event, 'slug')
