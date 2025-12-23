@@ -238,10 +238,24 @@ article section[aria-label^="Calculator mockup"] { font-size: 16px; line-height:
 /* Blog index layout */
 .recent-posts {
   display: grid;
-  gap: 2.5rem;
+  gap: 0.6rem;
 }
-.recent-posts header {
-  margin-bottom: 0.5rem;
+.recent-posts > header {
+  margin: 0;
+  padding-bottom: 0.2rem;
+  border-bottom: 1px solid var(--rule);
+  text-align: right;
+}
+.recent-posts > header h2 {
+  margin: 0;
+  font-family: var(--sans);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+}
+.demos-block > header,
+.archive-section > header {
+  text-align: right;
 }
 .lead-story {
   border-bottom: 1px solid var(--rule);
@@ -250,6 +264,7 @@ article section[aria-label^="Calculator mockup"] { font-size: 16px; line-height:
 .lead-story h3 {
   font-size: clamp(1.6rem, 2.2vw, 2.1rem);
   line-height: 1.2;
+  margin-top: 0.2rem;
 }
 .recent-grid {
   display: grid;

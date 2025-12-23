@@ -98,6 +98,10 @@ const archiveGroups = computed(() => {
 
     <main>
       <section class="recent-posts newspaper-column" id="recent-posts">
+        <header>
+          <h2>Latest Articles</h2>
+          <p>Recent posts and experiments from the workshop, newest first.</p>
+        </header>
         <p v-if="pending">Loading posts...</p>
         <p v-else-if="error">Posts could not be loaded right now.</p>
         <template v-else>
