@@ -49,6 +49,13 @@ export default defineNuxtConfig({
   app: {
     head: {
       title: "Geoff Storbeck's Blog",
+      script: [
+        {
+          'data-goatcounter': 'https://storbeck.goatcounter.com/count',
+          async: true,
+          src: '//gc.zgo.at/count.js'
+        }
+      ],
       meta: [
         {
           name: 'description',
