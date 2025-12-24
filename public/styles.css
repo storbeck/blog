@@ -359,20 +359,24 @@ a:active { color: color-mix(in oklch, var(--link-hover) 80%, black); }
 
 /* Calculator demos: keep internal type at 16px for layout fidelity */
 article section[aria-label^="Calculator mockup"] { font-size: 16px; line-height: 1.4; }
-.about-details {
-  border: 1px solid rgba(0,0,0,0.08);
-  border-radius: 10px;
-  padding: 0.5rem 0.85rem;
-  background: #f8fafc;
+.about-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 180px) minmax(0, 1fr);
+  gap: 1.5rem;
+  align-items: center;
+  margin-bottom: 1.5rem;
 }
-.about-details summary {
-  cursor: pointer;
-  font-weight: 600;
-  font-family: var(--sans);
-  color: #111;
+.about-photo {
+  margin: 0;
 }
-.about-details summary::-webkit-details-marker { display: none; }
-.about-details p:last-of-type { margin-bottom: 0.25rem; }
+.about-photo img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+  border: 1px solid rgba(17, 17, 17, 0.12);
+  box-shadow: 0 18px 40px rgba(17, 17, 17, 0.12);
+}
 
 /* Blog index layout */
 .recent-posts {
@@ -549,6 +553,12 @@ article section[aria-label^="Calculator mockup"] { font-size: 16px; line-height:
   }
   .nyt-nav {
     justify-content: flex-start;
+  }
+  .about-hero {
+    grid-template-columns: 1fr;
+  }
+  .about-photo {
+    max-width: 240px;
   }
 }
 @media (max-width: 480px) {

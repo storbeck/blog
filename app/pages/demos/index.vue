@@ -18,6 +18,7 @@ const formatDate = (value: string) => {
       <p>These are the posts that need raw HTML, CSS, and JavaScript to make the idea click.</p>
       <nav class="demo-nav" aria-label="Site navigation">
         <a href="/" rel="home">← Back to blog</a>
+        <a href="/about">About</a>
       </nav>
     </header>
 

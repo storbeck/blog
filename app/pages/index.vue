@@ -161,6 +161,7 @@ const archiveGroups = computed(() => {
       </div>
       <nav class="nyt-nav" aria-label="Site sections">
         <a href="#recent-posts">Latest</a>
+        <a href="/about">About me</a>
         <a href="#archive">Archive</a>
         <a href="/demos">Demos</a>
         <a href="#related-links">Links</a>

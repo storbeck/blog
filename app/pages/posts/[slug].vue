@@ -60,6 +60,7 @@ useHead(() => ({
     <nav class="post-nav post-nav--minimal" aria-label="Post navigation">
       <a href="/" rel="home">← Geoff Storbeck's Blog</a>
       <a href="/demos">Explore demos</a>
+      <a href="/about">About</a>
     </nav>
 
     <article class="post-article" itemscope itemtype="http://schema.org/BlogPosting">
