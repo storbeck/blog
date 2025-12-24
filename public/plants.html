@@ -7,9 +7,9 @@
     <title>Backyard Plant Catalog - storbeck.dev</title>
     <link rel="stylesheet" href="styles.css">
 </head>
-<body>
-    <header>
-        <nav aria-label="Site navigation">
+<body class="plants-page">
+    <header class="plants-hero">
+        <nav class="plants-back" aria-label="Site navigation">
             <a href="index.html" rel="home">← Go Home</a>
         </nav>
         <h1>Backyard Plant Catalog</h1>
@@ -17,8 +17,8 @@
         <hr>
     </header>
     
-    <main>
-        <nav>
+    <main class="plants-layout">
+        <nav class="plants-toc" aria-label="Plant categories">
             <h2>Plant Categories</h2>
             <ul>
                 <li><a href="#landscape">Landscape Design</a></li>
@@ -30,26 +30,25 @@
                 <li><a href="#care-guide">Care Guide</a></li>
             </ul>
         </nav>
-        
-        <hr>
 
+        <div class="plants-content">
         <section id="landscape">
             <h2>Landscape Design</h2>
             
             <div class="plant-entry">
-                <a href="images/originals/the_whole_gang.jpg">
+                <a href="images/originals/ill_landscape.jpg">
                     <picture>
                         <source
                             type="image/webp"
-                            srcset="images/the_whole_gang-400w.webp 400w, images/the_whole_gang-800w.webp 800w, images/the_whole_gang-1200w.webp 1200w"
+                            srcset="images/ill_landscape-400w.webp 400w, images/ill_landscape-800w.webp 800w, images/ill_landscape-1200w.webp 1200w"
                             sizes="(max-width: 400px) 400px, (max-width: 800px) 800px, 1200px">
                         <source
                             type="image/jpeg"
-                            srcset="images/the_whole_gang-400w.jpg 400w, images/the_whole_gang-800w.jpg 800w, images/the_whole_gang-1200w.jpg 1200w"
+                            srcset="images/ill_landscape-400w.jpg 400w, images/ill_landscape-800w.jpg 800w, images/ill_landscape-1200w.jpg 1200w"
                             sizes="(max-width: 400px) 400px, (max-width: 800px) 800px, 1200px">
                         <img
-                            src="images/the_whole_gang-800w.jpg"
-                            alt="Group shot of crotons, snake plants, pygmy date palm, and ponytail palm"
+                            src="images/ill_landscape-800w.jpg"
+                            alt="Botanical plate of a Florida palmetto hammock landscape"
                             width="200"
                             height="150"
                             loading="eager"
@@ -69,18 +68,18 @@
             <div class="plant-entry">
                 <h3>Southern Live Oak</h3>
                 <p class="scientific-name"><em>Quercus virginiana</em></p>
-                <a href="images/originals/live_oak.jpeg">
+                <a href="images/originals/ill_live_oak.jpg">
                     <picture>
                         <source
                             type="image/webp"
-                            srcset="images/live_oak-400w.webp 400w, images/live_oak-800w.webp 800w, images/live_oak-1200w.webp 1200w"
+                            srcset="images/ill_live_oak-400w.webp 400w, images/ill_live_oak-800w.webp 800w, images/ill_live_oak-1200w.webp 1200w"
                             sizes="(max-width: 400px) 400px, (max-width: 800px) 800px, 1200px">
                         <source
                             type="image/jpeg"
-                            srcset="images/live_oak-400w.jpg 400w, images/live_oak-800w.jpg 800w, images/live_oak-1200w.jpg 1200w"
+                            srcset="images/ill_live_oak-400w.jpg 400w, images/ill_live_oak-800w.jpg 800w, images/ill_live_oak-1200w.jpg 1200w"
                             sizes="(max-width: 400px) 400px, (max-width: 800px) 800px, 1200px">
                         <img
-                            src="images/live_oak-800w.jpg"
+                            src="images/ill_live_oak-800w.jpg"
                             alt="Southern Live Oak tree"
                             width="200"
                             height="267"
@@ -98,18 +97,18 @@
             <div class="plant-entry">
                 <h3>Weeping Fig</h3>
                 <p class="scientific-name"><em>Ficus benjamina</em></p>
-                <a href="images/originals/ficus_benjamina.jpeg">
+                <a href="images/originals/ill_ficus_benjamina.jpg">
                     <picture>
                         <source
                             type="image/webp"
-                            srcset="images/ficus_benjamina-400w.webp 400w, images/ficus_benjamina-800w.webp 800w, images/ficus_benjamina-1200w.webp 1200w"
+                            srcset="images/ill_ficus_benjamina-400w.webp 400w, images/ill_ficus_benjamina-800w.webp 800w, images/ill_ficus_benjamina-1200w.webp 1200w"
                             sizes="(max-width: 400px) 400px, (max-width: 800px) 800px, 1200px">
                         <source
                             type="image/jpeg"
-                            srcset="images/ficus_benjamina-400w.jpg 400w, images/ficus_benjamina-800w.jpg 800w, images/ficus_benjamina-1200w.jpg 1200w"
+                            srcset="images/ill_ficus_benjamina-400w.jpg 400w, images/ill_ficus_benjamina-800w.jpg 800w, images/ill_ficus_benjamina-1200w.jpg 1200w"
                             sizes="(max-width: 400px) 400px, (max-width: 800px) 800px, 1200px">
                         <img
-                            src="images/ficus_benjamina-800w.jpg"
+                            src="images/ill_ficus_benjamina-800w.jpg"
                             alt="Weeping Fig tree"
                             width="200"
                             height="267"
@@ -131,18 +130,18 @@
             <div class="plant-entry">
                 <h3>Pygmy Date Palm</h3>
                 <p class="scientific-name"><em>Phoenix roebelenii</em></p>
-                <a href="images/originals/pygmy_date_palm.jpeg">
+                <a href="images/originals/ill_pygmy_date_palm.jpg">
                     <picture>
                         <source
                             type="image/webp"
-                            srcset="images/pygmy_date_palm-400w.webp 400w, images/pygmy_date_palm-800w.webp 800w, images/pygmy_date_palm-1200w.webp 1200w"
+                            srcset="images/ill_pygmy_date_palm-400w.webp 400w, images/ill_pygmy_date_palm-800w.webp 800w, images/ill_pygmy_date_palm-1200w.webp 1200w"
                             sizes="(max-width: 400px) 400px, (max-width: 800px) 800px, 1200px">
                         <source
                             type="image/jpeg"
-                            srcset="images/pygmy_date_palm-400w.jpg 400w, images/pygmy_date_palm-800w.jpg 800w, images/pygmy_date_palm-1200w.jpg 1200w"
+                            srcset="images/ill_pygmy_date_palm-400w.jpg 400w, images/ill_pygmy_date_palm-800w.jpg 800w, images/ill_pygmy_date_palm-1200w.jpg 1200w"
                             sizes="(max-width: 400px) 400px, (max-width: 800px) 800px, 1200px">
                         <img
-                            src="images/pygmy_date_palm-800w.jpg"
+                            src="images/ill_pygmy_date_palm-800w.jpg"
                             alt="Pygmy Date Palm"
                             width="200"
                             height="267"
@@ -150,18 +149,18 @@
                             decoding="async">
                     </picture>
                 </a>
-                <a href="images/originals/pygmy_date_palm_planted.jpeg">
+                <a href="images/originals/ill_pygmy_date_palm_planted.jpg">
                     <picture>
                         <source
                             type="image/webp"
-                            srcset="images/pygmy_date_palm_planted-400w.webp 400w, images/pygmy_date_palm_planted-800w.webp 800w, images/pygmy_date_palm_planted-1200w.webp 1200w"
+                            srcset="images/ill_pygmy_date_palm_planted-400w.webp 400w, images/ill_pygmy_date_palm_planted-800w.webp 800w, images/ill_pygmy_date_palm_planted-1200w.webp 1200w"
                             sizes="(max-width: 400px) 400px, (max-width: 800px) 800px, 1200px">
                         <source
                             type="image/jpeg"
-                            srcset="images/pygmy_date_palm_planted-400w.jpg 400w, images/pygmy_date_palm_planted-800w.jpg 800w, images/pygmy_date_palm_planted-1200w.jpg 1200w"
+                            srcset="images/ill_pygmy_date_palm_planted-400w.jpg 400w, images/ill_pygmy_date_palm_planted-800w.jpg 800w, images/ill_pygmy_date_palm_planted-1200w.jpg 1200w"
                             sizes="(max-width: 400px) 400px, (max-width: 800px) 800px, 1200px">
                         <img
-                            src="images/pygmy_date_palm_planted-800w.jpg"
+                            src="images/ill_pygmy_date_palm_planted-800w.jpg"
                             alt="Pygmy Date Palm planted"
                             width="200"
                             height="267"
@@ -179,18 +178,18 @@
             <div class="plant-entry">
                 <h3>Ponytail Palm</h3>
                 <p class="scientific-name"><em>Beaucarnea recurvata</em></p>
-                <a href="images/originals/ponytail_palm.jpeg">
+                <a href="images/originals/ill_ponytail_palm.jpg">
                     <picture>
                         <source
                             type="image/webp"
-                            srcset="images/ponytail_palm-400w.webp 400w, images/ponytail_palm-800w.webp 800w, images/ponytail_palm-1200w.webp 1200w"
+                            srcset="images/ill_ponytail_palm-400w.webp 400w, images/ill_ponytail_palm-800w.webp 800w, images/ill_ponytail_palm-1200w.webp 1200w"
                             sizes="(max-width: 400px) 400px, (max-width: 800px) 800px, 1200px">
                         <source
                             type="image/jpeg"
-                            srcset="images/ponytail_palm-400w.jpg 400w, images/ponytail_palm-800w.jpg 800w, images/ponytail_palm-1200w.jpg 1200w"
+                            srcset="images/ill_ponytail_palm-400w.jpg 400w, images/ill_ponytail_palm-800w.jpg 800w, images/ill_ponytail_palm-1200w.jpg 1200w"
                             sizes="(max-width: 400px) 400px, (max-width: 800px) 800px, 1200px">
                         <img
-                            src="images/ponytail_palm-800w.jpg"
+                            src="images/ill_ponytail_palm-800w.jpg"
                             alt="Ponytail Palm"
                             width="200"
                             height="267"
@@ -205,7 +204,7 @@
                 </div>
             </div>
             
-            <div class="plant-entry">
+            <div class="plant-entry plant-entry--no-media">
                 <h3>Native Palmettos</h3>
                 <p class="scientific-name"><em>Serenoa repens / Sabal palmetto</em></p>
                 <div class="plant-details">
@@ -222,18 +221,18 @@
             <div class="plant-entry">
                 <h3>Tree Philodendron</h3>
                 <p class="scientific-name"><em>Thaumatophyllum bipinnatifidum</em></p>
-                <a href="images/originals/philodendron_selloum.jpeg">
+                <a href="images/originals/ill_tree_philodendron.jpg">
                     <picture>
                         <source
                             type="image/webp"
-                            srcset="images/philodendron_selloum-400w.webp 400w, images/philodendron_selloum-800w.webp 800w, images/philodendron_selloum-1200w.webp 1200w"
+                            srcset="images/ill_tree_philodendron-400w.webp 400w, images/ill_tree_philodendron-800w.webp 800w, images/ill_tree_philodendron-1200w.webp 1200w"
                             sizes="(max-width: 400px) 400px, (max-width: 800px) 800px, 1200px">
                         <source
                             type="image/jpeg"
-                            srcset="images/philodendron_selloum-400w.jpg 400w, images/philodendron_selloum-800w.jpg 800w, images/philodendron_selloum-1200w.jpg 1200w"
+                            srcset="images/ill_tree_philodendron-400w.jpg 400w, images/ill_tree_philodendron-800w.jpg 800w, images/ill_tree_philodendron-1200w.jpg 1200w"
                             sizes="(max-width: 400px) 400px, (max-width: 800px) 800px, 1200px">
                         <img
-                            src="images/philodendron_selloum-800w.jpg"
+                            src="images/ill_tree_philodendron-800w.jpg"
                             alt="Tree Philodendron"
                             width="200"
                             height="267"
@@ -251,18 +250,18 @@
             <div class="plant-entry">
                 <h3>Xanadu Philodendron</h3>
                 <p class="scientific-name"><em>Thaumatophyllum xanadu</em></p>
-                <a href="images/originals/philodendron.jpeg">
+                <a href="images/originals/ill_xanadu_philodendron.jpg">
                     <picture>
                         <source
                             type="image/webp"
-                            srcset="images/philodendron-400w.webp 400w, images/philodendron-800w.webp 800w, images/philodendron-1200w.webp 1200w"
+                            srcset="images/ill_xanadu_philodendron-400w.webp 400w, images/ill_xanadu_philodendron-800w.webp 800w, images/ill_xanadu_philodendron-1200w.webp 1200w"
                             sizes="(max-width: 400px) 400px, (max-width: 800px) 800px, 1200px">
                         <source
                             type="image/jpeg"
-                            srcset="images/philodendron-400w.jpg 400w, images/philodendron-800w.jpg 800w, images/philodendron-1200w.jpg 1200w"
+                            srcset="images/ill_xanadu_philodendron-400w.jpg 400w, images/ill_xanadu_philodendron-800w.jpg 800w, images/ill_xanadu_philodendron-1200w.jpg 1200w"
                             sizes="(max-width: 400px) 400px, (max-width: 800px) 800px, 1200px">
                         <img
-                            src="images/philodendron-800w.jpg"
+                            src="images/ill_xanadu_philodendron-800w.jpg"
                             alt="Xanadu Philodendron"
                             width="200"
                             height="267"
@@ -280,18 +279,18 @@
             <div class="plant-entry">
                 <h3>Elephant Ear</h3>
                 <p class="scientific-name"><em>Colocasia esculenta</em></p>
-                <a href="images/originals/elephant_ear.jpeg">
+                <a href="images/originals/ill_elephant_ear.jpg">
                     <picture>
                         <source
                             type="image/webp"
-                            srcset="images/elephant_ear-400w.webp 400w, images/elephant_ear-800w.webp 800w, images/elephant_ear-1200w.webp 1200w"
+                            srcset="images/ill_elephant_ear-400w.webp 400w, images/ill_elephant_ear-800w.webp 800w, images/ill_elephant_ear-1200w.webp 1200w"
                             sizes="(max-width: 400px) 400px, (max-width: 800px) 800px, 1200px">
                         <source
                             type="image/jpeg"
-                            srcset="images/elephant_ear-400w.jpg 400w, images/elephant_ear-800w.jpg 800w, images/elephant_ear-1200w.jpg 1200w"
+                            srcset="images/ill_elephant_ear-400w.jpg 400w, images/ill_elephant_ear-800w.jpg 800w, images/ill_elephant_ear-1200w.jpg 1200w"
                             sizes="(max-width: 400px) 400px, (max-width: 800px) 800px, 1200px">
                         <img
-                            src="images/elephant_ear-800w.jpg"
+                            src="images/ill_elephant_ear-800w.jpg"
                             alt="Elephant Ear plant"
                             width="200"
                             height="267"
@@ -309,18 +308,18 @@
             <div class="plant-entry">
                 <h3>Ti Plant</h3>
                 <p class="scientific-name"><em>Cordyline fruticosa</em></p>
-                <a href="images/originals/hawaiian_ti.jpeg">
+                <a href="images/originals/ill_ti_plant.jpg">
                     <picture>
                         <source
                             type="image/webp"
-                            srcset="images/hawaiian_ti-400w.webp 400w, images/hawaiian_ti-800w.webp 800w, images/hawaiian_ti-1200w.webp 1200w"
+                            srcset="images/ill_ti_plant-400w.webp 400w, images/ill_ti_plant-800w.webp 800w, images/ill_ti_plant-1200w.webp 1200w"
                             sizes="(max-width: 400px) 400px, (max-width: 800px) 800px, 1200px">
                         <source
                             type="image/jpeg"
-                            srcset="images/hawaiian_ti-400w.jpg 400w, images/hawaiian_ti-800w.jpg 800w, images/hawaiian_ti-1200w.jpg 1200w"
+                            srcset="images/ill_ti_plant-400w.jpg 400w, images/ill_ti_plant-800w.jpg 800w, images/ill_ti_plant-1200w.jpg 1200w"
                             sizes="(max-width: 400px) 400px, (max-width: 800px) 800px, 1200px">
                         <img
-                            src="images/hawaiian_ti-800w.jpg"
+                            src="images/ill_ti_plant-800w.jpg"
                             alt="Ti Plant"
                             width="200"
                             height="150"
@@ -338,18 +337,18 @@
             <div class="plant-entry">
                 <h3>White Bird of Paradise</h3>
                 <p class="scientific-name"><em>Strelitzia nicolai</em></p>
-                <a href="images/originals/bird_of_paradise.jpeg">
+                <a href="images/originals/ill_bird_of_paradise.jpg">
                     <picture>
                         <source
                             type="image/webp"
-                            srcset="images/bird_of_paradise-400w.webp 400w, images/bird_of_paradise-800w.webp 800w, images/bird_of_paradise-1200w.webp 1200w"
+                            srcset="images/ill_bird_of_paradise-400w.webp 400w, images/ill_bird_of_paradise-800w.webp 800w, images/ill_bird_of_paradise-1200w.webp 1200w"
                             sizes="(max-width: 400px) 400px, (max-width: 800px) 800px, 1200px">
                         <source
                             type="image/jpeg"
-                            srcset="images/bird_of_paradise-400w.jpg 400w, images/bird_of_paradise-800w.jpg 800w, images/bird_of_paradise-1200w.jpg 1200w"
+                            srcset="images/ill_bird_of_paradise-400w.jpg 400w, images/ill_bird_of_paradise-800w.jpg 800w, images/ill_bird_of_paradise-1200w.jpg 1200w"
                             sizes="(max-width: 400px) 400px, (max-width: 800px) 800px, 1200px">
                         <img
-                            src="images/bird_of_paradise-800w.jpg"
+                            src="images/ill_bird_of_paradise-800w.jpg"
                             alt="White Bird of Paradise"
                             width="200"
                             height="150"
@@ -367,18 +366,18 @@
             <div class="plant-entry">
                 <h3>Snake Plant</h3>
                 <p class="scientific-name"><em>Dracaena trifasciata</em></p>
-                <a href="images/originals/snake_plant.jpeg">
+                <a href="images/originals/ill_snake_plant.jpg">
                     <picture>
                         <source
                             type="image/webp"
-                            srcset="images/snake_plant-400w.webp 400w, images/snake_plant-800w.webp 800w, images/snake_plant-1200w.webp 1200w"
+                            srcset="images/ill_snake_plant-400w.webp 400w, images/ill_snake_plant-800w.webp 800w, images/ill_snake_plant-1200w.webp 1200w"
                             sizes="(max-width: 400px) 400px, (max-width: 800px) 800px, 1200px">
                         <source
                             type="image/jpeg"
-                            srcset="images/snake_plant-400w.jpg 400w, images/snake_plant-800w.jpg 800w, images/snake_plant-1200w.jpg 1200w"
+                            srcset="images/ill_snake_plant-400w.jpg 400w, images/ill_snake_plant-800w.jpg 800w, images/ill_snake_plant-1200w.jpg 1200w"
                             sizes="(max-width: 400px) 400px, (max-width: 800px) 800px, 1200px">
                         <img
-                            src="images/snake_plant-800w.jpg"
+                            src="images/ill_snake_plant-800w.jpg"
                             alt="Snake Plant"
                             width="200"
                             height="267"
@@ -396,18 +395,18 @@
             <div class="plant-entry">
                 <h3>Croton</h3>
                 <p class="scientific-name"><em>Codiaeum variegatum</em></p>
-                <a href="images/originals/crotons.jpeg">
+                <a href="images/originals/ill_croton.jpg">
                     <picture>
                         <source
                             type="image/webp"
-                            srcset="images/crotons-400w.webp 400w, images/crotons-800w.webp 800w, images/crotons-1200w.webp 1200w"
+                            srcset="images/ill_croton-400w.webp 400w, images/ill_croton-800w.webp 800w, images/ill_croton-1200w.webp 1200w"
                             sizes="(max-width: 400px) 400px, (max-width: 800px) 800px, 1200px">
                         <source
                             type="image/jpeg"
-                            srcset="images/crotons-400w.jpg 400w, images/crotons-800w.jpg 800w, images/crotons-1200w.jpg 1200w"
+                            srcset="images/ill_croton-400w.jpg 400w, images/ill_croton-800w.jpg 800w, images/ill_croton-1200w.jpg 1200w"
                             sizes="(max-width: 400px) 400px, (max-width: 800px) 800px, 1200px">
                         <img
-                            src="images/crotons-800w.jpg"
+                            src="images/ill_croton-800w.jpg"
                             alt="Croton plants"
                             width="200"
                             height="267"
@@ -429,18 +428,18 @@
             <div class="plant-entry">
                 <h3>Plumeria (Frangipani)</h3>
                 <p class="scientific-name"><em>Plumeria rubra/obtusa</em></p>
-                <a href="images/originals/plumeria.jpeg">
+                <a href="images/originals/ill_plumeria.jpg">
                     <picture>
                         <source
                             type="image/webp"
-                            srcset="images/plumeria-400w.webp 400w, images/plumeria-800w.webp 800w, images/plumeria-1200w.webp 1200w"
+                            srcset="images/ill_plumeria-400w.webp 400w, images/ill_plumeria-800w.webp 800w, images/ill_plumeria-1200w.webp 1200w"
                             sizes="(max-width: 400px) 400px, (max-width: 800px) 800px, 1200px">
                         <source
                             type="image/jpeg"
-                            srcset="images/plumeria-400w.jpg 400w, images/plumeria-800w.jpg 800w, images/plumeria-1200w.jpg 1200w"
+                            srcset="images/ill_plumeria-400w.jpg 400w, images/ill_plumeria-800w.jpg 800w, images/ill_plumeria-1200w.jpg 1200w"
                             sizes="(max-width: 400px) 400px, (max-width: 800px) 800px, 1200px">
                         <img
-                            src="images/plumeria-800w.jpg"
+                            src="images/ill_plumeria-800w.jpg"
                             alt="Plumeria tree"
                             width="200"
                             height="267"
@@ -458,18 +457,18 @@
             <div class="plant-entry">
                 <h3>Mandevilla (Rocktrumpet)</h3>
                 <p class="scientific-name"><em>Mandevilla sanderi</em></p>
-                <a href="images/originals/mandevilla.jpeg">
+                <a href="images/originals/ill_mandevilla.jpg">
                     <picture>
                         <source
                             type="image/webp"
-                            srcset="images/mandevilla-400w.webp 400w, images/mandevilla-800w.webp 800w, images/mandevilla-1200w.webp 1200w"
+                            srcset="images/ill_mandevilla-400w.webp 400w, images/ill_mandevilla-800w.webp 800w, images/ill_mandevilla-1200w.webp 1200w"
                             sizes="(max-width: 400px) 400px, (max-width: 800px) 800px, 1200px">
                         <source
                             type="image/jpeg"
-                            srcset="images/mandevilla-400w.jpg 400w, images/mandevilla-800w.jpg 800w, images/mandevilla-1200w.jpg 1200w"
+                            srcset="images/ill_mandevilla-400w.jpg 400w, images/ill_mandevilla-800w.jpg 800w, images/ill_mandevilla-1200w.jpg 1200w"
                             sizes="(max-width: 400px) 400px, (max-width: 800px) 800px, 1200px">
                         <img
-                            src="images/mandevilla-800w.jpg"
+                            src="images/ill_mandevilla-800w.jpg"
                             alt="Mandevilla vine"
                             width="200"
                             height="267"
@@ -487,18 +486,18 @@
             <div class="plant-entry">
                 <h3>Oleander</h3>
                 <p class="scientific-name"><em>Nerium oleander</em></p>
-                <a href="images/originals/oleander.jpeg">
+                <a href="images/originals/ill_oleander.jpg">
                     <picture>
                         <source
                             type="image/webp"
-                            srcset="images/oleander-400w.webp 400w, images/oleander-800w.webp 800w, images/oleander-1200w.webp 1200w"
+                            srcset="images/ill_oleander-400w.webp 400w, images/ill_oleander-800w.webp 800w, images/ill_oleander-1200w.webp 1200w"
                             sizes="(max-width: 400px) 400px, (max-width: 800px) 800px, 1200px">
                         <source
                             type="image/jpeg"
-                            srcset="images/oleander-400w.jpg 400w, images/oleander-800w.jpg 800w, images/oleander-1200w.jpg 1200w"
+                            srcset="images/ill_oleander-400w.jpg 400w, images/ill_oleander-800w.jpg 800w, images/ill_oleander-1200w.jpg 1200w"
                             sizes="(max-width: 400px) 400px, (max-width: 800px) 800px, 1200px">
                         <img
-                            src="images/oleander-800w.jpg"
+                            src="images/ill_oleander-800w.jpg"
                             alt="Oleander shrub"
                             width="200"
                             height="267"
@@ -516,18 +515,18 @@
             <div class="plant-entry">
                 <h3>Mexican Petunia</h3>
                 <p class="scientific-name"><em>Ruellia simplex</em></p>
-                <a href="images/originals/opportunistic_volunteers.jpeg">
+                <a href="images/originals/ill_ruellia.jpg">
                     <picture>
                         <source
                             type="image/webp"
-                            srcset="images/opportunistic_volunteers-400w.webp 400w, images/opportunistic_volunteers-800w.webp 800w, images/opportunistic_volunteers-1200w.webp 1200w"
+                            srcset="images/ill_ruellia-400w.webp 400w, images/ill_ruellia-800w.webp 800w, images/ill_ruellia-1200w.webp 1200w"
                             sizes="(max-width: 400px) 400px, (max-width: 800px) 800px, 1200px">
                         <source
                             type="image/jpeg"
-                            srcset="images/opportunistic_volunteers-400w.jpg 400w, images/opportunistic_volunteers-800w.jpg 800w, images/opportunistic_volunteers-1200w.jpg 1200w"
+                            srcset="images/ill_ruellia-400w.jpg 400w, images/ill_ruellia-800w.jpg 800w, images/ill_ruellia-1200w.jpg 1200w"
                             sizes="(max-width: 400px) 400px, (max-width: 800px) 800px, 1200px">
                         <img
-                            src="images/opportunistic_volunteers-800w.jpg"
+                            src="images/ill_ruellia-800w.jpg"
                             alt="Mexican Petunia and native ground cover"
                             width="200"
                             height="267"
@@ -549,18 +548,18 @@
             <div class="plant-entry">
                 <h3>Foxtail Fern</h3>
                 <p class="scientific-name"><em>Asparagus densiflorus</em></p>
-                <a href="images/originals/foxtail_fern.jpeg">
+                <a href="images/originals/ill_foxtail_fern.jpg">
                     <picture>
                         <source
                             type="image/webp"
-                            srcset="images/foxtail_fern-400w.webp 400w, images/foxtail_fern-800w.webp 800w, images/foxtail_fern-1200w.webp 1200w"
+                            srcset="images/ill_foxtail_fern-400w.webp 400w, images/ill_foxtail_fern-800w.webp 800w, images/ill_foxtail_fern-1200w.webp 1200w"
                             sizes="(max-width: 400px) 400px, (max-width: 800px) 800px, 1200px">
                         <source
                             type="image/jpeg"
-                            srcset="images/foxtail_fern-400w.jpg 400w, images/foxtail_fern-800w.jpg 800w, images/foxtail_fern-1200w.jpg 1200w"
+                            srcset="images/ill_foxtail_fern-400w.jpg 400w, images/ill_foxtail_fern-800w.jpg 800w, images/ill_foxtail_fern-1200w.jpg 1200w"
                             sizes="(max-width: 400px) 400px, (max-width: 800px) 800px, 1200px">
                         <img
-                            src="images/foxtail_fern-800w.jpg"
+                            src="images/ill_foxtail_fern-800w.jpg"
                             alt="Foxtail Fern"
                             width="200"
                             height="267"
@@ -579,36 +578,43 @@
         <section id="care-guide">
             <h2>Ormond Beach Care Guide</h2>
             <div class="care-summary">
-                <h3>Climate & Conditions</h3>
-                <ul>
-                    <li><strong>USDA Zone:</strong> 9b - Coastal Central Florida</li>
-                    <li><strong>Soil Type:</strong> Sandy, well-draining</li>
-                    <li><strong>Climate:</strong> Subtropical with salt air exposure</li>
-                    <li><strong>Growing Season:</strong> Year-round with winter dormancy for some species</li>
-                </ul>
-                
-                <h3>General Care Tips</h3>
-                <ul>
-                    <li><strong>Watering:</strong> Most plants benefit from morning watering with afternoon shade</li>
-                    <li><strong>Cold Protection:</strong> Protect tender tropicals when temps drop below 40°F</li>
-                    <li><strong>Hurricane Season:</strong> Prune dead fronds and branches before storm season</li>
-                    <li><strong>Salt Tolerance:</strong> Choose salt-tolerant species for exposed coastal areas</li>
-                </ul>
-                
-                <h3>Seasonal Calendar</h3>
-                <ul>
-                    <li><strong>Spring (Mar-May):</strong> Fertilize, prune, plant new specimens</li>
-                    <li><strong>Summer (Jun-Aug):</strong> Regular watering, monitor for pests</li>
-                    <li><strong>Fall (Sep-Nov):</strong> Reduce watering, prepare for cooler weather</li>
-                    <li><strong>Winter (Dec-Feb):</strong> Minimal watering, protect from cold snaps</li>
-                </ul>
+                <div class="care-block">
+                    <h3>Climate & Conditions</h3>
+                    <ul>
+                        <li><strong>USDA Zone:</strong> 9b - Coastal Central Florida</li>
+                        <li><strong>Soil Type:</strong> Sandy, well-draining</li>
+                        <li><strong>Climate:</strong> Subtropical with salt air exposure</li>
+                        <li><strong>Growing Season:</strong> Year-round with winter dormancy for some species</li>
+                    </ul>
+                </div>
+
+                <div class="care-block">
+                    <h3>General Care Tips</h3>
+                    <ul>
+                        <li><strong>Watering:</strong> Most plants benefit from morning watering with afternoon shade</li>
+                        <li><strong>Cold Protection:</strong> Protect tender tropicals when temps drop below 40°F</li>
+                        <li><strong>Hurricane Season:</strong> Prune dead fronds and branches before storm season</li>
+                        <li><strong>Salt Tolerance:</strong> Choose salt-tolerant species for exposed coastal areas</li>
+                    </ul>
+                </div>
+
+                <div class="care-block">
+                    <h3>Seasonal Calendar</h3>
+                    <ul>
+                        <li><strong>Spring (Mar-May):</strong> Fertilize, prune, plant new specimens</li>
+                        <li><strong>Summer (Jun-Aug):</strong> Regular watering, monitor for pests</li>
+                        <li><strong>Fall (Sep-Nov):</strong> Reduce watering, prepare for cooler weather</li>
+                        <li><strong>Winter (Dec-Feb):</strong> Minimal watering, protect from cold snaps</li>
+                    </ul>
+                </div>
             </div>
         </section>
+        </div>
     </main>
     
     <footer>
         <hr>
-        <p><small>Last updated: <time datetime="2024-10-06">October 6, 2024</time> • Plant identifications via ChatGPT image analysis</small></p>
+        <p><small>Last updated: <time datetime="2024-10-06">October 6, 2024</time> • Plant identifications via ChatGPT image analysis • Botanical plates sourced from public-domain archives</small></p>
     </footer>
 </body>
 </html>
