@@ -7,9 +7,26 @@
   --ink: #121212;
   --paper: #ffffff;
   --rule: rgba(17, 17, 17, 0.15);
+  --surface: #ffffff;
+  --surface-elevated: #fbfbfb;
+  --surface-muted: #f6f3ee;
+  --shadow-color: rgba(17, 17, 17, 0.12);
   --link: #1c3f7a;
   --link-hover: #0f2c5f;
   --link-visited: #4a4073;
+}
+html.theme-dark {
+  color-scheme: dark;
+  --ink: #e6e1d8;
+  --paper: #111110;
+  --rule: rgba(230, 225, 216, 0.16);
+  --surface: #1b1a18;
+  --surface-elevated: #24221f;
+  --surface-muted: #2c2925;
+  --shadow-color: rgba(0, 0, 0, 0.6);
+  --link: #d9c7a6;
+  --link-hover: #ead7b5;
+  --link-visited: #ccb6d9;
 }
 html { font-family: var(--sans); font-size: 16px; }
 @media (min-width: 960px) { html { font-size: 17px; } }
@@ -34,8 +51,12 @@ body {
   border: 1px solid rgba(17, 17, 17, 0.1);
   border-radius: 0.75rem;
   padding: 0.75rem;
-  background: #fafafa;
+  background: var(--surface-elevated);
   box-shadow: 0 8px 24px rgba(17, 17, 17, 0.05);
+}
+html.theme-dark .download-grid figure {
+  border-color: rgba(242, 234, 221, 0.12);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
 }
 
 .download-grid img {
@@ -128,6 +149,7 @@ dialog.image-modal::backdrop { background: rgba(0,0,0,0.85); }
 
 /* Code */
 pre { overflow: auto; padding: 0.75rem; background: #eef0f3; border: 1px solid #d9dde3; border-radius: 6px; font-size: 0.95rem; }
+html.theme-dark pre { background: #1a1714; border-color: rgba(245, 239, 230, 0.2); }
 code, pre, kbd, samp { font-family: var(--mono); }
 code { font-size: 0.95em; }
 /* Inline code should blend with text; no box */
@@ -136,6 +158,7 @@ pre code { background: none; padding: 0; }
 
 /* Blockquotes */
 blockquote { padding: 0.5rem 1rem; border-inline-start: 4px solid currentColor; background: rgba(127,127,127,0.06); }
+html.theme-dark blockquote { background: rgba(245, 239, 230, 0.08); }
 
 /* Tables */
 table { width: 100%; border-collapse: collapse; }
@@ -181,6 +204,35 @@ a:active { color: color-mix(in oklch, var(--link-hover) 80%, black); }
   border-bottom: 1px solid currentColor;
   font-weight: 600;
 }
+.theme-toggle {
+  border: 1px solid var(--rule);
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-family: var(--sans);
+  font-size: 0.9rem;
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  cursor: pointer;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.theme-toggle__icon {
+  font-size: 1.1rem;
+  line-height: 1;
+  display: block;
+}
+.theme-toggle:hover {
+  background: rgba(17, 17, 17, 0.04);
+}
+html.theme-dark .theme-toggle:hover {
+  background: rgba(245, 239, 230, 0.08);
+}
 .weather-chip {
   position: relative;
   display: inline-flex;
@@ -212,16 +264,22 @@ a:active { color: color-mix(in oklch, var(--link-hover) 80%, black); }
   padding: 1.1rem 1.2rem 1.2rem;
   border: 1px solid rgba(17, 17, 17, 0.18);
   border-radius: 0.75rem;
-  background: #fff;
+  background: var(--surface);
   color: #222;
   font-size: 0.85rem;
   line-height: 1.35;
-  box-shadow: 0 18px 40px rgba(17, 17, 17, 0.12);
+  box-shadow: 0 18px 40px var(--shadow-color);
   opacity: 0;
   visibility: hidden;
   transition: opacity 0.15s ease;
   z-index: 10;
   white-space: normal;
+}
+html.theme-dark .weather-tooltip {
+  background: #1b1916;
+  color: #f5efe6;
+  border-color: rgba(245, 239, 230, 0.2);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45);
 }
 .weather-tooltip__header {
   display: flex;
@@ -247,6 +305,9 @@ a:active { color: color-mix(in oklch, var(--link-hover) 80%, black); }
   color: #555;
   margin-left: auto;
 }
+html.theme-dark .weather-tooltip__wind {
+  color: rgba(245, 239, 230, 0.7);
+}
 .weather-tooltip__meta {
   display: block;
   color: #555;
@@ -260,6 +321,12 @@ a:active { color: color-mix(in oklch, var(--link-hover) 80%, black); }
   text-align: center;
   font-size: 0.78rem;
   color: #555;
+}
+html.theme-dark .weather-tooltip__meta,
+html.theme-dark .weather-tooltip__tides,
+html.theme-dark .weather-card__label,
+html.theme-dark .weather-card__condition {
+  color: rgba(245, 239, 230, 0.7);
 }
 .weather-tooltip__label {
   display: block;
@@ -285,11 +352,15 @@ a:active { color: color-mix(in oklch, var(--link-hover) 80%, black); }
   border: 1px solid rgba(17, 17, 17, 0.16);
   border-radius: 0.7rem;
   padding: 0.6rem 0.55rem;
-  background: #fbfbfb;
+  background: var(--surface-elevated);
   display: grid;
   grid-template-rows: auto auto 1fr;
   gap: 0.25rem;
   text-align: center;
+}
+html.theme-dark .weather-tooltip__list li {
+  background: #221f1a;
+  border-color: rgba(245, 239, 230, 0.18);
 }
 .weather-card__label {
   font-family: var(--sans);
@@ -441,6 +512,9 @@ article section[aria-label^="Calculator mockup"] { font-size: 16px; line-height:
   color: #4b4b4b;
   margin-top: 0.35rem;
 }
+html.theme-dark .post-meta {
+  color: rgba(232, 233, 234, 0.7);
+}
 .post-excerpt p {
   margin-top: 1rem;
 }
@@ -539,6 +613,9 @@ article section[aria-label^="Calculator mockup"] { font-size: 16px; line-height:
 .archive-list time {
   font-size: 0.9rem;
   color: #4b4b4b;
+}
+html.theme-dark .archive-list time {
+  color: rgba(232, 233, 234, 0.7);
 }
 @media (max-width: 900px) {
   .nyt-topbar {
@@ -659,11 +736,29 @@ article section[aria-label^="Calculator mockup"] { font-size: 16px; line-height:
     #f3efe7;
   color: var(--pokedex-ink);
 }
+html.theme-dark .plants-page {
+  --pokedex-red: #d46a6a;
+  --pokedex-red-dark: #f0b4b4;
+  --pokedex-cream: #1a1714;
+  --pokedex-ink: #f2eadd;
+  --pokedex-panel: #1b1714;
+  --pokedex-shadow: rgba(0, 0, 0, 0.55);
+  background:
+    radial-gradient(circle at top left, rgba(212, 106, 106, 0.08), transparent 45%),
+    radial-gradient(circle at 20% 35%, rgba(98, 150, 170, 0.08), transparent 50%),
+    #12100e;
+}
 .plants-hero {
   background:
     linear-gradient(135deg, rgba(198, 40, 40, 0.08), rgba(246, 242, 234, 0.9)),
     #f8f4ed;
   border-bottom: 2px solid rgba(17, 17, 17, 0.1);
+}
+html.theme-dark .plants-hero {
+  background:
+    linear-gradient(135deg, rgba(212, 106, 106, 0.12), rgba(26, 23, 20, 0.9)),
+    #151311;
+  border-bottom-color: rgba(242, 234, 221, 0.12);
 }
 .plants-hero h1 {
   margin-bottom: 0.4rem;
@@ -699,6 +794,9 @@ article section[aria-label^="Calculator mockup"] { font-size: 16px; line-height:
   box-shadow: 0 18px 40px var(--pokedex-shadow);
   font-family: var(--sans);
 }
+html.theme-dark .plants-toc {
+  border-color: rgba(242, 234, 221, 0.12);
+}
 .plants-toc h2 {
   margin-top: 0;
   font-size: 0.9rem;
@@ -731,6 +829,9 @@ article section[aria-label^="Calculator mockup"] { font-size: 16px; line-height:
   padding: clamp(1.5rem, 3vw, 2.25rem);
   box-shadow: 0 20px 50px var(--pokedex-shadow);
 }
+html.theme-dark .plants-content > section {
+  border-color: rgba(242, 234, 221, 0.12);
+}
 .plants-content > section h2 {
   margin-top: 0;
   display: inline-flex;
@@ -759,17 +860,27 @@ article section[aria-label^="Calculator mockup"] { font-size: 16px; line-height:
   border-radius: 18px;
   background:
     linear-gradient(180deg, rgba(246, 242, 234, 0.6), rgba(255, 255, 255, 0.9)),
-    #fff;
+    var(--pokedex-panel);
   margin-top: 1.25rem;
   position: relative;
+}
+html.theme-dark .plant-entry {
+  border-color: rgba(242, 234, 221, 0.12);
+  background:
+    linear-gradient(180deg, rgba(32, 27, 24, 0.9), rgba(26, 23, 20, 0.95)),
+    var(--pokedex-panel);
 }
 .plant-entry > a {
   grid-column: 1;
   display: block;
   padding: 0.4rem;
   border-radius: 16px;
-  background: #f1ece3;
+  background: var(--pokedex-cream);
   border: 1px solid rgba(17, 17, 17, 0.08);
+}
+html.theme-dark .plant-entry > a {
+  background: rgba(26, 23, 20, 0.9);
+  border-color: rgba(242, 234, 221, 0.12);
 }
 .plant-entry > h3,
 .plant-entry > .scientific-name,
@@ -818,6 +929,10 @@ article section[aria-label^="Calculator mockup"] { font-size: 16px; line-height:
   padding: 0.2rem 0.55rem;
   border-radius: 999px;
 }
+html.theme-dark .scientific-name {
+  background: rgba(212, 106, 106, 0.18);
+  color: #f1dcc9;
+}
 .plant-details p {
   margin: 0.5rem 0;
   display: grid;
@@ -833,6 +948,9 @@ article section[aria-label^="Calculator mockup"] { font-size: 16px; line-height:
   text-transform: uppercase;
   color: #4a3f32;
 }
+html.theme-dark .plant-details p strong {
+  color: rgba(242, 234, 221, 0.7);
+}
 .care-summary {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -843,6 +961,10 @@ article section[aria-label^="Calculator mockup"] { font-size: 16px; line-height:
   border-radius: 16px;
   padding: 1rem 1.1rem;
   background: #faf7f0;
+}
+html.theme-dark .care-block {
+  border-color: rgba(242, 234, 221, 0.12);
+  background: #1f1a17;
 }
 .care-block h3 {
   margin-top: 0;

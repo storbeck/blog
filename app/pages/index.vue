@@ -81,6 +81,12 @@ const tideSummary = computed(() => {
   return [high, low].filter(Boolean).join(' · ')
 })
 
+const theme = useState<'light' | 'dark'>('theme', () => 'light')
+const isDark = computed(() => theme.value === 'dark')
+const toggleTheme = () => {
+  theme.value = isDark.value ? 'light' : 'dark'
+}
+
 const leadPost = computed(() => posts.value[0])
 const secondaryPosts = computed(() => posts.value.slice(1))
 
@@ -151,6 +157,15 @@ const archiveGroups = computed(() => {
           </button>
         </div>
         <div class="nyt-topbar__right">
+          <button
+            class="theme-toggle"
+            type="button"
+            :aria-pressed="isDark"
+            :aria-label="isDark ? 'Switch to light mode' : 'Switch to dark mode'"
+            @click="toggleTheme"
+          >
+            <span class="mdi theme-toggle__icon" :class="isDark ? 'mdi-weather-sunny' : 'mdi-weather-night'" aria-hidden="true"></span>
+          </button>
           <a href="/feed.xml" rel="alternate">Subscribe</a>
           <a href="https://www.linkedin.com/in/geoff-storbeck-81a25035/" rel="external me" itemprop="sameAs">LinkedIn</a>
           <a href="https://github.com/storbeck" rel="external me" itemprop="sameAs">GitHub</a>
