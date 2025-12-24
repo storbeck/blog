@@ -562,6 +562,37 @@ article section[aria-label^="Calculator mockup"] { font-size: 16px; line-height:
   .nyt-nav {
     justify-content: flex-start;
   }
+  .weather-tooltip {
+    position: fixed;
+    top: 3.2rem;
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
+    width: min(92vw, 360px);
+    min-width: 0;
+    max-height: 80vh;
+    overflow: auto;
+  }
+  .weather-tooltip__list {
+    grid-auto-flow: row;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  }
+  .weather-tooltip__header {
+    gap: 0.5rem;
+  }
+  .weather-tooltip__temp {
+    font-size: 1.6rem;
+  }
+  .weather-tooltip__condition {
+    font-size: 0.95rem;
+  }
+  .weather-tooltip__wind {
+    width: 100%;
+    margin-left: 0;
+  }
+  .weather-card__condition {
+    min-height: 0;
+  }
   .about-hero {
     grid-template-columns: 1fr;
   }
