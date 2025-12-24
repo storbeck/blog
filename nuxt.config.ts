@@ -38,6 +38,12 @@ export default defineNuxtConfig({
     experimental: {
       sqliteConnector: 'native'
     },
+    highlight: {
+      theme: {
+        default: 'github-light',
+        dark: 'github-dark'
+      }
+    },
     renderer: {
       anchorLinks: false
     }

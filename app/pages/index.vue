@@ -31,7 +31,9 @@ if (data.value) {
 const hasNext = computed(() => currentPage.value < totalPages.value)
 
 const formatDate = (value: string) => {
-  const date = new Date(`${value}T00:00:00Z`)
+  const [year, month, day] = value.split('-').map(Number)
+  if (!year || !month || !day) return value
+  const date = new Date(year, month - 1, day)
   if (Number.isNaN(date.getTime())) return value
   return new Intl.DateTimeFormat('en-US', { dateStyle: 'long' }).format(date)
 }

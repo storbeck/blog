@@ -156,6 +156,9 @@ code { font-size: 0.95em; }
 code { background: transparent; border: 0; padding: 0.05em 0.15em; border-radius: 0; }
 pre code { background: none; padding: 0; }
 
+/* Tighter script block */
+.code-section pre { max-height: 360px; font-size: 0.85rem; }
+
 /* Blockquotes */
 blockquote { padding: 0.5rem 1rem; border-inline-start: 4px solid currentColor; background: rgba(127,127,127,0.06); }
 html.theme-dark blockquote { background: rgba(245, 239, 230, 0.08); }

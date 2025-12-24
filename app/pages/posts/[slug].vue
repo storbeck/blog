@@ -1,4 +1,5 @@
 <script setup lang="ts">
+
 const route = useRoute()
 const slug = computed(() => String(route.params.slug))
 
@@ -10,7 +11,9 @@ if (!post.value) {
 }
 
 const formatDate = (value: string) => {
-  const date = new Date(`${value}T00:00:00Z`)
+  const [year, month, day] = value.split('-').map(Number)
+  if (!year || !month || !day) return value
+  const date = new Date(year, month - 1, day)
   if (Number.isNaN(date.getTime())) return value
   return new Intl.DateTimeFormat('en-US', { dateStyle: 'long' }).format(date)
 }
@@ -30,6 +33,7 @@ const nextPost = computed(() => {
   const list = allPosts.value || []
   return list[currentIndex.value + 1] ?? null
 })
+
 
 useHead(() => ({
   title: `${post.value?.title} - Geoff Storbeck`,
