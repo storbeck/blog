@@ -440,8 +440,8 @@ html.theme-dark .weather-tooltip__list li {
 }
 .post-nav--minimal {
   border-bottom: 1px solid var(--rule);
-  padding-bottom: 1rem;
-  margin-bottom: 1.5rem;
+  padding-bottom: 0.75rem;
+  margin-bottom: 1rem;
 }
 .nyt-nav {
   display: flex;
@@ -729,12 +729,11 @@ html.theme-dark .archive-list time {
   max-width: 110ch;
   margin: 0 auto;
   padding: clamp(2rem, 6vw, 3rem) clamp(1.5rem, 5vw, 2.5rem) 3rem;
-  border: 1px solid rgba(17, 17, 17, 0.08);
-}
-.demo-shell {
-  background: var(--surface);
 }
 .post-shell {
+  padding-top: clamp(0.75rem, 3vw, 1.5rem);
+}
+.demo-shell {
   background: var(--surface);
 }
 html.theme-dark .demo-shell,
@@ -756,6 +755,9 @@ html.theme-dark .post-shell {
   gap: 1rem;
   font-family: var(--sans);
   margin-bottom: 1.5rem;
+}
+.post-nav {
+  margin-top: 0;
 }
 .demo-kicker {
   font-family: var(--sans);
