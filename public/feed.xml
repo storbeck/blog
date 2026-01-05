@@ -6,7 +6,15 @@
     <description>Technical blog by Geoff Storbeck covering frontend development, web performance, security, DevOps, and practical tooling.</description>
     <language>en</language>
     <atom:link href="https://storbeck.dev/feed.xml" rel="self" type="application/rss+xml" />
-    <lastBuildDate>Wed, 24 Dec 2025 12:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 05 Jan 2026 12:00:00 +0000</lastBuildDate>
+
+    <item>
+      <title>AI-generated music isn't doing it for me</title>
+      <link>https://storbeck.dev/posts/2026-1-5-ai-music-rdf-sparql.html</link>
+      <guid>https://storbeck.dev/posts/2026-1-5-ai-music-rdf-sparql.html</guid>
+      <pubDate>Mon, 05 Jan 2026 12:00:00 +0000</pubDate>
+      <description>A personal note on AI music fatigue, distrust of rec engines, and using Wikidata queries to browse like a record store.</description>
+    </item>
 
     <item>
       <title>Visualizing My Mac Process Tree with FalkorDB</title>
