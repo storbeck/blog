@@ -83,6 +83,11 @@ ORDER BY ?bandLabel
 </section>
 
 <section>
+<p>One gem I found just by browsing the list: <a href="https://www.youtube.com/watch?v=suA682WYEIM&list=PLyjgTtz3s3inGU8CbeqhaHzcAxWK2dgE4">this track</a>. It's great, and I never would have found it algorithmically.</p>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/suA682WYEIM?si=IFaVg_kcSMiPJaez" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+</section>
+
+<section>
 <p>Thounds of artists waiting to be heard, no proprietary recommendation engine required.</p>
 <p>Party on Wayne, party on Garth! 🤘</p>
 </section>
