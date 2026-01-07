@@ -58,16 +58,16 @@
 
     <item>
       <title>Dante's Inferno</title>
-      <link>https://www.storbeck.dev/posts/webgl-fire</link>
-      <guid>https://www.storbeck.dev/posts/webgl-fire</guid>
+      <link>https://www.storbeck.dev/posts/2025-11-21-webgl-fire.html</link>
+      <guid>https://www.storbeck.dev/posts/2025-11-21-webgl-fire.html</guid>
       <pubDate>Tue, 06 Jan 2026 12:00:00 +0000</pubDate>
       <description>WebGL fire shader with domain-warped noise and a blackbody-style palette.</description>
     </item>
 
     <item>
       <title>Fonts Carry Voice</title>
-      <link>https://www.storbeck.dev/posts/font-character-guide</link>
-      <guid>https://www.storbeck.dev/posts/font-character-guide</guid>
+      <link>https://www.storbeck.dev/posts/2025-11-17-font-character-guide.html</link>
+      <guid>https://www.storbeck.dev/posts/2025-11-17-font-character-guide.html</guid>
       <pubDate>Mon, 17 Nov 2025 12:00:00 +0000</pubDate>
       <description>One animated “A” auditioning for six roles, plus a playbook for choosing type on purpose—perfect if you keep defaulting to Inter and hope it sounds unique.</description>
     </item>
@@ -82,8 +82,8 @@
 
     <item>
       <title>Screen Shredder Demo</title>
-      <link>https://www.storbeck.dev/posts/secure-document-shred</link>
-      <guid>https://www.storbeck.dev/posts/secure-document-shred</guid>
+      <link>https://www.storbeck.dev/posts/2025-11-12-secure-document-shred.html</link>
+      <guid>https://www.storbeck.dev/posts/2025-11-12-secure-document-shred.html</guid>
       <pubDate>Wed, 12 Nov 2025 12:00:00 +0000</pubDate>
       <description>This page shreds itself in place — press the button and the page splits into narrow vertical strips that fall off the screen, implemented with plain HTML, CSS, and a bit of vanilla JS.</description>
     </item>
@@ -122,8 +122,8 @@
 
     <item>
       <title>React Context vs Zustand vs Jotai — A Visual Guide</title>
-      <link>https://www.storbeck.dev/posts/react-state-updates-visual-guide</link>
-      <guid>https://www.storbeck.dev/posts/react-state-updates-visual-guide</guid>
+      <link>https://www.storbeck.dev/posts/2025-10-26-react-state-updates-visual-guide.html</link>
+      <guid>https://www.storbeck.dev/posts/2025-10-26-react-state-updates-visual-guide.html</guid>
       <pubDate>Mon, 27 Oct 2025 10:32:01 +0000</pubDate>
       <description>See why Context rerenders every consumer and how Zustand/Jotai keep updates narrow — three tiny, dependency‑free demos with render counters.</description>
     </item>
@@ -170,8 +170,8 @@
 
     <item>
       <title>Light &amp; Color Ideas for Modern Frontend</title>
-      <link>https://www.storbeck.dev/posts/light-and-color-principles-frontend</link>
-      <guid>https://www.storbeck.dev/posts/light-and-color-principles-frontend</guid>
+      <link>https://www.storbeck.dev/posts/2025-10-16-light-and-color-principles-frontend.html</link>
+      <guid>https://www.storbeck.dev/posts/2025-10-16-light-and-color-principles-frontend.html</guid>
       <pubDate>Fri, 17 Oct 2025 00:24:35 +0000</pubDate>
       <description>Practical UI patterns: modular rhythm, natural motion, OKLCH palettes, hierarchy, tiny charts, and accessible status—with an interactive palette and copy‑paste code.</description>
     </item>
@@ -194,8 +194,8 @@
 
     <item>
       <title>Hand‑Held Card Fan (Lerped)</title>
-      <link>https://www.storbeck.dev/posts/card-deck-lerp</link>
-      <guid>https://www.storbeck.dev/posts/card-deck-lerp</guid>
+      <link>https://www.storbeck.dev/posts/2025-10-16-card-deck-lerp.html</link>
+      <guid>https://www.storbeck.dev/posts/2025-10-16-card-deck-lerp.html</guid>
       <pubDate>Thu, 16 Oct 2025 23:13:27 +0000</pubDate>
       <description>A tiny HTML/CSS/JS demo that fans, opens, and rotates a deck of cards with smooth lerped transforms — no frameworks.</description>
     </item>
@@ -218,8 +218,8 @@
 
     <item>
       <title>Rainbow Border with Modern CSS (One Rule)</title>
-      <link>https://www.storbeck.dev/posts/modern-rainbow-border-css</link>
-      <guid>https://www.storbeck.dev/posts/modern-rainbow-border-css</guid>
+      <link>https://www.storbeck.dev/posts/2025-10-15-modern-rainbow-border-css.html</link>
+      <guid>https://www.storbeck.dev/posts/2025-10-15-modern-rainbow-border-css.html</guid>
       <pubDate>Thu, 16 Oct 2025 23:13:20 +0000</pubDate>
       <description>Minimal, copy‑paste CSS to make a rainbow border using layered backgrounds and conic‑gradient. One rule. No extra markup.</description>
     </item>
@@ -234,8 +234,8 @@
 
     <item>
       <title>Simple Math for Better UI Motion</title>
-      <link>https://www.storbeck.dev/posts/juicing-ui-with-math</link>
-      <guid>https://www.storbeck.dev/posts/juicing-ui-with-math</guid>
+      <link>https://www.storbeck.dev/posts/2025-10-15-juicing-ui-with-math.html</link>
+      <guid>https://www.storbeck.dev/posts/2025-10-15-juicing-ui-with-math.html</guid>
       <pubDate>Thu, 16 Oct 2025 23:13:15 +0000</pubDate>
       <description>Use noise, nonlinear intensity, and smoothing to make UI motion feel deliberate and calm, not jittery.</description>
     </item>
