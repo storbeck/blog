@@ -48,6 +48,19 @@ sqlite3 ~/Library/Roblox/rbx-storage.db "PRAGMA table_info(files);"
 </section>
 
 <section>
+<h2>How the cache gets populated</h2>
+<p>The cache is generated opportunistically during play. When a session joins a place, the client logs the place and universe, then immediately begins fetching assets that world references. Those asset requests are what land in <code>rbx-storage</code> and get indexed in <code>rbx-storage.db</code>.</p>
+<p>On macOS, the join context is visible in <code>~/Library/Logs/Roblox/*_Player_*_last.log</code>. A typical sequence shows a join with <code>placeId</code>, <code>universeId</code>, and server endpoint, followed by asset load lines. That temporal proximity is the practical link between a cache entry and a specific game session.</p>
+<p>Example join context lines from the log:</p>
+
+```
+! Joining game '472478ed-6c7b-4acc-a0ef-3605cc510ebc' place 120274717380291 at 10.186.5.23
+GameJoinLoadTime ... placeid:120274717380291 ... universeid:9306827644 ...
+Connecting to UDMUX server 128.116.48.33:62658, and RCC server 10.186.5.23:62658
+```
+</section>
+
+<section>
 <h2>RBXH: the cache wrapper</h2>
 <p>Every file I looked at starts with an <code>RBXH</code> header: a small wrapper that stores a version, the length of a URL, the URL itself, and then the payload. The version I saw was consistently <code>2</code>. The URL is usually a <code>rbxcdn.com</code> host (sometimes with a <code>tr.rbxcdn.com</code> transform path). Visiting those URLs directly often returns “Access Denied” unless the request includes Roblox’s headers and auth, which is why the local cache is still useful for offline analysis.</p>
 </section>
