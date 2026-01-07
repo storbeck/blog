@@ -18,232 +18,232 @@
 
     <item>
       <title>AI-generated music isn't doing it for me</title>
-      <link>https://storbeck.dev/posts/2026-01-05-ai-music-rdf-sparql.html</link>
-      <guid>https://storbeck.dev/posts/2026-01-05-ai-music-rdf-sparql.html</guid>
+      <link>https://www.storbeck.dev/posts/ai-music-rdf-sparql</link>
+      <guid>https://www.storbeck.dev/posts/ai-music-rdf-sparql</guid>
       <pubDate>Mon, 05 Jan 2026 12:00:00 +0000</pubDate>
       <description>A personal note on AI music fatigue, distrust of rec engines, and using Wikidata queries to browse like a record store.</description>
     </item>
 
     <item>
       <title>Visualizing My Mac Process Tree with FalkorDB</title>
-      <link>https://storbeck.dev/posts/2025-12-24-visualizing-process-graph-falkordb.html</link>
-      <guid>https://storbeck.dev/posts/2025-12-24-visualizing-process-graph-falkordb.html</guid>
+      <link>https://www.storbeck.dev/posts/visualizing-process-graph-falkordb</link>
+      <guid>https://www.storbeck.dev/posts/visualizing-process-graph-falkordb</guid>
       <pubDate>Wed, 24 Dec 2025 12:00:00 +0000</pubDate>
       <description>A quick snapshot script, a tiny Docker container, and a graph view of how processes spawn on macOS.</description>
     </item>
 
     <item>
       <title>Iframe Sandbox Breakout Test Suite</title>
-      <link>https://storbeck.dev/posts/2025-12-23-iframe-sandbox-test-suite.html</link>
-      <guid>https://storbeck.dev/posts/2025-12-23-iframe-sandbox-test-suite.html</guid>
+      <link>https://www.storbeck.dev/posts/iframe-sandbox-test-suite</link>
+      <guid>https://www.storbeck.dev/posts/iframe-sandbox-test-suite</guid>
       <pubDate>Tue, 23 Dec 2025 12:00:00 +0000</pubDate>
       <description>A plain HTML test page for probing iframe sandbox security without the dashboard, covering navigation, storage, JS APIs, and permissions.</description>
     </item>
 
     <item>
       <title>Fuck Around and Find Out</title>
-      <link>https://storbeck.dev/posts/2025-12-22-fuck-around-and-find-out.html</link>
-      <guid>https://storbeck.dev/posts/2025-12-22-fuck-around-and-find-out.html</guid>
+      <link>https://www.storbeck.dev/posts/fuck-around-and-find-out</link>
+      <guid>https://www.storbeck.dev/posts/fuck-around-and-find-out</guid>
       <pubDate>Mon, 22 Dec 2025 12:00:00 +0000</pubDate>
       <description>An argument for deliberate experimentation in code: turn the knobs to extremes, break things on purpose, and learn the system’s real shape beyond what docs and tutorials show.</description>
     </item>
 
     <item>
       <title>Rediscovering My Craft: Layoffs, Mental Health, and Frontend UI</title>
-      <link>https://storbeck.dev/posts/2025-12-05-rediscovering-my-craft.html</link>
-      <guid>https://storbeck.dev/posts/2025-12-05-rediscovering-my-craft.html</guid>
+      <link>https://www.storbeck.dev/posts/rediscovering-my-craft</link>
+      <guid>https://www.storbeck.dev/posts/rediscovering-my-craft</guid>
       <pubDate>Fri, 05 Dec 2025 12:00:00 +0000</pubDate>
       <description>Thoughts on burnout, layoffs, frontend engineering, and rediscovering the joy of building UI while moving from React/Tailwind to Vue/Vuetify and freelance work.</description>
     </item>
 
     <item>
       <title>Dante's Inferno</title>
-      <link>https://storbeck.dev/posts/2025-11-21-webgl-fire.html</link>
-      <guid>https://storbeck.dev/posts/2025-11-21-webgl-fire.html</guid>
+      <link>https://www.storbeck.dev/posts/webgl-fire</link>
+      <guid>https://www.storbeck.dev/posts/webgl-fire</guid>
       <pubDate>Tue, 06 Jan 2026 12:00:00 +0000</pubDate>
       <description>WebGL fire shader with domain-warped noise and a blackbody-style palette.</description>
     </item>
 
     <item>
       <title>Fonts Carry Voice</title>
-      <link>https://storbeck.dev/posts/2025-11-17-font-character-guide.html</link>
-      <guid>https://storbeck.dev/posts/2025-11-17-font-character-guide.html</guid>
+      <link>https://www.storbeck.dev/posts/font-character-guide</link>
+      <guid>https://www.storbeck.dev/posts/font-character-guide</guid>
       <pubDate>Mon, 17 Nov 2025 12:00:00 +0000</pubDate>
       <description>One animated “A” auditioning for six roles, plus a playbook for choosing type on purpose—perfect if you keep defaulting to Inter and hope it sounds unique.</description>
     </item>
 
     <item>
       <title>PPM Wave Shader Jam</title>
-      <link>https://storbeck.dev/posts/2025-11-16-ppm-shader-wood-demo.html</link>
-      <guid>https://storbeck.dev/posts/2025-11-16-ppm-shader-wood-demo.html</guid>
+      <link>https://www.storbeck.dev/posts/ppm-shader-wood-demo</link>
+      <guid>https://www.storbeck.dev/posts/ppm-shader-wood-demo</guid>
       <pubDate>Sun, 16 Nov 2025 12:00:00 +0000</pubDate>
       <description>Inspired by Tsoding’s checkerboard video, I rewrote his PPM demo in Node, generated 600 frames, piped them through ffmpeg, and tweaked the shader into a drifting wave loop.</description>
     </item>
 
     <item>
       <title>Screen Shredder Demo</title>
-      <link>https://storbeck.dev/posts/2025-11-12-secure-document-shred.html</link>
-      <guid>https://storbeck.dev/posts/2025-11-12-secure-document-shred.html</guid>
+      <link>https://www.storbeck.dev/posts/secure-document-shred</link>
+      <guid>https://www.storbeck.dev/posts/secure-document-shred</guid>
       <pubDate>Wed, 12 Nov 2025 12:00:00 +0000</pubDate>
       <description>This page shreds itself in place — press the button and the page splits into narrow vertical strips that fall off the screen, implemented with plain HTML, CSS, and a bit of vanilla JS.</description>
     </item>
 
     <item>
       <title>Maze Night With The Kids</title>
-      <link>https://storbeck.dev/posts/2025-11-10-maze-family-printables.html</link>
-      <guid>https://storbeck.dev/posts/2025-11-10-maze-family-printables.html</guid>
+      <link>https://www.storbeck.dev/posts/maze-family-printables</link>
+      <guid>https://www.storbeck.dev/posts/maze-family-printables</guid>
       <pubDate>Mon, 10 Nov 2025 12:00:00 +0000</pubDate>
       <description>Built a tiny Go CLI for my kid’s maze obsession—Hunt-and-Kill grids on demand plus a few PNG downloads if you just want to print one.</description>
     </item>
 
     <item>
       <title>Quick n' Dirty AI Image Generation (No Subscriptions)</title>
-      <link>https://storbeck.dev/posts/2025-11-08-draw-things-sdxl-turbo.html</link>
-      <guid>https://storbeck.dev/posts/2025-11-08-draw-things-sdxl-turbo.html</guid>
+      <link>https://www.storbeck.dev/posts/draw-things-sdxl-turbo</link>
+      <guid>https://www.storbeck.dev/posts/draw-things-sdxl-turbo</guid>
       <pubDate>Sat, 08 Nov 2025 12:00:00 +0000</pubDate>
       <description>Run SDXL Turbo locally inside Draw Things with three inference steps, the Euler A Substep sampler, and zero subscriptions for instant cats, kaiju, and crab studies.</description>
     </item>
 
     <item>
       <title>What Is a CTA? Why We Need One</title>
-      <link>https://storbeck.dev/posts/2025-11-01-what-is-a-cta.html</link>
-      <guid>https://storbeck.dev/posts/2025-11-01-what-is-a-cta.html</guid>
+      <link>https://www.storbeck.dev/posts/what-is-a-cta</link>
+      <guid>https://www.storbeck.dev/posts/what-is-a-cta</guid>
       <pubDate>Sun, 02 Nov 2025 01:10:28 +0000</pubDate>
       <description>What a CTA is, why it matters, and practical ways to guide users with clear calls to action without losing your product’s voice.</description>
     </item>
 
     <item>
       <title>A Tiny MCP To Track App Store Feedback</title>
-      <link>https://storbeck.dev/posts/2025-10-27-creating-appstore-mcp-server.html</link>
-      <guid>https://storbeck.dev/posts/2025-10-27-creating-appstore-mcp-server.html</guid>
+      <link>https://www.storbeck.dev/posts/creating-appstore-mcp-server</link>
+      <guid>https://www.storbeck.dev/posts/creating-appstore-mcp-server</guid>
       <pubDate>Mon, 27 Oct 2025 15:02:17 +0000</pubDate>
       <description>Keep a free, daily pulse by pulling App Store reviews into an AI‑enabled loop, bucketing wins vs fixes, and shipping low‑hanging improvements fast.</description>
     </item>
 
     <item>
       <title>React Context vs Zustand vs Jotai — A Visual Guide</title>
-      <link>https://storbeck.dev/posts/2025-10-26-react-state-updates-visual-guide.html</link>
-      <guid>https://storbeck.dev/posts/2025-10-26-react-state-updates-visual-guide.html</guid>
+      <link>https://www.storbeck.dev/posts/react-state-updates-visual-guide</link>
+      <guid>https://www.storbeck.dev/posts/react-state-updates-visual-guide</guid>
       <pubDate>Mon, 27 Oct 2025 10:32:01 +0000</pubDate>
       <description>See why Context rerenders every consumer and how Zustand/Jotai keep updates narrow — three tiny, dependency‑free demos with render counters.</description>
     </item>
 
     <item>
       <title>Bodywork and Interfaces</title>
-      <link>https://storbeck.dev/posts/2025-10-22-bodywork-and-interfaces.html</link>
-      <guid>https://storbeck.dev/posts/2025-10-22-bodywork-and-interfaces.html</guid>
+      <link>https://www.storbeck.dev/posts/bodywork-and-interfaces</link>
+      <guid>https://www.storbeck.dev/posts/bodywork-and-interfaces</guid>
       <pubDate>Wed, 22 Oct 2025 16:03:29 +0000</pubDate>
       <description>Note from time around auto body repair shops, and why interfaces need the same patient, layer-by-layer inspection if you want them to actually shine.</description>
     </item>
 
     <item>
       <title>Automating Persona‑Driven Usability Testing with Playwright MCP</title>
-      <link>https://storbeck.dev/posts/2025-10-17-playwright-automated-usability-testing.html</link>
-      <guid>https://storbeck.dev/posts/2025-10-17-playwright-automated-usability-testing.html</guid>
+      <link>https://www.storbeck.dev/posts/playwright-automated-usability-testing</link>
+      <guid>https://www.storbeck.dev/posts/playwright-automated-usability-testing</guid>
       <pubDate>Sun, 19 Oct 2025 12:21:49 +0000</pubDate>
       <description>Automate persona‑driven usability testing with Playwright MCP. Use a demo repo of personas and system instructions to generate screenshots and UX reports. Fast signal before real studies.</description>
     </item>
 
     <item>
       <title>Tombstones, Timestamps, and Gossip: Cassandra’s Way of Staying Consistent</title>
-      <link>https://storbeck.dev/posts/2025-10-17-cassandra-tombstones-timestamps-compaction.html</link>
-      <guid>https://storbeck.dev/posts/2025-10-17-cassandra-tombstones-timestamps-compaction.html</guid>
+      <link>https://www.storbeck.dev/posts/cassandra-tombstones-timestamps-compaction</link>
+      <guid>https://www.storbeck.dev/posts/cassandra-tombstones-timestamps-compaction</guid>
       <pubDate>Fri, 17 Oct 2025 12:54:37 +0000</pubDate>
       <description>A conversational tour of Cassandra’s tombstones, timestamps, SSTables, compaction, read repair, and the gossip protocol — plus lessons you can borrow for other systems.</description>
     </item>
 
     <item>
       <title>Browse Tor with Claude (curl + socks5h)</title>
-      <link>https://storbeck.dev/posts/2025-10-16-tor-proxy-cli.html</link>
-      <guid>https://storbeck.dev/posts/2025-10-16-tor-proxy-cli.html</guid>
+      <link>https://www.storbeck.dev/posts/tor-proxy-cli</link>
+      <guid>https://www.storbeck.dev/posts/tor-proxy-cli</guid>
       <pubDate>Thu, 16 Oct 2025 23:13:42 +0000</pubDate>
       <description>Browse Tor with Claude using curl over socks5h: simple setup, fast lookups via Ahmia, and how to prompt Claude to find and skim .onion sites like a search engine.</description>
     </item>
 
     <item>
       <title>Textmode Vibes That Move (ASCII → Animated Image)</title>
-      <link>https://storbeck.dev/posts/2025-10-16-moving-zine-ascii.html</link>
-      <guid>https://storbeck.dev/posts/2025-10-16-moving-zine-ascii.html</guid>
+      <link>https://www.storbeck.dev/posts/moving-zine-ascii</link>
+      <guid>https://www.storbeck.dev/posts/moving-zine-ascii</guid>
       <pubDate>Thu, 16 Oct 2025 23:13:40 +0000</pubDate>
       <description>Make a moving, zine‑style background by generating ASCII art with Linux tools and rendering it into an animated image with ImageMagick—no CSS or JavaScript required.</description>
     </item>
 
     <item>
       <title>Light &amp; Color Ideas for Modern Frontend</title>
-      <link>https://storbeck.dev/posts/2025-10-16-light-and-color-principles-frontend.html</link>
-      <guid>https://storbeck.dev/posts/2025-10-16-light-and-color-principles-frontend.html</guid>
+      <link>https://www.storbeck.dev/posts/light-and-color-principles-frontend</link>
+      <guid>https://www.storbeck.dev/posts/light-and-color-principles-frontend</guid>
       <pubDate>Fri, 17 Oct 2025 00:24:35 +0000</pubDate>
       <description>Practical UI patterns: modular rhythm, natural motion, OKLCH palettes, hierarchy, tiny charts, and accessible status—with an interactive palette and copy‑paste code.</description>
     </item>
 
     <item>
       <title>Gooey SVG (No CSS/JS)</title>
-      <link>https://storbeck.dev/posts/2025-10-16-gooey-svg.html</link>
-      <guid>https://storbeck.dev/posts/2025-10-16-gooey-svg.html</guid>
+      <link>https://www.storbeck.dev/posts/gooey-svg</link>
+      <guid>https://www.storbeck.dev/posts/gooey-svg</guid>
       <pubDate>Thu, 16 Oct 2025 23:13:34 +0000</pubDate>
       <description>Create a gooey, blobby merge effect using pure SVG filters — no external CSS or JavaScript. Includes a minimal filter and two copy/paste examples.</description>
     </item>
 
     <item>
       <title>Don’t Say “Build a Beautiful UI” — Use References</title>
-      <link>https://storbeck.dev/posts/2025-10-16-design-prompts-references.html</link>
-      <guid>https://storbeck.dev/posts/2025-10-16-design-prompts-references.html</guid>
+      <link>https://www.storbeck.dev/posts/design-prompts-references</link>
+      <guid>https://www.storbeck.dev/posts/design-prompts-references</guid>
       <pubDate>Thu, 16 Oct 2025 23:29:57 +0000</pubDate>
       <description>Don’t prompt agents to ‘build a beautiful UI’. Beauty is undefined. Give concrete visual references and style guides instead. Includes before/after prompts and a calculator mini‑demo with multiple reference styles.</description>
     </item>
 
     <item>
       <title>Hand‑Held Card Fan (Lerped)</title>
-      <link>https://storbeck.dev/posts/2025-10-16-card-deck-lerp.html</link>
-      <guid>https://storbeck.dev/posts/2025-10-16-card-deck-lerp.html</guid>
+      <link>https://www.storbeck.dev/posts/card-deck-lerp</link>
+      <guid>https://www.storbeck.dev/posts/card-deck-lerp</guid>
       <pubDate>Thu, 16 Oct 2025 23:13:27 +0000</pubDate>
       <description>A tiny HTML/CSS/JS demo that fans, opens, and rotates a deck of cards with smooth lerped transforms — no frameworks.</description>
     </item>
 
     <item>
       <title>Give Claude Code Unrestricted Root (via 1Password) — Dangerous, Test-Only</title>
-      <link>https://storbeck.dev/posts/2025-10-15-unattended-root-with-1password.html</link>
-      <guid>https://storbeck.dev/posts/2025-10-15-unattended-root-with-1password.html</guid>
+      <link>https://www.storbeck.dev/posts/unattended-root-with-1password</link>
+      <guid>https://www.storbeck.dev/posts/unattended-root-with-1password</guid>
       <pubDate>Thu, 16 Oct 2025 23:13:25 +0000</pubDate>
       <description>Security engineering note: how to let Claude Code (or similar agents) obtain root without prompts using a 1Password service account and op CLI. Extremely risky; test-only with strong safeguards.</description>
     </item>
 
     <item>
       <title>Remove Dead Code with Knip (Streamline Before Upgrades)</title>
-      <link>https://storbeck.dev/posts/2025-10-15-remove-dead-code-with-knip.html</link>
-      <guid>https://storbeck.dev/posts/2025-10-15-remove-dead-code-with-knip.html</guid>
+      <link>https://www.storbeck.dev/posts/remove-dead-code-with-knip</link>
+      <guid>https://www.storbeck.dev/posts/remove-dead-code-with-knip</guid>
       <pubDate>Thu, 16 Oct 2025 23:13:23 +0000</pubDate>
       <description>Use Knip to find and remove dead code, shrink context for AI and humans, and declutter before big upgrades. Includes quick start and iterative cleanup tips.</description>
     </item>
 
     <item>
       <title>Rainbow Border with Modern CSS (One Rule)</title>
-      <link>https://storbeck.dev/posts/2025-10-15-modern-rainbow-border-css.html</link>
-      <guid>https://storbeck.dev/posts/2025-10-15-modern-rainbow-border-css.html</guid>
+      <link>https://www.storbeck.dev/posts/modern-rainbow-border-css</link>
+      <guid>https://www.storbeck.dev/posts/modern-rainbow-border-css</guid>
       <pubDate>Thu, 16 Oct 2025 23:13:20 +0000</pubDate>
       <description>Minimal, copy‑paste CSS to make a rainbow border using layered backgrounds and conic‑gradient. One rule. No extra markup.</description>
     </item>
 
     <item>
       <title>Drop‑in Lottie Animations</title>
-      <link>https://storbeck.dev/posts/2025-10-15-lottie-quick-embed.html</link>
-      <guid>https://storbeck.dev/posts/2025-10-15-lottie-quick-embed.html</guid>
+      <link>https://www.storbeck.dev/posts/lottie-quick-embed</link>
+      <guid>https://www.storbeck.dev/posts/lottie-quick-embed</guid>
       <pubDate>Thu, 16 Oct 2025 23:13:18 +0000</pubDate>
       <description>Drop‑in animations with Lottie web components. Designers export Lottie; developers embed a local .lottie or JSON with one tag—no JavaScript to write or CSS transforms to rebuild.</description>
     </item>
 
     <item>
       <title>Simple Math for Better UI Motion</title>
-      <link>https://storbeck.dev/posts/2025-10-15-juicing-ui-with-math.html</link>
-      <guid>https://storbeck.dev/posts/2025-10-15-juicing-ui-with-math.html</guid>
+      <link>https://www.storbeck.dev/posts/juicing-ui-with-math</link>
+      <guid>https://www.storbeck.dev/posts/juicing-ui-with-math</guid>
       <pubDate>Thu, 16 Oct 2025 23:13:15 +0000</pubDate>
       <description>Use noise, nonlinear intensity, and smoothing to make UI motion feel deliberate and calm, not jittery.</description>
     </item>
 
     <item>
       <title>Preventing Secrets from Leaking in Git Repos (Pre‑commit Hook)</title>
-      <link>https://storbeck.dev/posts/2025-10-15-git-precommit-noseyparker.html</link>
-      <guid>https://storbeck.dev/posts/2025-10-15-git-precommit-noseyparker.html</guid>
+      <link>https://www.storbeck.dev/posts/git-precommit-noseyparker</link>
+      <guid>https://www.storbeck.dev/posts/git-precommit-noseyparker</guid>
       <pubDate>Thu, 16 Oct 2025 23:13:13 +0000</pubDate>
       <description>AI can slip secrets into commits. Offensive security teams use Nosey Parker to find credentials; you can use it pre-commit to stop leaks before they land.</description>
     </item>
