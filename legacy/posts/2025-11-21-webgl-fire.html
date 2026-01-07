@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="A WebGL flame study with domain-warped noise, upward advection, and a blackbody-style palette.">
+  <meta name="author" content="Storbeck">
+  <title>Dante's Inferno - Storbeck Blog</title>
+  <link rel="stylesheet" href="../styles.css">
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #0b0b0b;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: #f2f2f2;
+    }
+
+    body:not(:has(.page-shell)) {
+      max-width: none;
+      margin: 0;
+      padding: 0;
+      border: 0;
+      background: var(--bg);
+      color: #f2f2f2;
+    }
+
+    body > header,
+    body > main,
+    body > footer {
+      max-width: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .fire-container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 1.5rem clamp(1rem, 4vw, 2.5rem);
+    }
+
+    .fire-hero {
+      margin: 0;
+      width: 100vw;
+      margin-left: calc(50% - 50vw);
+      margin-right: calc(50% - 50vw);
+      background: #050505;
+      border-radius: 0;
+      overflow: hidden;
+    }
+
+    canvas {
+      width: 100%;
+      height: min(82vh, 860px);
+      display: block;
+      background: #050505;
+    }
+
+    .fire-controls {
+      max-width: 860px;
+      margin: 0 auto 3rem;
+    }
+
+    .fire-controls h2 {
+      color: #ffffff;
+      margin-bottom: 0.75rem;
+    }
+
+    .control-grid {
+      display: grid;
+      gap: 0.75rem;
+    }
+
+    .control-row {
+      display: grid;
+      grid-template-columns: minmax(0, 160px) minmax(0, 1fr) minmax(0, 56px);
+      gap: 0.75rem;
+      align-items: center;
+      font-size: 0.95rem;
+      color: #e6e6e6;
+    }
+
+    .control-row input[type="range"] {
+      width: 100%;
+      accent-color: #ff9b57;
+    }
+
+    .control-row output {
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+      color: #ffffff;
+    }
+
+    a {
+      color: #ffd4a3;
+    }
+
+    a:hover {
+      color: #ffe4c7;
+    }
+
+    header a,
+    footer a {
+      color: #ffd4a3;
+    }
+
+    header,
+    footer,
+    .fire-container h1,
+    .fire-container p {
+      color: #f5f5f5;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="fire-container">
+      <nav aria-label="Site navigation">
+        <a href="../index.html" rel="home">&lt;- Storbeck Blog</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <article>
+      <header class="fire-container">
+        <h1>Dante's Inferno</h1>
+        <p>
+          <time datetime="2026-01-06">January 6, 2026</time>
+          <span> | </span>
+          <span>WebGL demo</span>
+        </p>
+      </header>
+
+      <section class="fire-hero">
+        <canvas id="fire" width="1280" height="720" aria-label="WebGL fire animation"></canvas>
+      </section>
+
+      <section class="fire-controls fire-container">
+        <div class="control-grid">
+          <div class="control-row">
+            <label for="speed">Speed</label>
+            <input id="speed" type="range" min="0.3" max="1.6" step="0.01" value="0.7">
+            <output id="speedValue" for="speed">0.70</output>
+          </div>
+          <div class="control-row">
+            <label for="warp">Warp</label>
+            <input id="warp" type="range" min="0.15" max="0.65" step="0.01" value="0.35">
+            <output id="warpValue" for="warp">0.35</output>
+          </div>
+          <div class="control-row">
+            <label for="noiseScale">Noise scale</label>
+            <input id="noiseScale" type="range" min="0.6" max="1.6" step="0.01" value="1.0">
+            <output id="noiseScaleValue" for="noiseScale">1.00</output>
+          </div>
+          <div class="control-row">
+            <label for="width">Width</label>
+            <input id="width" type="range" min="0.7" max="1.4" step="0.01" value="1.0">
+            <output id="widthValue" for="width">1.00</output>
+          </div>
+          <div class="control-row">
+            <label for="heat">Heat</label>
+            <input id="heat" type="range" min="0.7" max="1.4" step="0.01" value="1.0">
+            <output id="heatValue" for="heat">1.00</output>
+          </div>
+        </div>
+
+        <div class="fire-links">
+          <a href="/" rel="home">Back to blog</a>
+          <a href="/demos">More demos</a>
+          <a href="/about">About</a>
+        </div>
+      </section>
+    </article>
+  </main>
+
+  <footer>
+    <div class="fire-container">
+      <nav aria-label="Post navigation">
+        <a href="../index.html" rel="home">&lt;- Back to blog</a>
+      </nav>
+      <p><small>Last updated: <time datetime="2026-01-06">January 6, 2026</time></small></p>
+    </div>
+  </footer>
+
+  <script>
+    const canvas = document.getElementById("fire");
+    const gl = canvas.getContext("webgl", { antialias: true, alpha: false }) || canvas.getContext("experimental-webgl");
+
+    if (!gl) {
+      canvas.insertAdjacentHTML("afterend", "<p>WebGL is not supported in this browser.</p>");
+      throw new Error("WebGL not supported");
+    }
+
+    const vertexSource = `
+      attribute vec2 position;
+      varying vec2 vUv;
+      void main() {
+        vUv = position * 0.5 + 0.5;
+        gl_Position = vec4(position, 0.0, 1.0);
+      }
+    `;
+
+    const fragmentSource = `
+      #ifdef GL_FRAGMENT_PRECISION_HIGH
+      precision highp float;
+      #else
+      precision mediump float;
+      #endif
+      varying vec2 vUv;
+      uniform float time;
+      uniform vec2 resolution;
+      uniform float uNoiseScale;
+      uniform float uWarp;
+      uniform float uSpeed;
+      uniform float uHeat;
+      uniform float uWidth;
+
+      float hash(vec2 p) {
+        float h = dot(p, vec2(127.1, 311.7));
+        return -1.0 + 2.0 * fract(sin(h) * 43758.5453123);
+      }
+
+      float noise(vec2 p) {
+        vec2 i = floor(p);
+        vec2 f = fract(p);
+        vec2 u = f * f * (3.0 - 2.0 * f);
+        float a = hash(i + vec2(0.0, 0.0));
+        float b = hash(i + vec2(1.0, 0.0));
+        float c = hash(i + vec2(0.0, 1.0));
+        float d = hash(i + vec2(1.0, 1.0));
+        return mix(mix(a, b, u.x), mix(c, d, u.x), u.y);
+      }
+
+      float fbm(vec2 p) {
+        float value = 0.0;
+        float amp = 0.5;
+        for (int i = 0; i < 5; i++) {
+          value += amp * noise(p);
+          p *= 2.0;
+          amp *= 0.5;
+        }
+        return value;
+      }
+
+      vec3 firePalette(float t) {
+        vec3 c1 = vec3(0.04, 0.01, 0.02);
+        vec3 c2 = vec3(0.52, 0.07, 0.02);
+        vec3 c3 = vec3(0.95, 0.32, 0.05);
+        vec3 c4 = vec3(0.99, 0.74, 0.2);
+        vec3 c5 = vec3(1.0, 0.98, 0.9);
+        t = clamp(t, 0.0, 1.0);
+        if (t < 0.25) return mix(c1, c2, t / 0.25);
+        if (t < 0.5) return mix(c2, c3, (t - 0.25) / 0.25);
+        if (t < 0.75) return mix(c3, c4, (t - 0.5) / 0.25);
+        return mix(c4, c5, (t - 0.75) / 0.25);
+      }
+
+      void main() {
+        vec2 uv = vUv;
+        vec2 p = (uv * 2.0 - 1.0);
+        p.x *= resolution.x / resolution.y;
+
+        float base = smoothstep(1.0, 0.0, uv.y);
+        float core = smoothstep(0.7, 0.0, uv.y);
+
+        float t = time * uSpeed;
+        vec2 flow = vec2(0.0, -t);
+        vec2 scaled = p * uNoiseScale;
+        vec2 warp = vec2(fbm(scaled * 1.8 + flow), fbm(scaled * 1.8 + vec2(1.2, -t * 1.1)));
+        vec2 warped = p + warp * vec2(uWarp, uWarp * 1.7);
+
+        float n1 = fbm(warped * (3.0 * uNoiseScale) + vec2(0.0, t * 1.4));
+        float n2 = fbm(warped * (6.0 * uNoiseScale) + vec2(0.0, t * 2.1));
+        float n = mix(n1, n2, 0.6);
+
+        float taper = uWidth;
+        float shape = (1.0 - smoothstep(0.15 * taper, 0.75 * taper, abs(p.x))) * base;
+        float lick = (1.0 - smoothstep(0.05 * taper, 0.55 * taper, abs(p.x + n * 0.28))) * core;
+        float flame = shape * (0.55 + n * 0.55) + lick * 0.75;
+
+        float intensity = clamp((flame * uHeat) - (uv.y * 0.25), 0.0, 1.0);
+        float heat = clamp(intensity + n * 0.25, 0.0, 1.0);
+        vec3 color = firePalette(pow(heat, 1.2));
+
+        gl_FragColor = vec4(color, 1.0);
+      }
+    `;
+
+    const compile = (type, source) => {
+      const shader = gl.createShader(type);
+      gl.shaderSource(shader, source);
+      gl.compileShader(shader);
+      if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+        throw new Error(gl.getShaderInfoLog(shader) || "Shader compile failed.");
+      }
+      return shader;
+    };
+
+    let program;
+    try {
+      program = gl.createProgram();
+      gl.attachShader(program, compile(gl.VERTEX_SHADER, vertexSource));
+      gl.attachShader(program, compile(gl.FRAGMENT_SHADER, fragmentSource));
+      gl.linkProgram(program);
+      if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+        throw new Error(gl.getProgramInfoLog(program) || "Shader link failed.");
+      }
+      gl.useProgram(program);
+    } catch (error) {
+      const message = document.createElement("pre");
+      message.style.color = "#fff";
+      message.textContent = `WebGL error: ${error.message}`;
+      canvas.insertAdjacentElement("afterend", message);
+      throw error;
+    }
+
+    const buffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
+      -1.0, -1.0,
+      1.0, -1.0,
+      -1.0, 1.0,
+      -1.0, 1.0,
+      1.0, -1.0,
+      1.0, 1.0
+    ]), gl.STATIC_DRAW);
+
+    const position = gl.getAttribLocation(program, "position");
+    gl.enableVertexAttribArray(position);
+    gl.vertexAttribPointer(position, 2, gl.FLOAT, false, 0, 0);
+
+    const timeLoc = gl.getUniformLocation(program, "time");
+    const resLoc = gl.getUniformLocation(program, "resolution");
+    const noiseScaleLoc = gl.getUniformLocation(program, "uNoiseScale");
+    const warpLoc = gl.getUniformLocation(program, "uWarp");
+    const speedLoc = gl.getUniformLocation(program, "uSpeed");
+    const heatLoc = gl.getUniformLocation(program, "uHeat");
+    const widthLoc = gl.getUniformLocation(program, "uWidth");
+
+    const controls = {
+      speed: document.getElementById("speed"),
+      warp: document.getElementById("warp"),
+      noiseScale: document.getElementById("noiseScale"),
+      width: document.getElementById("width"),
+      heat: document.getElementById("heat")
+    };
+
+    const outputs = {
+      speed: document.getElementById("speedValue"),
+      warp: document.getElementById("warpValue"),
+      noiseScale: document.getElementById("noiseScaleValue"),
+      width: document.getElementById("widthValue"),
+      heat: document.getElementById("heatValue")
+    };
+
+    const settings = {
+      speed: Number(controls.speed.value),
+      warp: Number(controls.warp.value),
+      noiseScale: Number(controls.noiseScale.value),
+      width: Number(controls.width.value),
+      heat: Number(controls.heat.value)
+    };
+
+    const syncControls = () => {
+      settings.speed = Number(controls.speed.value);
+      settings.warp = Number(controls.warp.value);
+      settings.noiseScale = Number(controls.noiseScale.value);
+      settings.width = Number(controls.width.value);
+      settings.heat = Number(controls.heat.value);
+
+      outputs.speed.textContent = settings.speed.toFixed(2);
+      outputs.warp.textContent = settings.warp.toFixed(2);
+      outputs.noiseScale.textContent = settings.noiseScale.toFixed(2);
+      outputs.width.textContent = settings.width.toFixed(2);
+      outputs.heat.textContent = settings.heat.toFixed(2);
+    };
+
+    Object.values(controls).forEach((control) => {
+      control.addEventListener("input", syncControls);
+    });
+
+    syncControls();
+
+    const resize = () => {
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const width = Math.floor(canvas.clientWidth * dpr);
+      const height = Math.floor(canvas.clientHeight * dpr);
+      if (canvas.width !== width || canvas.height !== height) {
+        canvas.width = width;
+        canvas.height = height;
+        gl.viewport(0, 0, width, height);
+      }
+    };
+
+    let start = performance.now();
+    const draw = (now) => {
+      resize();
+      const t = (now - start) / 1000;
+      gl.uniform1f(timeLoc, t);
+      gl.uniform2f(resLoc, canvas.width, canvas.height);
+      gl.uniform1f(noiseScaleLoc, settings.noiseScale);
+      gl.uniform1f(warpLoc, settings.warp);
+      gl.uniform1f(speedLoc, settings.speed);
+      gl.uniform1f(heatLoc, settings.heat);
+      gl.uniform1f(widthLoc, settings.width);
+      gl.drawArrays(gl.TRIANGLES, 0, 6);
+      requestAnimationFrame(draw);
+    };
+
+    requestAnimationFrame(draw);
+  </script>
+</body>
+</html>

@@ -1,5 +1,14 @@
 [
   {
+    "slug": "webgl-fire",
+    "title": "Dante's Inferno",
+    "description": "WebGL fire shader with domain-warped noise and a blackbody-style palette.",
+    "date": "2026-01-06",
+    "category": "WebGL, Shaders",
+    "legacyUrl": "/posts/2025-11-21-webgl-fire.html",
+    "legacyFile": "2025-11-21-webgl-fire.html"
+  },
+  {
     "slug": "font-character-guide",
     "title": "Fonts Carry Voice",
     "description": "Practical typography systems from a UX/front-end perspective: scales, spacing, family pairings, and side-by-side demos that show both great and disastrous treatments of the same layout.",

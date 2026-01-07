@@ -6,7 +6,7 @@
     <description>Technical blog by Geoff Storbeck covering frontend development, web performance, security, DevOps, and practical tooling.</description>
     <language>en</language>
     <atom:link href="https://storbeck.dev/feed.xml" rel="self" type="application/rss+xml" />
-    <lastBuildDate>Mon, 05 Jan 2026 12:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 06 Jan 2026 12:00:00 +0000</lastBuildDate>
 
     <item>
       <title>AI-generated music isn't doing it for me</title>
@@ -46,6 +46,14 @@
       <guid>https://storbeck.dev/posts/2025-12-05-rediscovering-my-craft.html</guid>
       <pubDate>Fri, 05 Dec 2025 12:00:00 +0000</pubDate>
       <description>Thoughts on burnout, layoffs, frontend engineering, and rediscovering the joy of building UI while moving from React/Tailwind to Vue/Vuetify and freelance work.</description>
+    </item>
+
+    <item>
+      <title>Dante's Inferno</title>
+      <link>https://storbeck.dev/posts/2025-11-21-webgl-fire.html</link>
+      <guid>https://storbeck.dev/posts/2025-11-21-webgl-fire.html</guid>
+      <pubDate>Tue, 06 Jan 2026 12:00:00 +0000</pubDate>
+      <description>WebGL fire shader with domain-warped noise and a blackbody-style palette.</description>
     </item>
 
     <item>
