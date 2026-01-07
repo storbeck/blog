@@ -6,12 +6,20 @@
     <description>Technical blog by Geoff Storbeck covering frontend development, web performance, security, DevOps, and practical tooling.</description>
     <language>en</language>
     <atom:link href="https://storbeck.dev/feed.xml" rel="self" type="application/rss+xml" />
-    <lastBuildDate>Tue, 06 Jan 2026 12:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 07 Jan 2026 12:00:00 +0000</lastBuildDate>
+
+    <item>
+      <title>Roblox Cache: RBXH, SQLite, and Offline Extraction</title>
+      <link>https://storbeck.dev/posts/2026-01-07-roblox-cache-rbxh-sqlite.html</link>
+      <guid>https://storbeck.dev/posts/2026-01-07-roblox-cache-rbxh-sqlite.html</guid>
+      <pubDate>Wed, 07 Jan 2026 12:00:00 +0000</pubDate>
+      <description>A practical map of RobloxPlayer's local cache: the SQLite index, the RBXH wrapper, CDN URLs, and how to trim payloads into viewable files.</description>
+    </item>
 
     <item>
       <title>AI-generated music isn't doing it for me</title>
-      <link>https://storbeck.dev/posts/2026-1-5-ai-music-rdf-sparql.html</link>
-      <guid>https://storbeck.dev/posts/2026-1-5-ai-music-rdf-sparql.html</guid>
+      <link>https://storbeck.dev/posts/2026-01-05-ai-music-rdf-sparql.html</link>
+      <guid>https://storbeck.dev/posts/2026-01-05-ai-music-rdf-sparql.html</guid>
       <pubDate>Mon, 05 Jan 2026 12:00:00 +0000</pubDate>
       <description>A personal note on AI music fatigue, distrust of rec engines, and using Wikidata queries to browse like a record store.</description>
     </item>

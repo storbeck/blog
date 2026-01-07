@@ -1,7 +1,7 @@
 ---
 title: "AI-generated music isn't doing it for me"
 description: "A personal note on AI music fatigue, distrust of rec engines, and using Wikidata queries to browse like a record store."
-date: "2026-1-5"
+date: "2026-01-05"
 category: "Journal"
 legacyUrl: "/posts/2026-1-5-ai-music-rdf-sparql.html"
 ---
