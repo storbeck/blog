@@ -65,6 +65,7 @@ useHead(() => ({
       <a href="/" rel="home">← Geoff Storbeck's Blog</a>
       <a href="/demos">Explore demos</a>
       <a href="/about">About</a>
+      <a href="https://pagefoundry.dev" rel="external">Hire me</a>
     </nav>
 
     <article class="post-article" itemscope itemtype="http://schema.org/BlogPosting">

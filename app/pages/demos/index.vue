@@ -21,6 +21,7 @@ const formatDate = (value: string) => {
       <nav class="demo-nav" aria-label="Site navigation">
         <a href="/" rel="home">← Back to blog</a>
         <a href="/about">About</a>
+        <a href="https://pagefoundry.dev" rel="external">Hire me</a>
       </nav>
     </header>
 

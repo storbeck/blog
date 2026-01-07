@@ -15,6 +15,7 @@ useHead({
     <nav class="post-nav post-nav--minimal" aria-label="Site navigation">
       <a href="/" rel="home">&lt;- Geoff Storbeck's Blog</a>
       <a href="/demos">Explore demos</a>
+      <a href="https://pagefoundry.dev" rel="external">Hire me</a>
     </nav>
 
     <article itemscope itemtype="http://schema.org/Person">
@@ -46,6 +47,10 @@ useHead({
         I build approachable, content-first interfaces as a freelance frontend developer based in Ormond Beach, Florida.
         My career spans web hosting, fintech, and offensive security, with a through-line of UI work that turns complex
         systems into clear workflows.
+      </p>
+      <p>
+        For frontend contract work, I take projects through PageFoundry LLC. Hire me at
+        <a href="https://pagefoundry.dev" rel="external">pagefoundry.dev</a>.
       </p>
       <p>
         Most recently I led the frontend rewrite of Praetorian's Chariot platform, moving delivery from monthly releases
