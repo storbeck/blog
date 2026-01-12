@@ -6,7 +6,15 @@
     <description>Technical blog by Geoff Storbeck covering frontend development, web performance, security, DevOps, and practical tooling.</description>
     <language>en</language>
     <atom:link href="https://www.storbeck.dev/feed.xml" rel="self" type="application/rss+xml" />
-    <lastBuildDate>Wed, 07 Jan 2026 12:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 12 Jan 2026 12:00:00 +0000</lastBuildDate>
+
+    <item>
+      <title>DALL-E from the CLI</title>
+      <link>https://www.storbeck.dev/posts/dall-e-cli-images</link>
+      <guid>https://www.storbeck.dev/posts/dall-e-cli-images</guid>
+      <pubDate>Mon, 12 Jan 2026 12:00:00 +0000</pubDate>
+      <description>A tiny npm CLI for OpenAI image generation, built for fast local asset workflows.</description>
+    </item>
 
     <item>
       <title>Roblox Cache: RBXH, SQLite, and Offline Extraction</title>
