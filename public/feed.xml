@@ -6,7 +6,15 @@
     <description>Technical blog by Geoff Storbeck covering frontend development, web performance, security, DevOps, and practical tooling.</description>
     <language>en</language>
     <atom:link href="https://www.storbeck.dev/feed.xml" rel="self" type="application/rss+xml" />
-    <lastBuildDate>Mon, 12 Jan 2026 12:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 27 Jan 2026 12:00:00 +0000</lastBuildDate>
+
+    <item>
+      <title>Why Your Design Sucks</title>
+      <link>https://www.storbeck.dev/posts/why-your-design-sucks</link>
+      <guid>https://www.storbeck.dev/posts/why-your-design-sucks</guid>
+      <pubDate>Tue, 27 Jan 2026 12:00:00 +0000</pubDate>
+      <description>Why data pipelines shouldn’t dictate your UI: a frontline take on designing around user intent instead of backend constraints.</description>
+    </item>
 
     <item>
       <title>DALL-E from the CLI</title>
