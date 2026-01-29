@@ -6,7 +6,15 @@
     <description>Technical blog by Geoff Storbeck covering frontend development, web performance, security, DevOps, and practical tooling.</description>
     <language>en</language>
     <atom:link href="https://www.storbeck.dev/feed.xml" rel="self" type="application/rss+xml" />
-    <lastBuildDate>Tue, 27 Jan 2026 12:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 29 Jan 2026 12:00:00 +0000</lastBuildDate>
+
+    <item>
+      <title>YTPod: An iPod‑style YouTube player</title>
+      <link>https://www.storbeck.dev/posts/ytpod-ipod-player</link>
+      <guid>https://www.storbeck.dev/posts/ytpod-ipod-player</guid>
+      <pubDate>Thu, 29 Jan 2026 12:00:00 +0000</pubDate>
+      <description>A tiny desktop player inspired by RyOS and built to search YouTube and play via an embedded iframe, with a modern music-player feel.</description>
+    </item>
 
     <item>
       <title>Why Your Design Sucks</title>
