@@ -1,9 +1,9 @@
 ---
 title: "Can Form and Content Live Separately?"
 description: "A look at how form and content depend on each other, where they drift apart, and what balance looks like in real work."
-date: "2026-01-29"
+date: "2026-01-30"
 category: "UX, Design"
-legacyUrl: "/posts/2026-01-29-can-form-and-content-live-separately.html"
+legacyUrl: "/posts/2026-01-30-can-form-and-content-live-separately.html"
 ---
 
 <section itemprop="articleBody">
