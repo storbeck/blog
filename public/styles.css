@@ -1,8 +1,8 @@
 :root {
   color-scheme: light;
-  --sans: "Libre Franklin", system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji";
-  --serif: "Source Serif 4", ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
-  --display: "Playfair Display", "Source Serif 4", ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+  --sans: "Public Sans", system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji";
+  --serif: "Literata", ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+  --display: "Merriweather", "Literata", ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
   --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
   --ink: #121212;
   --paper: #ffffff;
@@ -11,9 +11,9 @@
   --surface-elevated: #fbfbfb;
   --surface-muted: #f6f3ee;
   --shadow-color: rgba(17, 17, 17, 0.12);
-  --link: #1c3f7a;
-  --link-hover: #0f2c5f;
-  --link-visited: #4a4073;
+  --link: #5470c6;
+  --link-hover: #3f5aa9;
+  --link-visited: #6f7fa8;
 }
 html.theme-dark {
   color-scheme: dark;
@@ -24,9 +24,9 @@ html.theme-dark {
   --surface-elevated: #24221f;
   --surface-muted: #2c2925;
   --shadow-color: rgba(0, 0, 0, 0.6);
-  --link: #d9c7a6;
-  --link-hover: #ead7b5;
-  --link-visited: #ccb6d9;
+  --link: #73c0de;
+  --link-hover: #91cc75;
+  --link-visited: #b7ae9b;
 }
 html { font-family: var(--sans); font-size: 16px; }
 @media (min-width: 960px) { html { font-size: 17px; } }
@@ -201,8 +201,8 @@ th, td { padding: 0.5rem; border-bottom: 1px solid rgba(127,127,127,0.2); text-a
 
 /* Rules + links */
 hr { border: none; height: 1px; background: currentColor; opacity: 0.15; margin: 2rem 0; }
-a { color: var(--link); text-decoration: underline; text-underline-offset: 0.15em; }
-a:visited { color: var(--link-visited); }
+a { color: var(--link); text-decoration: underline; text-decoration-thickness: 0.085em; text-underline-offset: 0.14em; }
+a:visited { color: var(--link-visited); text-decoration-style: dotted; text-decoration-thickness: 0.075em; text-underline-offset: 0.18em; }
 a:hover { color: var(--link-hover); text-decoration-thickness: 0.12em; }
 a:active { color: color-mix(in oklch, var(--link-hover) 80%, black); }
 
