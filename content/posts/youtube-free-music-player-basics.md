@@ -7,7 +7,7 @@ category: "How To"
 
 This is a basic way to play music from YouTube from your terminal.
 
-## Option 1 (easiest): Terminal only
+## Terminal Command (One-Liner)
 
 Install tools once:
 
