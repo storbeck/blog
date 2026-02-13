@@ -31,13 +31,13 @@ const formatDate = (value: string) => {
       <section v-else>
         <ul class="demo-list">
           <li v-for="demo in data?.demos || []" :key="demo.slug" class="demo-card">
-            <h2><NuxtLink :to="`/demos/${demo.slug}`">{{ demo.title }}</NuxtLink></h2>
+            <h2><a :href="`/demos/${demo.slug}`">{{ demo.title }}</a></h2>
             <p class="demo-meta">
               <time :datetime="demo.date">{{ formatDate(demo.date) }}</time>
               <span v-if="demo.category"> • {{ demo.category }}</span>
             </p>
             <p>{{ demo.description }}</p>
-            <NuxtLink class="demo-link" :to="`/demos/${demo.slug}`">Run the demo</NuxtLink>
+            <a class="demo-link" :href="`/demos/${demo.slug}`">Run the demo</a>
           </li>
         </ul>
       </section>
