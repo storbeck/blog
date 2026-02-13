@@ -60,29 +60,25 @@ useHead(() => ({
 </script>
 
 <template>
-  <main class="post-shell">
-    <nav class="post-nav post-nav--minimal" aria-label="Post navigation">
-      <a href="/" rel="home">← Geoff Storbeck's Blog</a>
-      <a href="/demos">Explore demos</a>
-      <a href="/about">About</a>
-      <a href="https://pagefoundry.dev" rel="external">Hire me</a>
-    </nav>
+  <div class="page-shell">
+    <SiteMasthead active="latest" />
+    <main class="interior-main">
+      <article class="post-article" itemscope itemtype="http://schema.org/BlogPosting">
+        <header>
+          <h1 itemprop="headline">{{ post?.title }}</h1>
+          <p>
+            <time :datetime="post?.date" itemprop="datePublished">{{ formatDate(String(post?.date)) }}</time>
+            <span v-if="post?.category"> • {{ post?.category }}</span>
+          </p>
+        </header>
 
-    <article class="post-article" itemscope itemtype="http://schema.org/BlogPosting">
-      <header>
-        <h1 itemprop="headline">{{ post?.title }}</h1>
-        <p>
-          <time :datetime="post?.date" itemprop="datePublished">{{ formatDate(String(post?.date)) }}</time>
-          <span v-if="post?.category"> • {{ post?.category }}</span>
-        </p>
-      </header>
+        <ContentRenderer :value="post" />
+      </article>
 
-      <ContentRenderer :value="post" />
-    </article>
-
-    <nav class="post-pagination post-pagination--post" aria-label="Post pagination">
-      <a v-if="prevPost" :href="prevPost.path">← Previous post</a>
-      <a v-if="nextPost" :href="nextPost.path">Next post →</a>
-    </nav>
-  </main>
+      <nav class="post-pagination post-pagination--post" aria-label="Post pagination">
+        <NuxtLink v-if="prevPost" :to="prevPost.path">← Previous post</NuxtLink>
+        <NuxtLink v-if="nextPost" :to="nextPost.path">Next post →</NuxtLink>
+      </nav>
+    </main>
+  </div>
 </template>

@@ -11,14 +11,10 @@ useHead({
 </script>
 
 <template>
-  <main class="post-shell">
-    <nav class="post-nav post-nav--minimal" aria-label="Site navigation">
-      <a href="/" rel="home">&lt;- Geoff Storbeck's Blog</a>
-      <a href="/demos">Explore demos</a>
-      <a href="https://pagefoundry.dev" rel="external">Hire me</a>
-    </nav>
-
-    <article itemscope itemtype="http://schema.org/Person">
+  <div class="page-shell">
+    <SiteMasthead active="about" />
+    <main class="interior-main">
+      <article itemscope itemtype="http://schema.org/Person">
       <header class="about-hero">
         <figure class="about-photo">
           <picture>
@@ -171,6 +167,7 @@ useHead({
           I was hooked.
         </p>
       </section>
-    </article>
-  </main>
+      </article>
+    </main>
+  </div>
 </template>

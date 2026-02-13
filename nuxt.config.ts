@@ -50,6 +50,9 @@ export default defineNuxtConfig({
   },
   routeRules: {
     '/index.html': { redirect: { to: '/', statusCode: 301 } },
+    '/posts/2025-12-22-fuck-around-and-find-out.html': {
+      redirect: { to: '/posts/experiment-and-learn', statusCode: 301 }
+    },
     ...legacyRedirects
   },
   app: {

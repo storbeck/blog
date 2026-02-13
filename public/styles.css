@@ -5,8 +5,8 @@
   --display: "Merriweather", "Literata", ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
   --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
   --ink: #121212;
-  --canvas: #f4f4f2;
-  --canvas-stripe: rgba(18, 18, 18, 0.03);
+  --canvas: #faf9f7;
+  --canvas-stripe: rgba(18, 18, 18, 0.018);
   --paper: #ffffff;
   --rule: rgba(17, 17, 17, 0.15);
   --surface: #ffffff;
@@ -124,7 +124,7 @@ html.theme-dark body:not(:has(.page-shell)) {
 }
 
 .page-shell {
-  background: #f7f6f3;
+  background: var(--paper);
   max-width: 1360px;
   margin: 0 auto;
   overflow: hidden;
@@ -477,6 +477,11 @@ html.theme-dark .weather-tooltip__list li {
 .nyt-nav a:visited {
   color: inherit;
 }
+.nyt-nav a[aria-current="page"] {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+}
 .newspaper-column {
   margin-top: 1.25rem;
 }
@@ -789,6 +794,13 @@ html.theme-dark .archive-list time {
   display: grid;
   gap: 0.35rem;
   list-style: none;
+  padding: 0;
+}
+
+.interior-main {
+  padding-block: 1.25rem 2rem;
+}
+.interior-main .post-article {
   padding: 0;
 }
 

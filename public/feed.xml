@@ -73,9 +73,9 @@
     </item>
 
     <item>
-      <title>Fuck Around and Find Out</title>
-      <link>https://www.storbeck.dev/posts/fuck-around-and-find-out</link>
-      <guid>https://www.storbeck.dev/posts/fuck-around-and-find-out</guid>
+      <title>Experiment and Learn</title>
+      <link>https://www.storbeck.dev/posts/experiment-and-learn</link>
+      <guid>https://www.storbeck.dev/posts/experiment-and-learn</guid>
       <pubDate>Mon, 22 Dec 2025 12:00:00 +0000</pubDate>
       <description>An argument for deliberate experimentation in code: turn the knobs to extremes, break things on purpose, and learn the system’s real shape beyond what docs and tutorials show.</description>
     </item>

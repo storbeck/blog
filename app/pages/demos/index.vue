@@ -13,36 +13,34 @@ const formatDate = (value: string) => {
 </script>
 
 <template>
-  <main class="demo-shell">
-    <header class="demo-hero">
-      <p class="demo-kicker">Demos</p>
-      <h1>Hands-on experiments and UI playgrounds</h1>
-      <p>These are the posts that need raw HTML, CSS, and JavaScript to make the idea click.</p>
-      <nav class="demo-nav" aria-label="Site navigation">
-        <a href="/" rel="home">← Back to blog</a>
-        <a href="/about">About</a>
-        <a href="https://pagefoundry.dev" rel="external">Hire me</a>
-      </nav>
-    </header>
+  <div class="page-shell">
+    <SiteMasthead active="demos" />
+    <main class="interior-main">
+      <header class="demo-hero">
+        <p class="demo-kicker">Demos</p>
+        <h1>Hands-on experiments and UI playgrounds</h1>
+        <p>These are the posts that need raw HTML, CSS, and JavaScript to make the idea click.</p>
+      </header>
 
-    <section v-if="pending">
-      <p>Loading demos...</p>
-    </section>
-    <section v-else-if="error">
-      <p>Unable to load demos right now.</p>
-    </section>
-    <section v-else>
-      <ul class="demo-list">
-        <li v-for="demo in data?.demos || []" :key="demo.slug" class="demo-card">
-          <h2><a :href="`/demos/${demo.slug}`">{{ demo.title }}</a></h2>
-          <p class="demo-meta">
-            <time :datetime="demo.date">{{ formatDate(demo.date) }}</time>
-            <span v-if="demo.category"> • {{ demo.category }}</span>
-          </p>
-          <p>{{ demo.description }}</p>
-          <a class="demo-link" :href="`/demos/${demo.slug}`">Run the demo</a>
-        </li>
-      </ul>
-    </section>
-  </main>
+      <section v-if="pending">
+        <p>Loading demos...</p>
+      </section>
+      <section v-else-if="error">
+        <p>Unable to load demos right now.</p>
+      </section>
+      <section v-else>
+        <ul class="demo-list">
+          <li v-for="demo in data?.demos || []" :key="demo.slug" class="demo-card">
+            <h2><NuxtLink :to="`/demos/${demo.slug}`">{{ demo.title }}</NuxtLink></h2>
+            <p class="demo-meta">
+              <time :datetime="demo.date">{{ formatDate(demo.date) }}</time>
+              <span v-if="demo.category"> • {{ demo.category }}</span>
+            </p>
+            <p>{{ demo.description }}</p>
+            <NuxtLink class="demo-link" :to="`/demos/${demo.slug}`">Run the demo</NuxtLink>
+          </li>
+        </ul>
+      </section>
+    </main>
+  </div>
 </template>
