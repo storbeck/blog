@@ -181,7 +181,7 @@ const archiveGroups = computed(() => {
         <a href="/about">About me</a>
         <a href="#archive">Archive</a>
         <a href="/demos">Demos</a>
-        <a href="https://pagefoundry.dev" rel="external">Hire me</a>
+        <a href="https://pagefoundry.dev" rel="external" class="hire-cta">Hire me</a>
       </nav>
       <link itemprop="url" href="https://storbeck.dev">
     </header>

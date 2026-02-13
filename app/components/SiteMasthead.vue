@@ -51,7 +51,7 @@ const today = computed(() => formatDate(new Date().toISOString().slice(0, 10)))
       <NuxtLink to="/about" :aria-current="props.active === 'about' ? 'page' : undefined">About me</NuxtLink>
       <NuxtLink to="/#archive">Archive</NuxtLink>
       <NuxtLink to="/demos" :aria-current="props.active === 'demos' ? 'page' : undefined">Demos</NuxtLink>
-      <a href="https://pagefoundry.dev" rel="external">Hire me</a>
+      <a href="https://pagefoundry.dev" rel="external" class="hire-cta">Hire me</a>
     </nav>
     <link itemprop="url" href="https://storbeck.dev">
   </header>

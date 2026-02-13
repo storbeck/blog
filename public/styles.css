@@ -455,6 +455,7 @@ html.theme-dark .weather-tooltip__list li {
 .nyt-nav {
   display: flex;
   justify-content: center;
+  align-items: center;
   flex-wrap: wrap;
   gap: 0.95rem;
   padding: 0.7rem clamp(1rem, 4vw, 2.5rem);
@@ -481,6 +482,41 @@ html.theme-dark .weather-tooltip__list li {
   text-decoration: underline;
   text-decoration-thickness: 1px;
   text-underline-offset: 0.2em;
+}
+.nyt-nav a.hire-cta,
+.nyt-nav a.hire-cta:visited,
+.nyt-nav a[href*="pagefoundry.dev"],
+.nyt-nav a[href*="pagefoundry.dev"]:visited {
+  color: #2b1300;
+  background: linear-gradient(180deg, #ffd978 0%, #f4ad2f 100%);
+  border: 1px solid #b97a0f;
+  border-radius: 10px;
+  padding: 0.3rem 0.72rem;
+  font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1.05;
+  text-decoration: none;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.2), 0 3px 8px rgba(183, 106, 0, 0.2);
+}
+.nyt-nav a.hire-cta:hover,
+.nyt-nav a.hire-cta:focus-visible,
+.nyt-nav a[href*="pagefoundry.dev"]:hover,
+.nyt-nav a[href*="pagefoundry.dev"]:focus-visible {
+  color: #2b1300;
+  background: linear-gradient(180deg, #ffe39a 0%, #f8bb4f 100%);
+  transform: translateY(-0.5px);
+  text-decoration: none;
+}
+html.theme-dark .nyt-nav a.hire-cta,
+html.theme-dark .nyt-nav a.hire-cta:visited,
+html.theme-dark .nyt-nav a[href*="pagefoundry.dev"],
+html.theme-dark .nyt-nav a[href*="pagefoundry.dev"]:visited {
+  color: #2b1300;
+  background: linear-gradient(180deg, #ffdc8a 0%, #efab3d 100%);
+  border-color: #c78e2b;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.35), 0 3px 10px rgba(255, 191, 71, 0.14);
 }
 .newspaper-column {
   margin-top: 1.25rem;
