@@ -35,9 +35,6 @@ export default defineNuxtConfig({
   },
   modules: ['@nuxt/content'],
   content: {
-    experimental: {
-      sqliteConnector: 'native'
-    },
     highlight: {
       theme: {
         default: 'github-light',

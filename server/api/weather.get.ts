@@ -16,6 +16,22 @@ type WeatherSummary = {
   }
 }
 
+const WEATHER_TIMEOUT_MS = 2500
+
+const fetchJsonWithTimeout = async <T>(input: URL | string, init?: RequestInit, timeoutMs = WEATHER_TIMEOUT_MS): Promise<T | null> => {
+  const controller = new AbortController()
+  const timer = setTimeout(() => controller.abort(), timeoutMs)
+  try {
+    const response = await fetch(input, { ...init, signal: controller.signal })
+    if (!response.ok) return null
+    return (await response.json()) as T
+  } catch {
+    return null
+  } finally {
+    clearTimeout(timer)
+  }
+}
+
 const formatDateForNOAA = () => {
   const formatter = new Intl.DateTimeFormat('en-CA', {
     timeZone: 'America/New_York',
@@ -40,12 +56,10 @@ const fetchTides = async () => {
   url.searchParams.set('interval', 'hilo')
   url.searchParams.set('format', 'json')
 
-  const response = await fetch(url)
-  if (!response.ok) return null
-
-  const data = (await response.json()) as {
+  const data = await fetchJsonWithTimeout<{
     predictions?: Array<{ t?: string; type?: string }>
-  }
+  }>(url)
+  if (!data) return null
   const highs: string[] = []
   const lows: string[] = []
   for (const prediction of data.predictions ?? []) {
@@ -57,30 +71,18 @@ const fetchTides = async () => {
   return { high: highs, low: lows }
 }
 
-export default defineEventHandler(async (event) => {
-  const pointsResponse = await fetch('https://api.weather.gov/points/29.2858,-81.0559', {
+export default defineEventHandler(async () => {
+  const pointsData = await fetchJsonWithTimeout<{
+    properties?: { forecast?: string }
+  }>('https://api.weather.gov/points/29.2858,-81.0559', {
     headers: { 'User-Agent': 'storbeck.dev (weather widget)' }
   })
-  if (!pointsResponse.ok) {
-    return null
-  }
-
-  const pointsData = (await pointsResponse.json()) as {
-    properties?: { forecast?: string }
-  }
-  const forecastUrl = pointsData.properties?.forecast
+  const forecastUrl = pointsData?.properties?.forecast
   if (!forecastUrl) {
     return null
   }
 
-  const response = await fetch(forecastUrl, {
-    headers: { 'User-Agent': 'storbeck.dev (weather widget)' }
-  })
-  if (!response.ok) {
-    return null
-  }
-
-  const data = (await response.json()) as {
+  const data = await fetchJsonWithTimeout<{
     properties?: {
       periods?: Array<{
         shortForecast?: string
@@ -94,7 +96,10 @@ export default defineEventHandler(async (event) => {
         relativeHumidity?: { value?: number }
       }>
     }
-  }
+  }>(forecastUrl, {
+    headers: { 'User-Agent': 'storbeck.dev (weather widget)' }
+  })
+  if (!data) return null
   const periods = data.properties?.periods ?? []
   const period = periods[0]
   if (!period) {

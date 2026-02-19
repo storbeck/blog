@@ -15,7 +15,11 @@ const demos = ref<Array<Record<string, unknown>>>([])
 const totalPages = ref(1)
 const isLoadingMore = ref(false)
 
-const { data: weatherData } = await useAsyncData('weather', () => $fetch('/api/weather'))
+const { data: weatherData } = useAsyncData('weather', () => $fetch('/api/weather'), {
+  server: false,
+  lazy: true,
+  default: () => null
+})
 
 const { data, pending, error } = await useAsyncData(`posts-page-${currentPage.value}`, () =>
   $fetch('/api/posts', { query: { page: currentPage.value, pageSize } })
