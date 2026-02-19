@@ -2,6 +2,8 @@
 
 const route = useRoute()
 const slug = computed(() => String(route.params.slug))
+const siteUrl = 'https://storbeck.dev'
+const defaultOgImage = `${siteUrl}/images/profile-1200w.jpg`
 
 const { data: post } = await useAsyncData(`post-${slug.value}`, () => queryCollection('posts').path(`/posts/${slug.value}`).first())
 const { data: allPosts } = await useAsyncData('post-list', () => queryCollection('posts').order('date', 'DESC').all())
@@ -34,20 +36,37 @@ const nextPost = computed(() => {
   return list[currentIndex.value + 1] ?? null
 })
 
+const postUrl = computed(() => `${siteUrl}/posts/${slug.value}`)
+const ogImage = computed(() => {
+  const image = post.value?.ogImage
+  if (!image) return defaultOgImage
+  return image.startsWith('http') ? image : `${siteUrl}${image}`
+})
+
 
 useHead(() => ({
   title: `${post.value?.title} - Geoff Storbeck`,
   meta: [
     { name: 'description', content: post.value?.description || '' },
     { property: 'og:title', content: post.value?.title || '' },
-    { property: 'og:description', content: post.value?.description || '' }
+    { property: 'og:description', content: post.value?.description || '' },
+    { property: 'og:type', content: 'article' },
+    { property: 'og:url', content: postUrl.value },
+    { property: 'og:image', content: ogImage.value },
+    { name: 'twitter:card', content: 'summary_large_image' },
+    { name: 'twitter:title', content: post.value?.title || '' },
+    { name: 'twitter:description', content: post.value?.description || '' },
+    { name: 'twitter:image', content: ogImage.value }
   ],
-  link: needsDotLottie.value
-    ? [
-        { rel: 'preconnect', href: 'https://unpkg.com' },
-        { rel: 'dns-prefetch', href: 'https://unpkg.com' }
-      ]
-    : [],
+  link: [
+    { rel: 'canonical', href: postUrl.value },
+    ...(needsDotLottie.value
+      ? [
+          { rel: 'preconnect', href: 'https://unpkg.com' },
+          { rel: 'dns-prefetch', href: 'https://unpkg.com' }
+        ]
+      : [])
+  ],
   script: needsDotLottie.value
     ? [
         {

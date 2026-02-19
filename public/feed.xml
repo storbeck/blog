@@ -6,7 +6,15 @@
     <description>Technical blog by Geoff Storbeck covering frontend development, web performance, security, DevOps, and practical tooling.</description>
     <language>en</language>
     <atom:link href="https://www.storbeck.dev/feed.xml" rel="self" type="application/rss+xml" />
-    <lastBuildDate>Thu, 29 Jan 2026 20:37:00 -0500</lastBuildDate>
+    <lastBuildDate>Wed, 18 Feb 2026 12:00:00 +0000</lastBuildDate>
+
+    <item>
+      <title>The Missing Diamond in AI-Generated Design</title>
+      <link>https://www.storbeck.dev/posts/missing-diamond-ai-generated-design</link>
+      <guid>https://www.storbeck.dev/posts/missing-diamond-ai-generated-design</guid>
+      <pubDate>Wed, 18 Feb 2026 12:00:00 +0000</pubDate>
+      <description>AI can generate polished interfaces fast, but it mostly skips discovery and problem framing. The first diamond is still human work.</description>
+    </item>
 
     <item>
       <title>Can Form and Content Live Separately?</title>

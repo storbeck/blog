@@ -10,7 +10,8 @@ export default defineContentConfig({
         description: z.string(),
         date: z.string(),
         category: z.string().optional(),
-        legacyUrl: z.string().optional()
+        legacyUrl: z.string().optional(),
+        ogImage: z.string().optional()
       })
     })
   }

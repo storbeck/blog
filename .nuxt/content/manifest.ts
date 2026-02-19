@@ -1,8 +1,8 @@
 export const checksums = {
-  "posts": "v3.5.0--M6zFPmRkGw8uWVB4GUXQviLi9yds3_9P1_cJXKm3AyI"
+  "posts": "v3.5.0--3ElkzakRcO31TnVzbWseEZv6VtpyenIDr2PBNQDM7kk"
 }
 export const checksumsStructure = {
-  "posts": "GP0tQNgxSPeGcOZIx0YOWgrafH49RDoag5x2YthFyLE"
+  "posts": "OVoxeMpSD2kAVvs1OomXKGVEXLypYmm1OhBB0ZUzWRE"
 }
 
 export const tables = {
@@ -24,6 +24,7 @@ export default {
       "legacyUrl": "string",
       "meta": "json",
       "navigation": "json",
+      "ogImage": "string",
       "path": "string",
       "seo": "json",
       "stem": "string"

@@ -4,11 +4,16 @@ description: "AI can generate polished interfaces fast, but it mostly skips disc
 date: "2026-02-18"
 category: "Design, AI"
 legacyUrl: "/posts/2026-02-18-missing-diamond-ai-generated-design.html"
+ogImage: "/images/diamonds.png"
 ---
 
 <section>
-<p>If your team uses AI for design, you already know the upside: you can go from rough idea to polished UI in hours, not days. The downside is that speed makes it easy to confuse polished screens with validated thinking. Teams commit to build plans before they have solid evidence about the user problem. The product ships looking complete, then adoption and support data expose what discovery should have caught earlier. This post explains why that happens, what "the missing diamond" means in practice, and how to keep speed without shipping expensive rework.</p>
+<p>If your team uses AI for design, you already know the upside: you can go from rough idea to polished UI in hours, not days. That shift is real, and it changes how teams work day to day.</p>
+<p>The problem is what speed can hide. Polished screens start to look like validated thinking, even when the user problem is still fuzzy. Teams commit to build plans too early, then learn from adoption and support data what discovery should have caught before implementation. This post looks at why that happens, what "the missing diamond" means in practice, and how to keep the speed without paying for rework later.</p>
 </section>
+<figure>
+<img src="/images/diamonds.png" alt="Double Diamond illustration showing Discover and Define neglected on the left and AI-accelerated Develop and Deliver on the right." loading="lazy" decoding="async" />
+</figure>
 
 <section aria-labelledby="from-idea-to-ui">
 <h2 id="from-idea-to-ui">How Teams Go From Rough Idea to Polished UI</h2>
@@ -18,14 +23,14 @@ legacyUrl: "/posts/2026-02-18-missing-diamond-ai-generated-design.html"
 
 <section aria-labelledby="the-downside-of-speed">
 <h2 id="the-downside-of-speed">The Downside If You Use Speed the Wrong Way</h2>
-<p>The risk is not speed itself. The risk is what teams do with the saved time. Some teams reinvest that time into wider exploration, better testing, and stronger evidence. Other teams spend the same time accelerating toward build commitments because polished output creates a false sense of certainty. The visual quality goes up so quickly that people mistake "looks good" for "is correct."</p>
-<p>That is where sequencing breaks. Teams move from prompt to prototype, then to roadmap and estimates, before they validate whether the proposed design actually supports the user goal. Once timelines and architecture decisions lock, the organization becomes resistant to course correction. At that point, even good objections are treated as delivery risk instead of quality control.</p>
+<p>Speed is useful, but the outcome depends on how teams use the time they get back. Some teams reinvest it into broader exploration, sharper testing, and better evidence. Others use it to accelerate build commitments. Polished output creates a false sense of certainty. As visual quality climbs, it becomes easier to treat "looks good" as "is correct," and that is usually when the sequence starts to drift.</p>
+<p>Teams move from prompt to prototype, then to roadmap and estimates, before they validate whether the proposed design actually supports the user goal. Once timelines and architecture decisions lock, the organization becomes resistant to course correction, and even good objections get treated as delivery risk instead of quality control.</p>
 </section>
 
 <section aria-labelledby="what-user-problem">
 <h2 id="what-user-problem">What User Problem Are We Solving?</h2>
-<p>This is the core question many teams skip when prototypes look polished. Product design is not an art contest and not a component beauty pass. It exists to help users complete important tasks with less friction, better confidence, and better outcomes. A feature should have a clear job: reduce time, reduce error, improve decision quality, increase completion, or unlock something users could not do before.</p>
-<p>Design is the layer that makes the product&rsquo;s value usable. If the product strategy says "help users do X," the design must make X obvious, fast, and trustworthy in the user&rsquo;s actual context. That means the design work is never separate from problem framing. A beautiful interface that adds cognitive noise, hides key actions, or disrupts task flow is still bad design, even if it demos well.</p>
+<p>This is the core question many teams skip when prototypes look polished. Product design is not an art contest, and it is not about polishing components for their own sake. It exists to help users complete important tasks with less friction, better confidence, and better outcomes. A feature should have a clear job: reduce time, reduce error, improve decision quality, increase completion, or unlock something users could not do before.</p>
+<p>Design is the layer that makes the product&rsquo;s value usable. If the product strategy says "help users do X," the design must make X obvious, fast, and trustworthy in the user&rsquo;s actual context. For example, a dashboard generated by AI might look clean and balanced. But if the user&rsquo;s real job is to detect anomalies quickly under time pressure, the design must optimize for scanning speed, not aesthetic harmony. That means the design work is never separate from <a href="https://www.interaction-design.org/literature/topics/problem-statements" rel="external noopener noreferrer">problem framing</a>. A beautiful interface that adds cognitive noise, hides key actions, or disrupts task flow is still bad design, even if it demos well.</p>
 </section>
 
 <section aria-labelledby="what-adoption-reveals">
@@ -42,6 +47,7 @@ legacyUrl: "/posts/2026-02-18-missing-diamond-ai-generated-design.html"
 
 <section aria-labelledby="best-path-forward">
 <h2 id="best-path-forward">Best Path Forward</h2>
-<p>Keep the speed. Do not drop the discipline. Treat AI outputs as hypotheses, not evidence, and add a lightweight discovery gate before implementation commitments. A practical path is simple: generate multiple options quickly, write explicit assumptions for each, test with real users in realistic conditions, cut weak directions, then commit engineering effort. This approach protects velocity while reducing rework.</p>
-<p>In practice, teams that do this are not slower. They usually ship fewer corrections, spend less time in reactive support loops, and build more trust with users over time. That is the real goal: not just shipping polished features, but shipping features that solve the right problem clearly and reliably.</p>
+<p>Start before the first design prompt. Write three short lines the team agrees on: what the user needs to do, what gets in the way today, and what should improve if the design works. For example: user needs to find unusual spending quickly; right now they have to click through too many screens; success means they can spot issues in one view. This is less about wording and more about alignment. If the team cannot write these lines clearly, the problem definition is still weak. Doing this first keeps design work tied to user outcomes instead of internal preferences.</p>
+<p>Next, require one measurable job to be done before anyone judges aesthetics. Define what success means in behavior terms: complete this task in under two minutes, reduce errors on this step, increase completion from this screen. Now the design review has a real standard. You are no longer asking, &ldquo;Do we like this?&rdquo; You are asking, &ldquo;Does this help the user complete the job better?&rdquo; That shift alone removes a lot of noise from review discussions.</p>
+<p>Use AI to explore, not to prematurely finalize. Start by generating several design directions tied to the same user job, then write the assumption each direction depends on. Ask AI for research questions that can challenge those assumptions, and use those questions in a quick internal review followed by a short check with <a href="https://www.nngroup.com/articles/why-you-only-need-to-test-with-5-users/" rel="external noopener noreferrer">real users in realistic conditions</a>. Keep design exploration code in temporary branches and treat it as disposable until a direction proves itself. Once feedback is in, compare expected behavior with actual behavior, keep the strongest direction, and close the rest. This keeps discovery practical and focused, while using AI&rsquo;s speed to improve decisions instead of just increasing output.</p>
 </section>

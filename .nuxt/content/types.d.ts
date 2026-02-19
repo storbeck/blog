@@ -14,6 +14,7 @@ declare module '@nuxt/content' {
     date: string;
     category?: string;
     legacyUrl?: string;
+    ogImage?: string;
   }
   
 
