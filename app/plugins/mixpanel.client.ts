@@ -14,7 +14,7 @@ export default defineNuxtPlugin(() => {
       submit: true
     },
     track_pageview: 'full-url',
-    api_host: '/mp',
+    api_host: 'https://api-js.mixpanel.com',
     record_sessions_percent: 100,
     record_heatmap_data: true,
     persistence: 'localStorage',
