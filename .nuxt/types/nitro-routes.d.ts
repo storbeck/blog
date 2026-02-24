@@ -20,6 +20,9 @@ declare module "nitropack/types" {
     '/demos/:slug': {
       'get': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/routes/demos/[slug].get').default>>>>
     }
+    '/mp/**:path': {
+      'default': Simplify<Serialize<Awaited<ReturnType<typeof import('../../server/routes/mp/[...path]').default>>>>
+    }
     '/__nuxt_error': {
       'default': Simplify<Serialize<Awaited<ReturnType<typeof import('../../node_modules/@nuxt/nitro-server/dist/runtime/handlers/renderer').default>>>>
     }
