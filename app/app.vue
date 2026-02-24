@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import mixpanel from "mixpanel-browser";
+
 const theme = useState<'light' | 'dark'>('theme', () => 'light')
 
 const applyTheme = (value: 'light' | 'dark') => {
@@ -8,6 +10,12 @@ const applyTheme = (value: 'light' | 'dark') => {
 }
 
 onMounted(() => {
+  // Create an instance of the Mixpanel object, your token is already added to this snippet
+  mixpanel.init('4ba463d581f794dcf1a6da2690508d33', {
+    autocapture: true,
+    record_sessions_percent: 100,
+  })
+
   const stored = localStorage.getItem('theme')
   if (stored === 'light' || stored === 'dark') {
     theme.value = stored
