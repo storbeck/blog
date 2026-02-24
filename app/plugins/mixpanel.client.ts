@@ -28,4 +28,28 @@ export default defineNuxtPlugin(() => {
     path: window.location.pathname,
     host: window.location.host
   })
+
+  const router = useRouter()
+  let lastTrackedUrl = ''
+
+  const writePageTrack = () => {
+    const currentUrl = window.location.href
+    if (currentUrl === lastTrackedUrl) {
+      return
+    }
+
+    lastTrackedUrl = currentUrl
+    mixpanel.track('Page View', {
+      title: document.title,
+      url: currentUrl,
+      path: window.location.pathname,
+      search: window.location.search,
+      hash: window.location.hash
+    })
+  }
+
+  writePageTrack()
+  router.afterEach(() => {
+    writePageTrack()
+  })
 })
