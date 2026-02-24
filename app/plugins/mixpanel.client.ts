@@ -14,6 +14,7 @@ export default defineNuxtPlugin(() => {
       submit: true
     },
     track_pageview: 'full-url',
+    api_host: '/mp',
     record_sessions_percent: 100,
     record_heatmap_data: true,
     persistence: 'localStorage',
