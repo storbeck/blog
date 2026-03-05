@@ -6,7 +6,15 @@
     <description>Technical blog by Geoff Storbeck covering frontend development, web performance, security, DevOps, and practical tooling.</description>
     <language>en</language>
     <atom:link href="https://www.storbeck.dev/feed.xml" rel="self" type="application/rss+xml" />
-    <lastBuildDate>Wed, 18 Feb 2026 12:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 05 Mar 2026 12:00:00 +0000</lastBuildDate>
+
+    <item>
+      <title>Keeping an Eye on My Home Network</title>
+      <link>https://www.storbeck.dev/posts/bgw320-slow-router-ui-network-monitor</link>
+      <guid>https://www.storbeck.dev/posts/bgw320-slow-router-ui-network-monitor</guid>
+      <pubDate>Thu, 05 Mar 2026 12:00:00 +0000</pubDate>
+      <description>I built a small home network monitor for my BGW320 router to track device activity over time.</description>
+    </item>
 
     <item>
       <title>The Missing Diamond in AI-Generated Design</title>
